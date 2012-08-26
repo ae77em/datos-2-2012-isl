@@ -1,6 +1,4 @@
-src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
- ../src/redsvd/src/eigen/Eigen/Sparse.h \
- ../src/redsvd/src/eigen/Eigen/SparseCore.h \
+src/main.d: ../src/main.cpp ../src/redsvd/src/eigen/Eigen/Dense.h \
  ../src/redsvd/src/eigen/Eigen/Core.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/util/Macros.h \
@@ -14,6 +12,9 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
  ../src/redsvd/src/eigen/Eigen/src/Core/NumTraits.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/MathFunctions.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/GenericPacketMath.h \
+ ../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/PacketMath.h \
+ ../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/MathFunctions.h \
+ ../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/Complex.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/arch/Default/Settings.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/Functors.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/DenseCoeffsBase.h \
@@ -92,57 +93,15 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
  ../src/redsvd/src/eigen/Eigen/src/Core/ArrayWrapper.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/GlobalFunctions.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/util/ReenableStupidWarnings.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseUtil.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseMatrixBase.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/CommonCwiseUnaryOps.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/CommonCwiseBinaryOps.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/MatrixCwiseUnaryOps.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/MatrixCwiseBinaryOps.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/CompressedStorage.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/AmbiVector.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseMatrix.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/MappedSparseMatrix.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseVector.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/CoreIterators.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseBlock.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseTranspose.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseCwiseUnaryOp.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseCwiseBinaryOp.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseDot.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparsePermutation.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseAssign.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseRedux.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseFuzzy.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseSparseProductWithPruning.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseProduct.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseDenseProduct.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseDiagonalProduct.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseTriangularView.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseSelfAdjointView.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/TriangularSolver.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseView.h \
- ../src/redsvd/src/eigen/Eigen/OrderingMethods.h \
- ../src/redsvd/src/eigen/Eigen/src/OrderingMethods/Amd.h \
- ../src/redsvd/src/eigen/Eigen/src/OrderingMethods/../Core/util/NonMPL2.h \
- ../src/redsvd/src/eigen/Eigen/SparseCholesky.h \
+ ../src/redsvd/src/eigen/Eigen/LU.h \
  ../src/redsvd/src/eigen/Eigen/src/misc/Solve.h \
- ../src/redsvd/src/eigen/Eigen/src/misc/SparseSolve.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCholesky/SimplicialCholesky.h \
- ../src/redsvd/src/eigen/Eigen/src/SparseCholesky/../Core/util/NonMPL2.h \
- ../src/redsvd/src/eigen/Eigen/IterativeLinearSolvers.h \
- ../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h \
- ../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h \
- ../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h \
- ../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h \
- ../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h \
- ../src/redsvd/src/eigen/Eigen/Dense.h ../src/redsvd/src/eigen/Eigen/LU.h \
  ../src/redsvd/src/eigen/Eigen/src/misc/Kernel.h \
  ../src/redsvd/src/eigen/Eigen/src/misc/Image.h \
  ../src/redsvd/src/eigen/Eigen/src/LU/FullPivLU.h \
  ../src/redsvd/src/eigen/Eigen/src/LU/PartialPivLU.h \
  ../src/redsvd/src/eigen/Eigen/src/LU/Determinant.h \
  ../src/redsvd/src/eigen/Eigen/src/LU/Inverse.h \
+ ../src/redsvd/src/eigen/Eigen/src/LU/arch/Inverse_SSE.h \
  ../src/redsvd/src/eigen/Eigen/Cholesky.h \
  ../src/redsvd/src/eigen/Eigen/src/Cholesky/LLT.h \
  ../src/redsvd/src/eigen/Eigen/src/Cholesky/LDLT.h \
@@ -174,6 +133,7 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
  ../src/redsvd/src/eigen/Eigen/src/Geometry/ParametrizedLine.h \
  ../src/redsvd/src/eigen/Eigen/src/Geometry/AlignedBox.h \
  ../src/redsvd/src/eigen/Eigen/src/Geometry/Umeyama.h \
+ ../src/redsvd/src/eigen/Eigen/src/Geometry/arch/Geometry_SSE.h \
  ../src/redsvd/src/eigen/Eigen/Eigenvalues.h \
  ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/Tridiagonalization.h \
  ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/RealSchur.h \
@@ -188,14 +148,24 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
  ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/ComplexEigenSolver.h \
  ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/./ComplexSchur.h \
  ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
- ../src/redsvd/src/eigen/Eigen/Eigenvalues.h ../src/redsvd/src/util.hpp \
- ../src/redsvd/src/eigen/Eigen/Dense.h
+ ../src/AnalizadorGramatico/AnalizadorGramatico.h \
+ ../src/AnalizadorGramatico/../Utilidades/Utilidades.h \
+ ../src/AnalizadorGramatico/../ArchivoTexto/ArchivoTexto.h \
+ ../src/AnalizadorGramatico/../Trie/Trie.h \
+ ../src/AnalizadorGramatico/../Trie/../Utilidades/Utilidades.h \
+ ../src/Trie/Trie.h ../src/Utilidades/Utilidades.h \
+ ../src/Indexador/Indexador.h \
+ ../src/Indexador/../RecorredorDeDirectorios/RecorredorDeDirectorios.h \
+ ../src/Indexador/../AnalizadorGramatico/AnalizadorGramatico.h \
+ ../src/Indexador/../AnalizadorGramatico/../Utilidades/Utilidades.h \
+ ../src/Indexador/../AnalizadorGramatico/../ArchivoTexto/ArchivoTexto.h \
+ ../src/Indexador/../AnalizadorGramatico/../Trie/Trie.h \
+ ../src/Indexador/../Trie/Trie.h \
+ ../src/Indexador/../Utilidades/Utilidades.h \
+ ../src/RecorredorDeDirectorios/RecorredorDeDirectorios.h \
+ ../src/Consulta/Consulta.h
 
-../src/redsvd/src/redsvd.hpp:
-
-../src/redsvd/src/eigen/Eigen/Sparse.h:
-
-../src/redsvd/src/eigen/Eigen/SparseCore.h:
+../src/redsvd/src/eigen/Eigen/Dense.h:
 
 ../src/redsvd/src/eigen/Eigen/Core.h:
 
@@ -222,6 +192,12 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
 ../src/redsvd/src/eigen/Eigen/src/Core/MathFunctions.h:
 
 ../src/redsvd/src/eigen/Eigen/src/Core/GenericPacketMath.h:
+
+../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/PacketMath.h:
+
+../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/MathFunctions.h:
+
+../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/Complex.h:
 
 ../src/redsvd/src/eigen/Eigen/src/Core/arch/Default/Settings.h:
 
@@ -379,97 +355,9 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
 
 ../src/redsvd/src/eigen/Eigen/src/Core/util/ReenableStupidWarnings.h:
 
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseUtil.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseMatrixBase.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/CommonCwiseUnaryOps.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/CommonCwiseBinaryOps.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/MatrixCwiseUnaryOps.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/../plugins/MatrixCwiseBinaryOps.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/CompressedStorage.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/AmbiVector.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseMatrix.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/MappedSparseMatrix.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseVector.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/CoreIterators.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseBlock.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseTranspose.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseCwiseUnaryOp.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseCwiseBinaryOp.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseDot.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparsePermutation.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseAssign.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseRedux.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseFuzzy.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseSparseProductWithPruning.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseProduct.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseDenseProduct.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseDiagonalProduct.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseTriangularView.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseSelfAdjointView.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/TriangularSolver.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCore/SparseView.h:
-
-../src/redsvd/src/eigen/Eigen/OrderingMethods.h:
-
-../src/redsvd/src/eigen/Eigen/src/OrderingMethods/Amd.h:
-
-../src/redsvd/src/eigen/Eigen/src/OrderingMethods/../Core/util/NonMPL2.h:
-
-../src/redsvd/src/eigen/Eigen/SparseCholesky.h:
+../src/redsvd/src/eigen/Eigen/LU.h:
 
 ../src/redsvd/src/eigen/Eigen/src/misc/Solve.h:
-
-../src/redsvd/src/eigen/Eigen/src/misc/SparseSolve.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCholesky/SimplicialCholesky.h:
-
-../src/redsvd/src/eigen/Eigen/src/SparseCholesky/../Core/util/NonMPL2.h:
-
-../src/redsvd/src/eigen/Eigen/IterativeLinearSolvers.h:
-
-../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h:
-
-../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h:
-
-../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h:
-
-../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h:
-
-../src/redsvd/src/eigen/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h:
-
-../src/redsvd/src/eigen/Eigen/Dense.h:
-
-../src/redsvd/src/eigen/Eigen/LU.h:
 
 ../src/redsvd/src/eigen/Eigen/src/misc/Kernel.h:
 
@@ -482,6 +370,8 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
 ../src/redsvd/src/eigen/Eigen/src/LU/Determinant.h:
 
 ../src/redsvd/src/eigen/Eigen/src/LU/Inverse.h:
+
+../src/redsvd/src/eigen/Eigen/src/LU/arch/Inverse_SSE.h:
 
 ../src/redsvd/src/eigen/Eigen/Cholesky.h:
 
@@ -545,6 +435,8 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
 
 ../src/redsvd/src/eigen/Eigen/src/Geometry/Umeyama.h:
 
+../src/redsvd/src/eigen/Eigen/src/Geometry/arch/Geometry_SSE.h:
+
 ../src/redsvd/src/eigen/Eigen/Eigenvalues.h:
 
 ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/Tridiagonalization.h:
@@ -573,8 +465,36 @@ src/main.d: ../src/main.cpp ../src/redsvd/src/redsvd.hpp \
 
 ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h:
 
-../src/redsvd/src/eigen/Eigen/Eigenvalues.h:
+../src/AnalizadorGramatico/AnalizadorGramatico.h:
 
-../src/redsvd/src/util.hpp:
+../src/AnalizadorGramatico/../Utilidades/Utilidades.h:
 
-../src/redsvd/src/eigen/Eigen/Dense.h:
+../src/AnalizadorGramatico/../ArchivoTexto/ArchivoTexto.h:
+
+../src/AnalizadorGramatico/../Trie/Trie.h:
+
+../src/AnalizadorGramatico/../Trie/../Utilidades/Utilidades.h:
+
+../src/Trie/Trie.h:
+
+../src/Utilidades/Utilidades.h:
+
+../src/Indexador/Indexador.h:
+
+../src/Indexador/../RecorredorDeDirectorios/RecorredorDeDirectorios.h:
+
+../src/Indexador/../AnalizadorGramatico/AnalizadorGramatico.h:
+
+../src/Indexador/../AnalizadorGramatico/../Utilidades/Utilidades.h:
+
+../src/Indexador/../AnalizadorGramatico/../ArchivoTexto/ArchivoTexto.h:
+
+../src/Indexador/../AnalizadorGramatico/../Trie/Trie.h:
+
+../src/Indexador/../Trie/Trie.h:
+
+../src/Indexador/../Utilidades/Utilidades.h:
+
+../src/RecorredorDeDirectorios/RecorredorDeDirectorios.h:
+
+../src/Consulta/Consulta.h:

@@ -25,4 +25,11 @@ C_UPPER_DEPS :=
 SUBDIRS := \
 src/redsvd/src \
 src \
+src/Utilidades \
+src/Trie \
+src/RecorredorDeDirectorios \
+src/Indexador \
+src/Consulta \
+src/ArchivoTexto \
+src/AnalizadorGramatico \
 

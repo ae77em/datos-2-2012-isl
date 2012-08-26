@@ -15,6 +15,9 @@ src/redsvd/src/redsvdFile.d: ../src/redsvd/src/redsvdFile.cpp \
  ../src/redsvd/src/eigen/Eigen/src/Core/NumTraits.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/MathFunctions.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/GenericPacketMath.h \
+ ../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/PacketMath.h \
+ ../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/MathFunctions.h \
+ ../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/Complex.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/arch/Default/Settings.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/Functors.h \
  ../src/redsvd/src/eigen/Eigen/src/Core/DenseCoeffsBase.h \
@@ -144,6 +147,7 @@ src/redsvd/src/redsvdFile.d: ../src/redsvd/src/redsvdFile.cpp \
  ../src/redsvd/src/eigen/Eigen/src/LU/PartialPivLU.h \
  ../src/redsvd/src/eigen/Eigen/src/LU/Determinant.h \
  ../src/redsvd/src/eigen/Eigen/src/LU/Inverse.h \
+ ../src/redsvd/src/eigen/Eigen/src/LU/arch/Inverse_SSE.h \
  ../src/redsvd/src/eigen/Eigen/Cholesky.h \
  ../src/redsvd/src/eigen/Eigen/src/Cholesky/LLT.h \
  ../src/redsvd/src/eigen/Eigen/src/Cholesky/LDLT.h \
@@ -175,6 +179,7 @@ src/redsvd/src/redsvdFile.d: ../src/redsvd/src/redsvdFile.cpp \
  ../src/redsvd/src/eigen/Eigen/src/Geometry/ParametrizedLine.h \
  ../src/redsvd/src/eigen/Eigen/src/Geometry/AlignedBox.h \
  ../src/redsvd/src/eigen/Eigen/src/Geometry/Umeyama.h \
+ ../src/redsvd/src/eigen/Eigen/src/Geometry/arch/Geometry_SSE.h \
  ../src/redsvd/src/eigen/Eigen/Eigenvalues.h \
  ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/Tridiagonalization.h \
  ../src/redsvd/src/eigen/Eigen/src/Eigenvalues/RealSchur.h \
@@ -225,6 +230,12 @@ src/redsvd/src/redsvdFile.d: ../src/redsvd/src/redsvdFile.cpp \
 ../src/redsvd/src/eigen/Eigen/src/Core/MathFunctions.h:
 
 ../src/redsvd/src/eigen/Eigen/src/Core/GenericPacketMath.h:
+
+../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/PacketMath.h:
+
+../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/MathFunctions.h:
+
+../src/redsvd/src/eigen/Eigen/src/Core/arch/SSE/Complex.h:
 
 ../src/redsvd/src/eigen/Eigen/src/Core/arch/Default/Settings.h:
 
@@ -486,6 +497,8 @@ src/redsvd/src/redsvdFile.d: ../src/redsvd/src/redsvdFile.cpp \
 
 ../src/redsvd/src/eigen/Eigen/src/LU/Inverse.h:
 
+../src/redsvd/src/eigen/Eigen/src/LU/arch/Inverse_SSE.h:
+
 ../src/redsvd/src/eigen/Eigen/Cholesky.h:
 
 ../src/redsvd/src/eigen/Eigen/src/Cholesky/LLT.h:
@@ -547,6 +560,8 @@ src/redsvd/src/redsvdFile.d: ../src/redsvd/src/redsvdFile.cpp \
 ../src/redsvd/src/eigen/Eigen/src/Geometry/AlignedBox.h:
 
 ../src/redsvd/src/eigen/Eigen/src/Geometry/Umeyama.h:
+
+../src/redsvd/src/eigen/Eigen/src/Geometry/arch/Geometry_SSE.h:
 
 ../src/redsvd/src/eigen/Eigen/Eigenvalues.h:
 
