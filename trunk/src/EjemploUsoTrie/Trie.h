@@ -67,6 +67,7 @@ public:
     void exportarPalabras_INI(fstream*);
     void exportarPalabras(TnodoTrie*,fstream*,string);
 
+    int obternerCantidadDePalabrasIngresadas();
     int obtenerContadorId();
     void incrementarContadorId();
 
