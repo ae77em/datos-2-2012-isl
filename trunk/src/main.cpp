@@ -1,4 +1,5 @@
-#include <iostream>
+#include <stdlib.h>
+#include <time.h>
 #include "redsvd/src/eigen/Eigen/Dense.h"
 
 using namespace std;
@@ -54,24 +55,38 @@ void ayuda()
 			"\nBusqueda: los siguientes argumentos deben ser palabras de busqueda, indicando el principio y el final de éstas con comillas"<< std::endl;
 }
 
+void crearMatrizFormatoMM(){
+
+    srand(time(NULL));
+
+    fstream archivo;
+    archivo.open("matrizMM.mm",fstream::out);
+
+    archivo<<"%%MatrixMarket matrix coordinate real general"<<endl;
+
+    int nro=5000;
+    int nro2=10000;
+    float nro3=0;
+    //inserto cabecera del archivo
+    archivo<<nro<<" "<<nro<<" "<<nro*nro2<<endl;
+
+   for(int i=1;i<=nro;i++){
+        for(int j=1;j<=nro2;j++){
+
+            nro3 = log10 (1 + rand()%20000);
+
+            archivo<<i<<" "<<j<<" "<<nro3<<endl;
+        }
+
+   }
+
+    archivo.close();
+}
+
 /*
  * Principal.
  */
 int main(int argc, char **argv) {
-
-
-	/* Esto era el main del redsvd */
-	Matrix2f A;
-	A << 1, 2, 2, 3;
-	cout << "MAIN REDSVD\n"<< endl;
-	cout << "Here is the matrix A:\n" << A << endl;
-	SelfAdjointEigenSolver<Matrix2f> eigensolver(A);
-	if (eigensolver.info() != Success) abort();
-	cout << "The eigenvalues of A are:\n" << eigensolver.eigenvalues() << endl;
-	cout << "Here's a matrix whose columns are eigenvectors of A \n"
-		<< "corresponding to these eigenvalues:\n"
-		<< eigensolver.eigenvectors() << endl;
-
 
 	cout << "AHORA ENTRA A NUESTRO MAIN, Y RESPONDE SEGUN LOS PARAMETROS INGRESADOS\n"<< endl;
 
