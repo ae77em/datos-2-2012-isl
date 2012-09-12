@@ -65,7 +65,7 @@ void crearMatrizFormatoMM(){
     archivo<<"%%MatrixMarket matrix coordinate real general"<<endl;
 
     int nro=5000;
-    int nro2=10000;
+    int nro2=100000;
     float nro3=0;
     //inserto cabecera del archivo
     archivo<<nro<<" "<<nro<<" "<<nro*nro2<<endl;
