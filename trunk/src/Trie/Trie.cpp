@@ -64,9 +64,7 @@ TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direc
         if(HijoACambiar->infoArchivo==NULL){
 
             HijoACambiar->infoArchivo= new TnodoData;
-            HijoACambiar->infoArchivo->ocurrenciasEnDocDistintos=0;
             HijoACambiar->infoArchivo->ocurrenciasEnElDocActual=0;
-            HijoACambiar->infoArchivo->ocurrenciasEnLaColeccion=0;
             HijoACambiar->infoArchivo->id = this->obtenerContadorId();
 
             this->incrementarContadorId();
@@ -74,7 +72,6 @@ TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direc
         }
 
         HijoACambiar->infoArchivo->ocurrenciasEnElDocActual++;
-        HijoACambiar->infoArchivo->ocurrenciasEnLaColeccion++;
     }
 
     string palabraAux= palabra.substr(1,palabra.size()-1);
@@ -250,41 +247,38 @@ void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
 
 //parte de busqueda
 
-void Trie::buscarPalabrasDeLaParseada_INI(){
+list<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 
-    string cadenaQueEscupePalabras;
-
-    cadenaQueEscupePalabras.clear();
-
-    string aux="";
+    list<TnodoData*>* contenedorIdFreq = new list <TnodoData*>;
     //RAIZ->log<<endl<<endl;
-    buscarPalabrasDeLaParseada(RAIZ->hijo,cadenaQueEscupePalabras,aux);
+    buscarPalabrasDelDocParseado(RAIZ->hijo,contenedorIdFreq);
     //RAIZ->log<<endl;
+
+    return contenedorIdFreq;
 
 }
 
-void Trie::buscarPalabrasDeLaParseada(TnodoTrie* NODO,string palabra,string aux){
+void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,list<TnodoData*>* contenedorIdFreq ){
 
     if(NODO){
         if(NODO->flagParser){
-            palabra= palabra+NODO->letra;
+
             //pongo en cero para que posteriores parseadas no lo reconozcan salvo que forme parte de palabras de la
             //correspondinete parseada
             NODO->flagParser=0;
 
             if(NODO->infoArchivo){
-                //RAIZ->log<<palabra;
-                //RAIZ->log<<" FILA: "<<NODO->infoArchivo->id<<endl;
+
+                contenedorIdFreq->push_back(NODO->infoArchivo);
+
             }
 
-            buscarPalabrasDeLaParseada(NODO->hijo,palabra,aux);
-            palabra.resize(palabra.size()-1);
-
-            buscarPalabrasDeLaParseada(NODO->hermano,palabra,aux);
+            buscarPalabrasDelDocParseado(NODO->hijo,contenedorIdFreq);
+            buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
         }
         else{
 
-            buscarPalabrasDeLaParseada(NODO->hermano,palabra,aux);
+            buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
 
         }
     }

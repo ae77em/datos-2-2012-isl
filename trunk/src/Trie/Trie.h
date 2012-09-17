@@ -6,14 +6,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <list>
 
 using namespace std;
 
 struct TnodoData{
 
     int ocurrenciasEnElDocActual;
-    int ocurrenciasEnLaColeccion;
-    int ocurrenciasEnDocDistintos;
     int id;
 };
 
@@ -34,7 +33,6 @@ struct TnodoPrincipalTrie{
     fstream log;
 
 };
-
 
 class Trie {
 
@@ -61,8 +59,8 @@ public:
     void destruirArbol(TnodoTrie*,int*);
     void destruirArbol_INI(void);
 
-    void buscarPalabrasDeLaParseada_INI(void);
-    void buscarPalabrasDeLaParseada(TnodoTrie*,string,string);
+    list<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
+    void buscarPalabrasDelDocParseado(TnodoTrie*,list<TnodoData*>*);
 
     void exportarPalabras_INI(fstream*);
     void exportarPalabras(TnodoTrie*,fstream*,string);
