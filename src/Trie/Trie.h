@@ -7,8 +7,15 @@
 #include <iostream>
 #include <fstream>
 #include <list>
+#include <vector>
 
 using namespace std;
+
+struct TnodoTerminoId{
+
+    string palabra;
+    int* id;
+};
 
 struct TnodoData{
 
@@ -31,6 +38,7 @@ struct TnodoPrincipalTrie{
     int cantidadDeDocumentoParseados;
     TnodoTrie* hijo;
     fstream log;
+    vector<TnodoTerminoId*>* contenedor;
 
 };
 
@@ -68,6 +76,15 @@ public:
     int obternerCantidadDePalabrasIngresadas();
     int obtenerContadorId();
     void incrementarContadorId();
+
+    vector<TnodoTerminoId*>* exportarPalabrasContenedor_INI();
+    void exportarPalabrasContenedor(TnodoTrie*,vector<TnodoTerminoId*>*,string);
+
+    void eliminarStopWord_INI(string);
+    void eliminarStoprWord(TnodoTrie*,string);
+
+    void quitarTermindoDelContenedor(int);
+    void actualizarIds(int);
 
 };
 #endif
