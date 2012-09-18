@@ -9,6 +9,7 @@ void Trie::inicializarRaiz(){
     this->RAIZ->log.open("log.txt",fstream::out);
     this->RAIZ->contadorDeId_s=0;
     this->RAIZ->cantidadDeDocumentoParseados=0;
+    this->RAIZ->contenedor = new vector<TnodoTerminoId*>;
 
 }
 
@@ -432,3 +433,89 @@ TnodoTrie* Trie::buscarLetra(char letraBuscada, TnodoTrie* NODO){
     }
 
 }
+
+//se usa al final de la indexacion, vuelca todo en un vector, para facilitar la actualizacion de los id´s
+// luego de la eliminaicon de las stopwords
+vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
+
+    RAIZ->contenedor->resize(this->obtenerContadorId()); //el id arranca desde cero
+
+    string palabraAux = "";
+
+    this->exportarPalabrasContenedor(this->RAIZ->hijo,RAIZ->contenedor,palabraAux);
+
+    return RAIZ->contenedor;
+
+}
+
+void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*contenedor, string palabra){
+
+    if(NODO){
+            palabra= palabra + NODO->letra;
+
+            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
+
+                //RAIZ->log<<palabra;
+                //RAIZ->log<<"  id:"<<NODO->infoArchivo->id<<"  esta palabra aparecio: ";
+                //RAIZ->log<<NODO->infoArchivo->ocurrenciasEnLaColeccion<<"  en la coleccion "<<endl;
+                TnodoTerminoId* terminoId = new TnodoTerminoId;
+
+                terminoId->id = &NODO->infoArchivo->id;
+                terminoId->palabra = palabra;
+
+                cout<<"exportando palabra: "<<terminoId->palabra<<"  exportando id: "<<*terminoId->id<<endl;
+
+                contenedor->at(*terminoId->id)=terminoId;
+
+            }
+
+            exportarPalabrasContenedor(NODO->hijo,contenedor,palabra);
+            palabra.resize(palabra.size()-1);
+
+            exportarPalabrasContenedor(NODO->hermano,contenedor,palabra);
+        }
+}
+
+void Trie::eliminarStopWord_INI(string palabraParaEliminar){
+
+    eliminarStoprWord(RAIZ->hijo,palabraParaEliminar);
+
+}
+
+//este metodo no elimina ninguna palabra, solamente elimina el nodo que se usa de flag para que el trie lo
+//deje de reconocer como palabra
+void Trie::eliminarStoprWord(TnodoTrie* NODO, string palabraParaEliminar){
+
+    TnodoTrie* nodoAnalizado = buscarLetra(palabraParaEliminar[0],NODO);
+
+    if(palabraParaEliminar.size()==1){
+        if(nodoAnalizado->infoArchivo){
+
+            this->quitarTermindoDelContenedor(nodoAnalizado->infoArchivo->id);
+
+            delete nodoAnalizado->infoArchivo;
+
+        }else{
+            cout<<"la palabra buscada para eliminar no se encuentra dentro del buffer"<<endl;
+        }
+    }else{
+        palabraParaEliminar= palabraParaEliminar.substr(1,palabraParaEliminar.size()-1);
+        eliminarStoprWord(nodoAnalizado->hijo,palabraParaEliminar);
+    }
+}
+
+void Trie::quitarTermindoDelContenedor(int id){
+
+    //ver como quitar elemendor de en medio de un vector
+
+    actualizarIds(id);
+}
+
+void Trie::actualizarIds(int idBorrado){
+
+    for(int i= idBorrado; i<RAIZ->contenedor->size();i++){
+        RAIZ->contenedor->at(i)--;
+    }
+
+}
+
