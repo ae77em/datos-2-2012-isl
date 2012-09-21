@@ -288,13 +288,13 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,list<TnodoData*>* conten
 
 
 
-void Trie::exportarPalabras_INI(fstream* salida){
+void Trie::persistirPalabras_INI(fstream* salida){
 
     string cadenaQueEscupePalabras;
 
     cadenaQueEscupePalabras.clear();
 
-    exportarPalabras(RAIZ->hijo,salida,cadenaQueEscupePalabras);
+    persistirPalabras(RAIZ->hijo,salida,cadenaQueEscupePalabras);
 
     //RAIZ->log<<endl<<endl<<"cantidadTotalDePalabrasQueSeIngresaron(no quiere decir distintas): "<<RAIZ->cantidadTotalDePalabrasEnLaColeccion;
 
@@ -304,7 +304,7 @@ void Trie::exportarPalabras_INI(fstream* salida){
 
 }
 
-void Trie::exportarPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
+void Trie::persistirPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
 
         if(NODO){
 
@@ -319,10 +319,10 @@ void Trie::exportarPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
 
             }
 
-            exportarPalabras(NODO->hijo,salida,palabra);
+            persistirPalabras(NODO->hijo,salida,palabra);
             palabra.resize(palabra.size()-1);
 
-            exportarPalabras(NODO->hermano,salida,palabra);
+            persistirPalabras(NODO->hermano,salida,palabra);
         }
 
 }
@@ -398,19 +398,19 @@ TnodoTrie* Trie::buscarLetra(char letraBuscada, TnodoTrie* NODO){
         return NULL;
     }
     //primer letra del Nodo es la que busco
-    if (NODO->letra==letraBuscada){
+    else if (NODO->letra==letraBuscada){
         //cout<< "PrimerLetraEsIGualaMi=="<< letraBuscada<<endl;
         return NODO;
     }
 
     //si la letra que entra es mas chica que las que ya estan
-    if (NODO->letra>letraBuscada){
+    else if (NODO->letra>letraBuscada){
         //cout<< "letra desigual yo busco una: "<<letraBuscada<<" y es una:  "<<NODO->letra<<endl;
 
         return NULL;
     }
 
-    if (NODO->letra<letraBuscada){
+    else if (NODO->letra<letraBuscada){
        //cout<< "primerLetraEsmenosQueyo:   "<<NODO->letra<<" ENtro En bucle"<<endl;
 
 
@@ -463,8 +463,6 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
                 terminoId->id = &NODO->infoArchivo->id;
                 terminoId->palabra = palabra;
 
-                cout<<"exportando palabra: "<<terminoId->palabra<<"  exportando id: "<<*terminoId->id<<endl;
-
                 contenedor->at(*terminoId->id)=terminoId;
 
             }
@@ -494,6 +492,7 @@ void Trie::eliminarStoprWord(TnodoTrie* NODO, string palabraParaEliminar){
             this->quitarTermindoDelContenedor(nodoAnalizado->infoArchivo->id);
 
             delete nodoAnalizado->infoArchivo;
+            nodoAnalizado->infoArchivo=NULL;
 
         }else{
             cout<<"la palabra buscada para eliminar no se encuentra dentro del buffer"<<endl;
@@ -506,16 +505,28 @@ void Trie::eliminarStoprWord(TnodoTrie* NODO, string palabraParaEliminar){
 
 void Trie::quitarTermindoDelContenedor(int id){
 
-    //ver como quitar elemendor de en medio de un vector
+    RAIZ->contenedor->at(id)=NULL;
 
     actualizarIds(id);
 }
 
 void Trie::actualizarIds(int idBorrado){
 
-    for(int i= idBorrado; i<RAIZ->contenedor->size();i++){
-        RAIZ->contenedor->at(i)--;
+    for(int i=idBorrado+1; i<RAIZ->contenedor->size();i++){
+        if(RAIZ->contenedor->at(i)){
+            cout<<--*RAIZ->contenedor->at(i)->id<<" ";
+        }
     }
-
 }
 
+void Trie::persistirPalabrasContenedor(fstream* salida){
+
+    cout<<"persisteicno"<<endl;
+
+    for(int i=0; i<RAIZ->contenedor->size();i++){
+        //si no esta vacio
+        if(RAIZ->contenedor->at(i)){
+            *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<endl;
+        }
+    }
+}
