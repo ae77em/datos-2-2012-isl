@@ -70,8 +70,10 @@ public:
     list<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
     void buscarPalabrasDelDocParseado(TnodoTrie*,list<TnodoData*>*);
 
-    void exportarPalabras_INI(fstream*);
-    void exportarPalabras(TnodoTrie*,fstream*,string);
+    void persistirPalabras_INI(fstream*);
+    void persistirPalabras(TnodoTrie*,fstream*,string);
+
+    void persistirPalabrasContenedor(fstream*);
 
     int obternerCantidadDePalabrasIngresadas();
     int obtenerContadorId();
