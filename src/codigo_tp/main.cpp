@@ -18,7 +18,11 @@ int main () {
 	cantTopicos = argv[2];
 	directorio = argv[3];
 	
-	indexer.crearIndice(nombrerepositorio, cantTopicos, directorio);
+	if (indexer.crearIndice(nombrerepositorio, cantTopicos, directorio)) {
+		std::cerr << "El indice no pudo ser creado.";
+		return 1;
+	}
 	
+	std::cerr << "El indice fue creado satisfactoriamente.";
 	return 0;
 }

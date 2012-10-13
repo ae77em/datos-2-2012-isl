@@ -10,7 +10,7 @@ class Lister {
 	public:
 		Lister(std::string ruta);
 		~Lister();
-		std::list<std::string>* listarArchivos ();
+		std::list<std::string>* listarArchivos();
 };
 
 #endif

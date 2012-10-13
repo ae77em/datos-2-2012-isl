@@ -3,9 +3,13 @@
 
 class Parser {
 	private:
-	
+		Reader* lector;
+		Stemmer* stemmer;
+		Persister* persistidor;
 	public:
-	
+		Parser();
+		~Parser();
+		std::bool parsearArchivo(std::string nombreArchivo);
 };
 
 #endif
