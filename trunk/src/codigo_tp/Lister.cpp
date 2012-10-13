@@ -9,7 +9,7 @@ Lister::Lister(std::string ruta) {
 	this->ruta = ruta;
 }
 
-std::list<std::string>* Lister::listarArchivos () {
+std::list<std::string>* Lister::listarArchivos() {
 	std::list<std::string>* lista;
 
 	struct dirent* archivo;

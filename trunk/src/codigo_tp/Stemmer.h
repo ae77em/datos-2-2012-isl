@@ -2,10 +2,11 @@
 #define __STEMMER_H_
 
 class Stemmer {
-	private:
-	
 	public:
-	
+		Stemmer();
+		~Stemmer();
+		
+		std::string stemPalabra(std::string palabra);
 };
 
 #endif
