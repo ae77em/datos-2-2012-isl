@@ -84,12 +84,10 @@ TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direc
     }
     //si se modifico el comienzo de la lista lo actualizo el puntero al comienzo de la misma
     if(NodoAInsertarPorLasDudas){
-        // //RAIZ->log<<"\nYosoy el padre: "<<NODO->letra<<" de: "<<NodoAInsertarPorLasDudas->letra<<endl;
         HijoACambiar->hijo=NodoAInsertarPorLasDudas;
     }
 
     if(modificoPrincipioDeLista){
-        // //RAIZ->log<<"\ndevolcia hijo a cambvivar con letra: "<<HijoACambiar->letra<<endl;
         return HijoACambiar;
     }
     else{
@@ -100,11 +98,8 @@ TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direc
 
 TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int* FLAG){
 
-    ////RAIZ->log<<"\nSOY LA PRIMER LETRA DE LA LISTA: "<<primerNodo->letra<<endl;
 
     if(primerNodo->letra==FINAL_DE_PALABRA){
-       // //RAIZ->log<< "PrimerNodoEstabaVacio"<<endl;
-        ////RAIZ->log<<"entra la letra: "<<letraEntrante<<endl;
         TnodoTrie* nodoHijo= new TnodoTrie;
 
         inicializarNodo(nodoHijo);
@@ -117,14 +112,12 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
 
 
     if (primerNodo->letra==letraEntrante){
-        ////RAIZ->log<< "PrimerLetraEsIGualaMi="<< letraEntrante<<"= "<<primerNodo->letra<<endl;
         primerNodo->flagParser=1;
         return primerNodo;
     }
 
     //si la letra que entra es mas chica que las que ya estan
     if (primerNodo->letra>letraEntrante){
-        ////RAIZ->log<< "DeboIngresarAlPRincipiodeLalistaYa:"<<letraEntrante<<" < "<<primerNodo->letra<<endl;
 
         *FLAG=1;
 
@@ -143,7 +136,6 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
     }
 
     if (primerNodo->letra<letraEntrante){
-        ////RAIZ->log<< "primerLetraEsmenosQueyo ENtro En bucle, la letra es: "<<primerNodo->letra<<" yo soy: "<<letraEntrante<<endl;
 
         TnodoTrie* nodoEntrante= new TnodoTrie;
         TnodoTrie* nuevoNodoHijo= new TnodoTrie;
@@ -152,8 +144,6 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
         inicializarNodo(nodoEntrante);
 
         if(primerNodo->hermano==NULL){
-
-          //  //RAIZ->log<< "Siguuiente vacio  "<<primerNodo->letra<<" < "<<letraEntrante<<endl;
 
             nodoEntrante->letra=letraEntrante;
             nodoEntrante->flagParser=1;
@@ -166,7 +156,6 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
         }
 
         else {
-            ////RAIZ->log<< "como el primer Hermano no esta vacion entro en bucle\n"<<endl;
 
             TnodoTrie* nodoActual= primerNodo->hermano;
 
@@ -176,16 +165,12 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
 
                 if(nodoActual->letra==letraEntrante){
 
-              //      //RAIZ->log<<"la letra de mi hijo es: "<<nodoActual->hijo->letra;
-                //    //RAIZ->log <<" encontre una letra igual a mi, es la: "<<nodoActual->letra<<" yo soy "<<letraEntrante<<endl;
                     nodoActual->flagParser=1;
 
                     return nodoActual;
 
                 }
                 if(nodoActual->letra>letraEntrante){
-                  //  //RAIZ->log<<"ACA NUNCA ENTRO";
-                    ////RAIZ->log<< "me encajo en el medio de"<<nodoAnterior->letra<<" yo soy "<<letraEntrante<<" y mi hermana mayor"<< nodoActual->letra<<endl;
 
                     nodoEntrante->letra=letraEntrante;
                     nodoEntrante->hijo=nuevoNodoHijo;
@@ -200,7 +185,6 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
 
             }
             //si salgo del while quiere decir que la letra que quiero ingresar a mayor a todas
-            ////RAIZ->log<<"llegue al final y no entre, yo soy: "<<letraEntrante<<"mi hermano menor es: "<<nodoAnterior->letra<<endl;
 
             nodoAnterior->hermano=nodoEntrante;
 
@@ -208,8 +192,6 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
             nodoEntrante->flagParser=1;
             nodoEntrante->hijo=nuevoNodoHijo;
 
-          /*  delete nodoActual;
-            delete nodoAnterior;*/
             return nodoEntrante;
         }
 
@@ -224,15 +206,12 @@ void Trie::destruirArbol_INI(){
 
     destruirArbol(RAIZ->hijo,&cantidadDeNodos);
 
-    //RAIZ->log<<"se destruyeron: "<<cantidadDeNodos<<" nodos"<<endl;
-
 }
 
 
 void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
 
     if(NODO){
-        ////RAIZ->log<<NODO->letra;
         destruirArbol(NODO->hijo,cantidadDeNodos);
         destruirArbol(NODO->hermano,cantidadDeNodos);
 
@@ -251,9 +230,7 @@ void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
 list<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 
     list<TnodoData*>* contenedorIdFreq = new list <TnodoData*>;
-    //RAIZ->log<<endl<<endl;
     buscarPalabrasDelDocParseado(RAIZ->hijo,contenedorIdFreq);
-    //RAIZ->log<<endl;
 
     return contenedorIdFreq;
 
@@ -296,11 +273,6 @@ void Trie::persistirPalabras_INI(fstream* salida){
 
     persistirPalabras(RAIZ->hijo,salida,cadenaQueEscupePalabras);
 
-    //RAIZ->log<<endl<<endl<<"cantidadTotalDePalabrasQueSeIngresaron(no quiere decir distintas): "<<RAIZ->cantidadTotalDePalabrasEnLaColeccion;
-
-    //RAIZ->log<<endl<<"estado final del contador de IDs: "<<obtenerContadorId();
-
-    //RAIZ->log.close();
 
 }
 
@@ -312,9 +284,6 @@ void Trie::persistirPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
 
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
-                //RAIZ->log<<palabra;
-                //RAIZ->log<<"  id:"<<NODO->infoArchivo->id<<"  esta palabra aparecio: ";
-                //RAIZ->log<<NODO->infoArchivo->ocurrenciasEnLaColeccion<<"  en la coleccion "<<endl;
                 *salida<<palabra<<"  id: "<<NODO->infoArchivo->id<<endl;
 
             }
@@ -354,8 +323,6 @@ bool Trie::buscarPalabra(string palabra){
 //recibe al hijo de la raiz del arbol
 bool Trie::buscarPalabra(string palabra,TnodoTrie* NODO){
 
-    //cout<<"LETRA QUE SE ESTA BUSCANDO: "<<palabra[0]<<endl;
-
     //si devuele un nodo, la letra buscada entonces fue hallada
     //entonces la busqueda continua de lo contrario quiere decir que no se halla alguna de
     //las letras que forman la palabra buscada, la busqueda pincha
@@ -366,24 +333,19 @@ bool Trie::buscarPalabra(string palabra,TnodoTrie* NODO){
        if((palabra.size()>1) ){
 
             palabra=palabra.substr(1,palabra.size()-1);
-            //cout<<"letra que esta por entrar a la sgte busqueda: "<<palabra[0]<<endl;
             return buscarPalabra(palabra,nodoSiguiente->hijo);
 
        }else{
             //despues cambiar esta parte el operador ternario
             if(nodoSiguiente->infoArchivo){
-               // cout<<"contenido NODO->INFO->ID: "<<nodoSiguiente->infoArchivo->id<<endl;
                 return true;
             }else{
-          //      cout<<"encontre una subcadena pero la palabra cno esta"<<endl<<endl;
-            //    cout<<"contenido NODO->INFO: "<<nodoSiguiente->infoArchivo<<endl;
                 return false;
             }
        }
     }
     else{
         //ENTRO ACA SI LA LETRA QUE SE ESTABA BUSCANDO NO SE ENCUENTRA EN LA LISTA
-        //cout<<"fallo en la letra: "<<NODO->letra<<endl;
         return false;
     }
 
@@ -394,24 +356,20 @@ TnodoTrie* Trie::buscarLetra(char letraBuscada, TnodoTrie* NODO){
     //cadena incompleta
     if(NODO->letra==FINAL_DE_PALABRA){
 
-        //cout<<"dice que el nodo esta vacio"<<endl;
         return NULL;
     }
     //primer letra del Nodo es la que busco
     else if (NODO->letra==letraBuscada){
-        //cout<< "PrimerLetraEsIGualaMi=="<< letraBuscada<<endl;
         return NODO;
     }
 
     //si la letra que entra es mas chica que las que ya estan
     else if (NODO->letra>letraBuscada){
-        //cout<< "letra desigual yo busco una: "<<letraBuscada<<" y es una:  "<<NODO->letra<<endl;
 
         return NULL;
     }
 
     else if (NODO->letra<letraBuscada){
-       //cout<< "primerLetraEsmenosQueyo:   "<<NODO->letra<<" ENtro En bucle"<<endl;
 
 
             TnodoTrie* nodoActual=NODO->hermano;
@@ -420,7 +378,6 @@ TnodoTrie* Trie::buscarLetra(char letraBuscada, TnodoTrie* NODO){
             while(!(nodoActual==NULL)){
 
                 if(nodoActual->letra==letraBuscada){
-        //            cout <<"encontre una letra igual a mi, es la: "<<nodoActual->letra<<" yo soy "<<letraBuscada<<endl;
                     return nodoActual;
 
                 }
@@ -428,13 +385,12 @@ TnodoTrie* Trie::buscarLetra(char letraBuscada, TnodoTrie* NODO){
                 nodoAnterior=nodoActual;
                 nodoActual=nodoActual->hermano;
             }
-      //      cout<<"LLEGUE AL FINAL Y NO ENCONTRE LA LETRA"<<endl;
             return NULL;
     }
 
 }
 
-//se usa al final de la indexacion, vuelca todo en un vector, para facilitar la actualizacion de los id´s
+//se usa al final de la indexacion, vuelca todo en un vector, para facilitar la actualizacion de los idï¿½s
 // luego de la eliminaicon de las stopwords
 vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
 
@@ -455,9 +411,6 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
 
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
-                //RAIZ->log<<palabra;
-                //RAIZ->log<<"  id:"<<NODO->infoArchivo->id<<"  esta palabra aparecio: ";
-                //RAIZ->log<<NODO->infoArchivo->ocurrenciasEnLaColeccion<<"  en la coleccion "<<endl;
                 TnodoTerminoId* terminoId = new TnodoTerminoId;
 
                 terminoId->id = &NODO->infoArchivo->id;
