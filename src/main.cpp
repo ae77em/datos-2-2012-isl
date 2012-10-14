@@ -57,30 +57,75 @@ void ayuda()
 
 void crearMatrizFormatoMM(){
 
-    srand(time(NULL));
+		srand(time(NULL));
 
-    fstream archivo;
-    archivo.open("matrizMM.mm",fstream::out);
+	    int fila=100000,columna=750000,contador=0,indice=0,
+	    		indicesDistintosDeCero=1000;
 
-    archivo<<"%%MatrixMarket matrix coordinate real general"<<endl;
+	    float valorIndice=0;
 
-    int nro=5000;
-    int nro2=100000;
-    float nro3=0;
-    //inserto cabecera del archivo
-    archivo<<nro<<" "<<nro<<" "<<nro*nro2<<endl;
+	    vector<float>* contenedor = new vector<float>;
+	    contenedor->resize(fila,0);
 
-   for(int i=1;i<=nro;i++){
-        for(int j=1;j<=nro2;j++){
+	    fstream archivo;
+	    archivo.open("/home/federico/pruebasPython/mm1x5term75x4docIndices75x7.mm",fstream::out);
 
-            nro3 = log10 (1 + rand()%20000);
+	    archivo<<"%%MatrixMarket matrix coordinate real general"<<endl;
+	    //inserto cabecera del archivo
+	    //doc - terminos - indices distintos de cero
 
-            archivo<<i<<" "<<j<<" "<<nro3<<endl;
-        }
+	    archivo<<columna<<" "<<fila<<" "<<(indicesDistintosDeCero*columna)<<endl;
 
-   }
+	    register int valoresIngresados=0;
 
-    archivo.close();
+	    for(register int i=1;i<=columna;i++){
+
+	        for(register int j=1;j<=indicesDistintosDeCero;j++){
+	        	//en este bucle cargo el vector de longitud Filas con indicesDistintosDeCero valores diferentes
+	        	indice =  rand()%fila;
+	        	valorIndice = 1 + log10 (1 + rand()%20000);
+
+	        	if(contenedor->at(indice)!=0){
+	        		//busco lugar vacion dentro del vector
+	        		while(contenedor->at(indice)!=0){
+
+	        			//si llego al final del vector
+	        			if(indice==(fila-1)){
+	        				indice=-1;
+	        			}
+
+	        			++indice;
+	        		}
+	        	}
+	        	if(indice<0){
+	        	cout<<indice<<endl;
+	        	}
+	        	contenedor->at(indice) = valorIndice;
+	        }
+
+	        for(register unsigned int k=0; k<contenedor->size(); k++){
+
+	        	if(contenedor->at(k)!=0){
+	        		archivo<<i<<" "<<k+1<<" "<<contenedor->at(k)<<endl;
+	        		contador++;
+	        		contenedor->at(k)=0;
+	        		++valoresIngresados;
+	        	}
+
+	        	if(valoresIngresados==indicesDistintosDeCero){
+	        		valoresIngresados=0;
+	        		break;
+	        	}
+
+	        }
+
+	    }
+
+	    cout<<endl<<"ingrese:  "<<contador<<endl;
+
+	    archivo.close();
+
+
 }
 
 /*
