@@ -474,8 +474,6 @@ void Trie::actualizarIds(int idBorrado){
 
 void Trie::persistirPalabrasContenedor(fstream* salida){
 
-    cout<<"persisteicno"<<endl;
-
     for(int i=0; i<RAIZ->contenedor->size();i++){
         //si no esta vacio
         if(RAIZ->contenedor->at(i)){
