@@ -8,14 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include src/redsvd/src/subdir.mk
--include src/Utilidades/subdir.mk
--include src/Trie/subdir.mk
--include src/RecorredorDeDirectorios/subdir.mk
--include src/Indexador/subdir.mk
--include src/Consulta/subdir.mk
--include src/ArchivoTexto/subdir.mk
--include src/AnalizadorGramatico/subdir.mk
+-include src/codigo_tp/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk

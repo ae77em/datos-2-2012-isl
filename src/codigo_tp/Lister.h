@@ -3,13 +3,21 @@
 
 #include <iostream>
 #include <list>
+#include <cstring>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 class Lister {
-	private:
+
+private:
 		std::string ruta;
-	public:
-		Lister(std::string ruta);
+		std::list<std::string>* lista;
+
+public:
+		Lister(std::string);
 		~Lister();
+		void listarArchivos(std::string,std::list<std::string>*);
 		std::list<std::string>* listarArchivos();
 };
 
