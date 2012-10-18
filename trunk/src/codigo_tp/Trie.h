@@ -1,5 +1,5 @@
-#ifndef _trie_H_
-#define _trie_H_
+#ifndef _TRIE_H_
+#define _TRIE_H_
 
 #define FINAL_DE_PALABRA 0
 

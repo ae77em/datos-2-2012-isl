@@ -1,4 +1,4 @@
-#include "trie.h"
+#include "Trie.h"
 #include <iostream>
 #include <string>
 

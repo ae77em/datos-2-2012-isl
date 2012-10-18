@@ -23,13 +23,6 @@ C_UPPER_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-src/redsvd/src \
 src \
-src/Utilidades \
-src/Trie \
-src/RecorredorDeDirectorios \
-src/Indexador \
-src/Consulta \
-src/ArchivoTexto \
-src/AnalizadorGramatico \
+src/codigo_tp \
 
