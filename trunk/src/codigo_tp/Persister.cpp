@@ -2,14 +2,14 @@
 
 Persister::Persister(std::string path){
 
-    salida.open(path.c_str(),fstream::out);
+    salida.open(path.c_str(),std::fstream::out);
     //inicializo cabecera del archivo
-    salida<<"%%MatrixMarket matrix coordinate real general"<<endl;
+    salida<<"%%MatrixMarket matrix coordinate real general\n";
     //se debe dejar un espacio en blanco para luego insertar la cantidad de col, fil e indices
     //ese debe ser el formato respetado para que la libreria pueda andar
-    salida<<"                         "<<endl;
+    salida<<"                         \n";
 
-    contenedor = new list<TregistroArchivo*>;
+    contenedor = new std::list<TregistroArchivo*>;
 
 }
 
@@ -20,13 +20,13 @@ Persister::~Persister(){
 
 }
 
-void Persister::recibirDatos(list<TnodoData*>* data, unsigned int columna){
+void Persister::recibirDatos(std::list<TnodoData*>* data, unsigned int columna){
 
-    list<TnodoData*>::iterator b = data->begin();
-    list<TnodoData*>::iterator e = data->end();
+    std::list<TnodoData*>::iterator b = data->begin();
+    std::list<TnodoData*>::iterator e = data->end();
     while(b!=e){
         TnodoData* aux = *b;
-        salida<<columna<<" "<<aux->id<<" "<<aux->ocurrenciasEnElDocActual<<endl;
+        salida<<columna<<" "<<aux->id<<" "<<aux->ocurrenciasEnElDocActual<<std::endl;
         b++;
     }
 }

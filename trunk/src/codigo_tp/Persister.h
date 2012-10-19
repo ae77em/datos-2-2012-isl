@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 #include <list>
-#include "trie.h"
+#include "Trie.h"
 
 struct TregistroArchivo{
     int col;
@@ -15,16 +15,17 @@ struct TregistroArchivo{
 class Persister {
 
 	public:
+		Persister();
         Persister(std::string);
         ~Persister();
-        void recibirDatos(list<TnodoData*>*,unsigned int);
+        void recibirDatos(std::list<TnodoData*>*,unsigned int);
 
 	private:
 
         void bajarDatosADisco();
 
-        fstream salida;
-        list<TregistroArchivo*>* contenedor;
+        std::fstream salida;
+        std::list<TregistroArchivo*>* contenedor;
 
 };
 
