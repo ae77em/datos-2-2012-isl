@@ -15,10 +15,13 @@ private:
 		std::list<std::string>* lista;
 
 public:
+		Lister();
 		Lister(std::string);
 		~Lister();
-		void listarArchivos(std::string,std::list<std::string>*);
 		std::list<std::string>* listarArchivos();
+
+private:
+		void listarArchivos(std::string,std::list<std::string>*);
 };
 
 #endif

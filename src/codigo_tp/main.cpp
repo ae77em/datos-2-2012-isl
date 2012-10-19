@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
 
-#include "Indexer.h"
+#include "Indexador.h"
 
 int main () {
-	Indexer indexador;
+	Indexador indexador;
 	std::string nombreRepositorio, cantTopicos, directorio;
 	
 	if (argc < 4) {
