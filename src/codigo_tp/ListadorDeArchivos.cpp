@@ -1,7 +1,7 @@
 #include "ListadorDeArchivos.h"
 
 
-ListadorDeArchivos::ListadorDeArchivos(std::string ruta) {
+ListadorDeArchivos::ListadorDeArchivos(std::string ruta ) {
 	this->ruta = ruta;
 }
 
@@ -9,27 +9,8 @@ std::list<std::string>* ListadorDeArchivos::listarArchivos() {
 
 	std::list<std::string>* lista = new std::list<std::string>;
 
-	struct dirent* archivo;
-	DIR* directorio;
+	listarArchivos(this->ruta, lista);
 
-	directorio = opendir (ruta.c_str());
-	if (directorio == NULL){
-		return NULL;
-	}
-
-	while  ((archivo = readdir(directorio)) != NULL) {
-		std::string nomArchivo = ruta + "/" + archivo->d_name;
-
-		if (archivo->d_type == DT_DIR) {
-			if (strcmp(archivo->d_name, ".") != 0 && strcmp(archivo->d_name, "..") != 0) {
-				listarArchivos(nomArchivo, lista);
-			}
-		}else {
-			lista->push_back(nomArchivo);
-		}
-	}
-
-	closedir(directorio);
 	return lista;
 }
 

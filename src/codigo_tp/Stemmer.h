@@ -1,14 +1,7 @@
 #ifndef __STEMMER_H_
 #define __STEMMER_H_
 
-#include <cstring>  /* for memmove */
 #include <cstdio>
-#include <cstdlib>  /* for malloc, free */
-#include <cctype>   /* for isupper, islower, tolower */
-
-#define INC 50           /* size units in which s is increased */
-#define LETTER(ch) (isupper(ch) || islower(ch))
-#define BUFF 16
 
 class Stemmer {
 

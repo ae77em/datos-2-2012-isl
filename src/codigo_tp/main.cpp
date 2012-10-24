@@ -4,10 +4,11 @@
 #include "Indexador.h"
 
 int main (int argc, char *argv[]) {
+
 	Indexador indexador;
 	std::string nombreRepositorio;
-	std::string cantTopicos;
 	std::string directorio;
+	int cantTopicos;
 	
 	if (argc < 4) {
 		std::cerr << "Uso del programa: " << std::endl;

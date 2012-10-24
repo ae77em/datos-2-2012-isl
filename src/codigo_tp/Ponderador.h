@@ -6,14 +6,13 @@
  *     Comment: Clase con funciones comunes para el programa.
  */
 
+
+#include <Eigen/Sparse>
+
 #ifndef PONDERADOR_H_
 #define PONDERADOR_H_
 
-#include <sstream>
-#include <string>
-#include <cstdint>
-#include <algorithm>
-
+using namespace Eigen;
 
 class Ponderador {
 private:
@@ -26,21 +25,18 @@ public:
 
 	virtual ~Ponderador();
 
-	static float normaVectorialMatriz( MatrizDispersa<float> &);
+	static float normaVectorialMatriz( MatrixXf&);
 
-	static void ponderacionLocal( MatrizDispersa<float> & );
+	static void ponderacionLocal( MatrixXf& );
 
 	static float cocientePonderacionGlobal( float, float, unsigned );
 
-	static void ponderacionGlobal( MatrizDispersa<float> & , unsigned);
+	static void ponderacionGlobal( MatrixXf& , unsigned);
 
 	static float calculoDeSimilitud( float q[], float d[], int );
 
 	static void dotVectores( float mat1[], float mat2[], float& dot, int tamanio );
 
 };
-
-
-
 
 #endif /* PONDERADOR_H_ */

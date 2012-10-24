@@ -6,6 +6,12 @@
  */
 
 #include "Ponderador.h"
+#include <sstream>
+#include <string>
+#include <cstdint>
+#include <algorithm>
+
+
 
 Ponderador::Ponderador() {
 	// TODO Auto-generated constructor stub
@@ -22,11 +28,11 @@ float Ponderador::conTresDecimales(float numero){
  * Calcula la norma vectorial de *this. *this debe ser un vector
  * de tipo MatrizInversa...es malo el metodo pero bueno, es lo que hay
  */
-float Ponderador::normaVectorialMatriz( MatrizDispersa<float> & mat){
+float Ponderador::normaVectorialMatriz( MatrixXf& mat){
 
-	//float norma = 0;
+	float norma = 0;
 
-	/*if ( mat.cols() != 1 && mat.rows() != 1 )
+	if ( mat.cols() != 1 && mat.rows() != 1 )
 		return 0; // si no es un vector
 
 	if ( mat.cols() == 1 && mat.rows() == 1 )
@@ -34,13 +40,13 @@ float Ponderador::normaVectorialMatriz( MatrizDispersa<float> & mat){
 
 	if ( mat.cols() > 1 )
 		for ( unsigned i = 0; i < mat.cols(); ++i )
-			norma += pow(mat(0,i),2);
+			norma += pow(double(mat(0,i)),2);
 
 	else if ( mat.rows() > 1 )
 		for ( unsigned i = 0; i < mat.rows(); ++i )
-			norma += pow(mat(i,0),2);*/
+			norma += pow(double(mat(i,0)),2);
 
-	float norma = mat.dot(mat,mat); // calculo el producto escalar
+	float norma = mat.dot(mat); // calculo el producto escalar
 
 	return floor ( sqrt(norma) * 1000 ) / 1000;
 
@@ -50,7 +56,7 @@ float Ponderador::normaVectorialMatriz( MatrizDispersa<float> & mat){
  * Calcula la importancia local de un término en un doc.
  * @param : ft = frecuencia del termino en el documento.
  */
-void Ponderador::ponderacionLocal( MatrizDispersa<float> & mat ){
+void Ponderador::ponderacionLocal( MatrixXf& mat ){
 
 	for ( unsigned i = 0; i < mat.rows(); ++i )
 		for ( unsigned j = 0; j < mat.cols(); ++j ){
@@ -84,16 +90,16 @@ float Ponderador::cocientePonderacionGlobal( float ft, float fgt, unsigned n ){
  * En este caso se le pasa la matriz con la ponderacion local en cada una de
  * sus componentes....
  */
-void Ponderador::ponderacionGlobal( MatrizDispersa<float> & mat, unsigned colIni ){
+void Ponderador::ponderacionGlobal( MatrixXf& mat, unsigned colIni ){
 
 	unsigned nroTermino = 0;
 	while ( nroTermino < mat.rows() ){
-		MatrizDispersa<float> aux(1,mat.rows());
+		MatrixXf aux(1,mat.rows());
 		float sumatoria = 0;
 		float fgt = 0;
 		for ( unsigned k = colIni; k < mat.cols(); ++k )
 			if ( mat(nroTermino,k) != 0 )
-				fgt += pow(10,mat(nroTermino,k))-1;
+				fgt += pow(10,double(mat(nroTermino,k)))-1;
 
 		for ( unsigned j = colIni; j < mat.cols(); ++j ){
 			float ft = mat(nroTermino,j);
