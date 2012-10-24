@@ -40,6 +40,14 @@
 
 #include "Stemmer.h"
 
+#include <cstring>
+#include <cstdlib>
+#include <cctype>
+
+#define INC 50           /* size units in which s is increased */
+#define LETTER(ch) (isupper(ch) || islower(ch))
+#define BUFF 16
+
 static char * b;       		/* buffer for word to be stemmed */
 static int 	k,k0,j;     	/* j is a general offset into the string */
 static char * s;        	/* a char * (=string) pointer; passed into b above */

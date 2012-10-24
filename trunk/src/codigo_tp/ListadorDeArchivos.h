@@ -12,13 +12,16 @@ class ListadorDeArchivos {
 
 private:
 		std::string ruta;
-		std::list<std::string>* lista;
 
 public:
 		ListadorDeArchivos();
+
 		ListadorDeArchivos(std::string);
-		~ListadorDeArchivos();
+
 		std::list<std::string>* listarArchivos();
+
+		~ListadorDeArchivos();
+
 
 private:
 		void listarArchivos(std::string,std::list<std::string>*);
