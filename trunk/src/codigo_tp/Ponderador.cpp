@@ -1,53 +1,28 @@
 /*
- * Utilities.cpp
+ * Ponderador.cpp
  *
  *  Created on: 18/10/2012
  *      Author: esteban
  */
 
-#include "Utilities.h"
+#include "Ponderador.h"
 
-Utilities::Utilities() {
+Ponderador::Ponderador() {
 	// TODO Auto-generated constructor stub
 
 }
 
-float Utilities::conTresDecimales(float numero){
+float Ponderador::conTresDecimales(float numero){
 
 	return floor(numero * 1000) / 1000;
 }
 
 
 /*
- * Transforma un entero en string
- *
- * @param numero El entero a transformar
- */
-std::string Utilities::intToString(uint32_t numero) {
-
-  std::string snumero;
-  std::stringstream cvz;
-  cvz.width();
-  cvz << numero;
-  snumero= cvz.str();
-
-  return snumero;
-}
-
-/*
- * Transforma un string a minusculas.
- *
- * @param str El string a transformar.
- */
-void Utilities::pasarAminusculas(std::string& str){
-     std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-}
-
-/*
  * Calcula la norma vectorial de *this. *this debe ser un vector
  * de tipo MatrizInversa...es malo el metodo pero bueno, es lo que hay
  */
-float Utilities::normaVectorialMatriz( MatrizDispersa<float> & mat){
+float Ponderador::normaVectorialMatriz( MatrizDispersa<float> & mat){
 
 	//float norma = 0;
 
@@ -75,7 +50,7 @@ float Utilities::normaVectorialMatriz( MatrizDispersa<float> & mat){
  * Calcula la importancia local de un término en un doc.
  * @param : ft = frecuencia del termino en el documento.
  */
-void Utilities::ponderacionLocal( MatrizDispersa<float> & mat ){
+void Ponderador::ponderacionLocal( MatrizDispersa<float> & mat ){
 
 	for ( unsigned i = 0; i < mat.rows(); ++i )
 		for ( unsigned j = 0; j < mat.cols(); ++j ){
@@ -93,7 +68,7 @@ void Utilities::ponderacionLocal( MatrizDispersa<float> & mat ){
  * 			este.
  * @param : n = cantidad de columnas/documentos.
 **/
-float Utilities::cocientePonderacionGlobal( float ft, float fgt, unsigned n ){
+float Ponderador::cocientePonderacionGlobal( float ft, float fgt, unsigned n ){
 
 	if ( ft == 0 || fgt == 0) return 0;
 	float p = ft / fgt;
@@ -109,7 +84,7 @@ float Utilities::cocientePonderacionGlobal( float ft, float fgt, unsigned n ){
  * En este caso se le pasa la matriz con la ponderacion local en cada una de
  * sus componentes....
  */
-void Utilities::ponderacionGlobal( MatrizDispersa<float> & mat, unsigned colIni ){
+void Ponderador::ponderacionGlobal( MatrizDispersa<float> & mat, unsigned colIni ){
 
 	unsigned nroTermino = 0;
 	while ( nroTermino < mat.rows() ){
@@ -139,16 +114,16 @@ void Utilities::ponderacionGlobal( MatrizDispersa<float> & mat, unsigned colIni 
 
 }
 
-float Utilities::calculoDeSimilitud( float q[], float d[], int tamanio){
+float Ponderador::calculoDeSimilitud( float q[], float d[], int tamanio){
 
 	float auxRaiz, auxRaiz2;
 	float numerador;
 	//float* d = new float[A.rows()]; // d corresponde a un fila de D, que es la matriz de docs
 
-	Utilities::dotVectores(d,q,numerador,tamanio);
+	Ponderador::dotVectores(d,q,numerador,tamanio);
 
-	Utilities::dotVectores(q,q,auxRaiz,tamanio); // calculo la norma de q
-	Utilities::dotVectores(d,d,auxRaiz2,tamanio); // y d
+	Ponderador::dotVectores(q,q,auxRaiz,tamanio); // calculo la norma de q
+	Ponderador::dotVectores(d,d,auxRaiz2,tamanio); // y d
 
 	auxRaiz = sqrt(auxRaiz);
 	auxRaiz2 = sqrt(auxRaiz2);
@@ -163,7 +138,7 @@ float Utilities::calculoDeSimilitud( float q[], float d[], int tamanio){
 /*
  * Producto vectorial
  */
-void Utilities::dotVectores( float mat1[], float mat2[], float& dot, int tamanio ){
+void Ponderador::dotVectores( float mat1[], float mat2[], float& dot, int tamanio ){
 
 
 	if (sizeof(mat1) != sizeof(mat2))
@@ -180,7 +155,7 @@ void Utilities::dotVectores( float mat1[], float mat2[], float& dot, int tamanio
 
 
 
-Utilities::~Utilities() {
+Ponderador::~Ponderador() {
 	// TODO Auto-generated destructor stub
 }
 

@@ -1,7 +1,7 @@
 #include "Indexador.h"
 
 Indexador::Indexador() {
-	listador = new Lister();
+	listador = new ListadorDeArchivos();
 	parser = new Parser();
 
 }
