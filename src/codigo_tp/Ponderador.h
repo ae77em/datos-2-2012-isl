@@ -1,13 +1,13 @@
 /*
- * Utilities.h
+ * Ponderador.h
  *
  *  Created on: 18/10/2012
  *      Author: esteban
  *     Comment: Clase con funciones comunes para el programa.
  */
 
-#ifndef UTILITIES_H_
-#define UTILITIES_H_
+#ifndef PONDERADOR_H_
+#define PONDERADOR_H_
 
 #include <sstream>
 #include <string>
@@ -15,17 +15,16 @@
 #include <algorithm>
 
 
-class Utilities {
+class Ponderador {
+private:
+
+	float conTresDecimales( float );
+
 public:
-	Utilities();
 
-	virtual ~Utilities();
+	Ponderador();
 
-	static std::string intToString(uint32_t numero);
-
-	static void pasarAminusculas(std::string& str);
-
-	static float conTresDecimales( float );
+	virtual ~Ponderador();
 
 	static float normaVectorialMatriz( MatrizDispersa<float> &);
 
@@ -44,4 +43,4 @@ public:
 
 
 
-#endif /* UTILITIES_H_ */
+#endif /* PONDERADOR_H_ */

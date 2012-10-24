@@ -1,12 +1,13 @@
-#include "Lister.h"
+#include "ListadorDeArchivos.h"
 
 
-Lister::Lister(std::string ruta) {
+ListadorDeArchivos::ListadorDeArchivos(std::string ruta) {
 	this->ruta = ruta;
 }
 
-std::list<std::string>* Lister::listarArchivos() {
-	std::list<std::string>* lista;
+std::list<std::string>* ListadorDeArchivos::listarArchivos() {
+
+	std::list<std::string>* lista = new std::list<std::string>;
 
 	struct dirent* archivo;
 	DIR* directorio;
@@ -32,7 +33,7 @@ std::list<std::string>* Lister::listarArchivos() {
 	return lista;
 }
 
-void Lister::listarArchivos(std::string ruta,std::list<std::string>* lista) {
+void ListadorDeArchivos::listarArchivos(std::string ruta,std::list<std::string>* lista) {
 
 	struct dirent* archivo;
 	DIR* directorio;

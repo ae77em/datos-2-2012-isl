@@ -4,12 +4,12 @@
 #include <string>
 #include <list>
 
-#include "Lister.h"
+#include "ListadorDeArchivos.h"
 #include "Parser.h"
 
 class Indexador {
 	private:
-		Lister* listador;
+		ListadorDeArchivos* listador;
 		Parser* parser;
 
 	public:

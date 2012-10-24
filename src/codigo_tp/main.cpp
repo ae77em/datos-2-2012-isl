@@ -3,9 +3,11 @@
 
 #include "Indexador.h"
 
-int main () {
+int main (int argc, char *argv[]) {
 	Indexador indexador;
-	std::string nombreRepositorio, cantTopicos, directorio;
+	std::string nombreRepositorio;
+	std::string cantTopicos;
+	std::string directorio;
 	
 	if (argc < 4) {
 		std::cerr << "Uso del programa: " << std::endl;
@@ -18,7 +20,7 @@ int main () {
 	cantTopicos = argv[2];
 	directorio = argv[3];
 	
-	if (indexer.crearIndice(nombrerepositorio, cantTopicos, directorio)) {
+	if (indexador.crearIndice(nombreRepositorio, cantTopicos, directorio)) {
 		std::cerr << "El indice no pudo ser creado.";
 		return 1;
 	}
@@ -26,3 +28,5 @@ int main () {
 	std::cerr << "El indice fue creado satisfactoriamente.";
 	return 0;
 }
+
+

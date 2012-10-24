@@ -1,5 +1,5 @@
-#ifndef __LISTER_H_
-#define __LISTER_H_
+#ifndef __LISTADOR_DE_ARCHIVOS_H_
+#define __LISTADOR_DE_ARCHIVOS_H_
 
 #include <iostream>
 #include <list>
@@ -8,16 +8,16 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-class Lister {
+class ListadorDeArchivos {
 
 private:
 		std::string ruta;
 		std::list<std::string>* lista;
 
 public:
-		Lister();
-		Lister(std::string);
-		~Lister();
+		ListadorDeArchivos();
+		ListadorDeArchivos(std::string);
+		~ListadorDeArchivos();
 		std::list<std::string>* listarArchivos();
 
 private:
