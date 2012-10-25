@@ -17,15 +17,16 @@ class Persister {
 	public:
 		Persister();
         Persister(std::string);
-        ~Persister();
-        void recibirDatos(std::list<TnodoData*>*,unsigned int);
+        ~Persister(void);
+        void persistirDatos(std::vector<TnodoData*>*,unsigned int);
+        void destruir();
 
 	private:
 
         void bajarDatosADisco();
 
         std::fstream salida;
-        std::list<TregistroArchivo*>* contenedor;
+        std::vector<TregistroArchivo*>* contenedor;
 
 };
 
