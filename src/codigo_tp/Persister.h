@@ -19,6 +19,8 @@ class Persister {
         Persister(std::string);
         ~Persister(void);
         void persistirDatos(std::vector<TnodoData*>*,unsigned int);
+        list<TregistroArchivo*>* obtenerColumnaMatriz(unsigned int);
+        void abrir(std::string);
         void destruir();
 
 	private:
@@ -26,7 +28,7 @@ class Persister {
         void bajarDatosADisco();
 
         std::fstream salida;
-        std::vector<TregistroArchivo*>* contenedor;
+        std::list<TregistroArchivo*>* contenedor;
 
 };
 

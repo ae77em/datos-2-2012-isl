@@ -26,7 +26,39 @@ void Persister::destruir(){
 	salida.close();
 	cout<<"PERSISTER DESTRUIDO"<<endl;
 
+}
 
+void Persister::abrir(std::string path){
+
+	salida.open(path.c_str(),std::fstream::in);
+
+}
+//POR EL MOMENTO SE VA A HACER SECUENCIAL, MAS ADELANTE, SI ES NECESERAIO
+//AGREGARE FUNCIONALIDAD PARA PODER LEER DE A COLUMNA
+list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(unsigned int columna){
+
+	char registro[5];
+	this->salida.getline(registro,5);
+
+	TregistroArchivo* reg = new TregistroArchivo;
+
+	reg->fil=registro[2];
+	reg->freq=registro[4];
+
+	this->contenedor->push_back(reg);
+
+
+	while(columna==registro[0]){
+		this->salida.getline(registro,5);
+		TregistroArchivo* reg = new TregistroArchivo;
+
+		reg->fil=registro[2];
+		reg->freq=registro[4];
+
+		//this->contenedor->push_back(this->reg);
+	}
+
+	return this->contenedor;
 }
 
 
