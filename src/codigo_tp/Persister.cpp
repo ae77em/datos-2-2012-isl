@@ -9,7 +9,9 @@ Persister::Persister(std::string path){
     //ese debe ser el formato respetado para que la libreria pueda andar
     salida<<"                         \n";
 
-    //contenedor = new std::list<TregistroArchivo*>;
+    contenedor = new std::list<TregistroArchivo*>;
+    regAux=NULL;
+
     cout<<"PERSISTER CREADO"<<endl;
 }
 
@@ -37,25 +39,29 @@ void Persister::abrir(std::string path){
 //AGREGARE FUNCIONALIDAD PARA PODER LEER DE A COLUMNA
 list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(unsigned int columna){
 
-	char registro[5];
-	this->salida.getline(registro,5);
 
-	TregistroArchivo* reg = new TregistroArchivo;
+	if(regAux==NULL){//solo en la primer lectura pasa esto
+		TregistroArchivo* regAux = new TregistroArchivo;
 
-	reg->fil=registro[2];
-	reg->freq=registro[4];
+		salida >> regAux->col;
+		salida >> regAux->fil;
+		salida >> regAux->freq;
+		this->contenedor->push_back(regAux);//
 
-	this->contenedor->push_back(reg);
+	}else{
+		this->contenedor->push_back(this->regAux);//guardo el que me quedo almacenado de la ultima vez
+
+	}
 
 
-	while(columna==registro[0]){
-		this->salida.getline(registro,5);
+	while(columna==regAux->col){
 		TregistroArchivo* reg = new TregistroArchivo;
 
-		reg->fil=registro[2];
-		reg->freq=registro[4];
+		salida >> reg->col;
+		salida >> reg->fil;
+		salida >> reg->freq;
+		this->contenedor->push_back(reg);
 
-		//this->contenedor->push_back(this->reg);
 	}
 
 	return this->contenedor;
