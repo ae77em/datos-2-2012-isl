@@ -9,24 +9,31 @@ Persister::Persister(std::string path){
     //ese debe ser el formato respetado para que la libreria pueda andar
     salida<<"                         \n";
 
-    contenedor = new std::list<TregistroArchivo*>;
-
+    //contenedor = new std::list<TregistroArchivo*>;
+    cout<<"PERSISTER CREADO"<<endl;
 }
 
-Persister::~Persister(){
+Persister::~Persister(void){
 
-    salida.close();
+   // salida.close();
+    cout<<"PERSISTER DESTRUIDO"<<endl;
     //vaciar contenedor
 
 }
 
-void Persister::recibirDatos(std::list<TnodoData*>* data, unsigned int columna){
+void Persister::destruir(){
 
-    std::list<TnodoData*>::iterator b = data->begin();
-    std::list<TnodoData*>::iterator e = data->end();
-    while(b!=e){
-        TnodoData* aux = *b;
-        salida<<columna<<" "<<aux->id<<" "<<aux->ocurrenciasEnElDocActual<<std::endl;
-        b++;
+	salida.close();
+	cout<<"PERSISTER DESTRUIDO"<<endl;
+
+
+}
+
+
+void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int columna){
+
+	for(register int i=0; i< data->size() ; i++){
+									//sumo uno porque los id arrancar desde 0, y las filas desde 1
+         salida<<columna<<" "<<(data->at(i)->id + 1)<<" "<<data->at(i)->ocurrenciasEnElDocActual<<std::endl;
     }
 }
