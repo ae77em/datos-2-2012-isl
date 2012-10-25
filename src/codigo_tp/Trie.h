@@ -36,7 +36,7 @@ struct TnodoPrincipalTrie {
     int cantidadDeDocumentoParseados;
     TnodoTrie* hijo;
     fstream log;
-    vector<TnodoTerminoId*>* contenedor;
+    vector<TnodoTerminoId*>* contenedor; // se usa en la persistencia del lexico
     vector<TnodoData*>* contenedorParcial;
 };
 
@@ -54,6 +54,8 @@ class Trie {
 		TnodoTrie* buscarLugar(char,TnodoTrie*,short int*);
 
 		void aumentarCantidadDePalabrasEnLaColeccion(void);
+		void aumentarCantidadDeDocParseados(void);
+
 
 		bool buscarPalabra(string);
 		bool buscarPalabra(string,TnodoTrie*);
@@ -70,7 +72,8 @@ class Trie {
 
 		void persistirPalabrasContenedor(fstream*);
 
-		int obternerCantidadDePalabrasIngresadas();
+		int obtenerCantidadDePalabrasIngresadas();
+		int obtenerCantidadDeDocumentosParseados();
 		int obtenerContadorId();
 		void incrementarContadorId();
 
