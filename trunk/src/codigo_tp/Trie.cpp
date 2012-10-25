@@ -267,11 +267,11 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,list<TnodoData*>* conten
 
 void Trie::persistirPalabras_INI(fstream* salida){
 
-    string cadenaQueEscupePalabras;
+    string cadenaParcialDePalabras;
 
-    cadenaQueEscupePalabras.clear();
+    cadenaParcialDePalabras.clear();
 
-    persistirPalabras(RAIZ->hijo,salida,cadenaQueEscupePalabras);
+    persistirPalabras(RAIZ->hijo,salida,cadenaParcialDePalabras);
 
 
 }
