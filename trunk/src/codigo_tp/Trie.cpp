@@ -10,6 +10,8 @@ void Trie::inicializarRaiz(){
     this->RAIZ->contadorDeId_s=0;
     this->RAIZ->cantidadDeDocumentoParseados=0;
     this->RAIZ->contenedor = new vector<TnodoTerminoId*>;
+    this->RAIZ->contenedorParcial = new vector<TnodoData*>;
+
 
 }
 
@@ -200,6 +202,7 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
 
     }
 
+    return NULL;
 }
 
 void Trie::destruirArbol_INI(){
@@ -229,16 +232,15 @@ void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
 
 //parte de busqueda
 
-list<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
+vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 
-    list<TnodoData*>* contenedorIdFreq = new list <TnodoData*>;
-    buscarPalabrasDelDocParseado(RAIZ->hijo,contenedorIdFreq);
+    buscarPalabrasDelDocParseado(RAIZ->hijo,RAIZ->contenedorParcial);
 
-    return contenedorIdFreq;
+    return RAIZ->contenedorParcial;
 
 }
 
-void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,list<TnodoData*>* contenedorIdFreq ){
+void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* contenedorIdFreq ){
 
     if(NODO){
         if(NODO->flagParser){
@@ -250,8 +252,7 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,list<TnodoData*>* conten
             if(NODO->infoArchivo){
 
                 contenedorIdFreq->push_back(NODO->infoArchivo);
-
-            }
+               }
 
             buscarPalabrasDelDocParseado(NODO->hijo,contenedorIdFreq);
             buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
@@ -433,7 +434,7 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
 
 void Trie::persistirPalabrasContenedor(fstream* salida){
 
-    for(int i=0; i<RAIZ->contenedor->size();i++){
+    for(register unsigned int i=0; i<RAIZ->contenedor->size();i++){
         //si no esta vacio
         if(RAIZ->contenedor->at(i)){
             *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<endl;
@@ -441,6 +442,19 @@ void Trie::persistirPalabrasContenedor(fstream* salida){
     }
 }
 
+void Trie::vaciarContenedorParcial(){
+
+    RAIZ->contenedorParcial->clear();
+
+}
+
+void Trie::inicializarFrecuenciasLocales(){
+
+	for(register unsigned int i=0; i<RAIZ->contenedorParcial->size();i++ ){
+		RAIZ->contenedorParcial->at(i)->ocurrenciasEnElDocActual=0;
+	}
+
+}
 
 
 //LOS SUIGUIENTES COMANDOS SE USARIAN EN EL CASO DE ELIMINAR STOP WORDS
@@ -485,7 +499,7 @@ void Trie::quitarTermindoDelContenedor(int id){
 //se usa solamente si se borra un termino, para luego actualizar los id de tola la coleccion
 void Trie::actualizarIds(int idBorrado){
 
-    for(int i=idBorrado+1; i<RAIZ->contenedor->size();i++){
+    for(unsigned int i=idBorrado+1; i<RAIZ->contenedor->size();i++){
         if(RAIZ->contenedor->at(i)){
             cout<<--*RAIZ->contenedor->at(i)->id<<" ";
         }

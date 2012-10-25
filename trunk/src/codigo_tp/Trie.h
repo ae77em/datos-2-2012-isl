@@ -37,6 +37,7 @@ struct TnodoPrincipalTrie {
     TnodoTrie* hijo;
     fstream log;
     vector<TnodoTerminoId*>* contenedor;
+    vector<TnodoData*>* contenedorParcial;
 };
 
 class Trie {
@@ -61,8 +62,8 @@ class Trie {
 		void destruirArbol(TnodoTrie*,int*);
 		void destruirArbol_INI(void);
 
-		list<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
-		void buscarPalabrasDelDocParseado(TnodoTrie*,list<TnodoData*>*);
+		vector<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
+		void buscarPalabrasDelDocParseado(TnodoTrie*,vector<TnodoData*>*);
 
 		void persistirPalabras_INI(fstream*);
 		void persistirPalabras(TnodoTrie*,fstream*,string);
@@ -81,5 +82,8 @@ class Trie {
 
 		void quitarTermindoDelContenedor(int);
 		void actualizarIds(int);
+
+		void vaciarContenedorParcial();
+		void inicializarFrecuenciasLocales();
 };
 #endif
