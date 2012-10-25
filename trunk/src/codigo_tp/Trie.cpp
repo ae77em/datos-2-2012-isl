@@ -240,6 +240,10 @@ void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
 
 vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 
+	//solucion parcial al problema del heap, mejora busqeuda, pero necesita memori innecesaria
+	//despues controlar con un if si es NECESARIO O NO EL RESIZE, PROVISIRIO
+	RAIZ->contenedorParcial->resize(this->obtenerContadorId());
+
     buscarPalabrasDelDocParseado(RAIZ->hijo,RAIZ->contenedorParcial);
 
     return RAIZ->contenedorParcial;
@@ -256,7 +260,7 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* cont
             NODO->flagParser=0;
 
             if(NODO->infoArchivo && NODO->infoArchivo->ocurrenciasEnElDocActual){
-                contenedorIdFreq->push_back(NODO->infoArchivo);
+                contenedorIdFreq->at(NODO->infoArchivo->id) = NODO->infoArchivo ;
                }
 
             buscarPalabrasDelDocParseado(NODO->hijo,contenedorIdFreq);

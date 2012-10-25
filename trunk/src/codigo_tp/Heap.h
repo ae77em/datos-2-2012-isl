@@ -63,8 +63,9 @@ class Heap
 
         void mostrar(){
             for(int i=0;i<contenedor->size();i++){
-            std::cout <<contenedor->at(i)<<" ";
+          //  std::cout <<contenedor->at(i)<<" ";
             }
+            //std::cout<<std::endl<<std::endl;
         };
 
     private:
@@ -78,11 +79,9 @@ class Heap
         };
 
         void intercambiar(int nivelBajo, int nivelAlto){
-
             T aux = contenedor->at(nivelBajo);
             contenedor->at(nivelBajo) = contenedor->at(nivelAlto);
             contenedor->at(nivelAlto)= aux;
-
         };
 
         void controlarQueSeaUnHeapHaciaAbajo(int pos){
