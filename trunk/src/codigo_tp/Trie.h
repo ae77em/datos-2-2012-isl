@@ -17,7 +17,8 @@ struct TnodoTerminoId {
 };
 
 struct TnodoData {
-    int ocurrenciasEnElDocActual;
+    unsigned int ocurrenciasEnElDocActual;
+    unsigned int ocurrenciasEnLaColeccion;
     int id;
 };
 

@@ -66,6 +66,7 @@ TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direc
 
             HijoACambiar->infoArchivo= new TnodoData;
             HijoACambiar->infoArchivo->ocurrenciasEnElDocActual=0;
+            HijoACambiar->infoArchivo->ocurrenciasEnLaColeccion=0;
             HijoACambiar->infoArchivo->id = this->obtenerContadorId();
 
             this->incrementarContadorId();
@@ -73,6 +74,7 @@ TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direc
         }
 
         HijoACambiar->infoArchivo->ocurrenciasEnElDocActual++;
+        HijoACambiar->infoArchivo->ocurrenciasEnLaColeccion++;
     }
 
     string palabraAux= palabra.substr(1,palabra.size()-1);
@@ -404,6 +406,7 @@ vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
 
 }
 
+//SE USA para volvar la data ID,TERM a un vector,
 void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*contenedor, string palabra){
 
     if(NODO){
@@ -426,6 +429,21 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
             exportarPalabrasContenedor(NODO->hermano,contenedor,palabra);
         }
 }
+
+
+void Trie::persistirPalabrasContenedor(fstream* salida){
+
+    for(int i=0; i<RAIZ->contenedor->size();i++){
+        //si no esta vacio
+        if(RAIZ->contenedor->at(i)){
+            *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<endl;
+        }
+    }
+}
+
+
+
+//LOS SUIGUIENTES COMANDOS SE USARIAN EN EL CASO DE ELIMINAR STOP WORDS
 
 void Trie::eliminarStopWord_INI(string palabraParaEliminar){
 
@@ -456,6 +474,7 @@ void Trie::eliminarStoprWord(TnodoTrie* NODO, string palabraParaEliminar){
     }
 }
 
+//se usa solamente si se borra un termino, para luego actualizar los id de tola la coleccion
 void Trie::quitarTermindoDelContenedor(int id){
 
     RAIZ->contenedor->at(id)=NULL;
@@ -463,21 +482,12 @@ void Trie::quitarTermindoDelContenedor(int id){
     actualizarIds(id);
 }
 
+//se usa solamente si se borra un termino, para luego actualizar los id de tola la coleccion
 void Trie::actualizarIds(int idBorrado){
 
     for(int i=idBorrado+1; i<RAIZ->contenedor->size();i++){
         if(RAIZ->contenedor->at(i)){
             cout<<--*RAIZ->contenedor->at(i)->id<<" ";
-        }
-    }
-}
-
-void Trie::persistirPalabrasContenedor(fstream* salida){
-
-    for(int i=0; i<RAIZ->contenedor->size();i++){
-        //si no esta vacio
-        if(RAIZ->contenedor->at(i)){
-            *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<endl;
         }
     }
 }
