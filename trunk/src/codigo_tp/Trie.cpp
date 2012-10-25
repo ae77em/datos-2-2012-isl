@@ -11,8 +11,6 @@ void Trie::inicializarRaiz(){
     this->RAIZ->cantidadDeDocumentoParseados=0;
     this->RAIZ->contenedor = new vector<TnodoTerminoId*>;
     this->RAIZ->contenedorParcial = new vector<TnodoData*>;
-
-
 }
 
 void Trie::inicializarNodo(TnodoTrie* NODO){
@@ -39,6 +37,12 @@ Trie::Trie (){
 void Trie::aumentarCantidadDePalabrasEnLaColeccion(){
 
     RAIZ->cantidadTotalDePalabrasEnLaColeccion++;
+
+}
+
+void Trie::aumentarCantidadDeDocParseados(){
+
+    RAIZ->cantidadDeDocumentoParseados++;
 
 }
 
@@ -298,9 +302,15 @@ void Trie::persistirPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
 
 }
 
-int Trie::obternerCantidadDePalabrasIngresadas(){
+int Trie::obtenerCantidadDePalabrasIngresadas(){
 
     return RAIZ->cantidadTotalDePalabrasEnLaColeccion;
+
+}
+
+int Trie::obtenerCantidadDeDocumentosParseados(){
+
+    return RAIZ->cantidadDeDocumentoParseados;
 
 }
 
