@@ -249,8 +249,7 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* cont
             //correspondinete parseada
             NODO->flagParser=0;
 
-            if(NODO->infoArchivo){
-
+            if(NODO->infoArchivo && NODO->infoArchivo->ocurrenciasEnElDocActual){
                 contenedorIdFreq->push_back(NODO->infoArchivo);
                }
 
@@ -421,7 +420,7 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
                 terminoId->palabra = palabra;
 
                 contenedor->at(*terminoId->id)=terminoId;
-
+                cout<<palabra<<"  "<<"FLAG: "<<NODO->flagParser<<endl;
             }
 
             exportarPalabrasContenedor(NODO->hijo,contenedor,palabra);

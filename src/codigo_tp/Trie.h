@@ -27,7 +27,7 @@ struct TnodoTrie {
     TnodoTrie* hermano;
     TnodoTrie* hijo;
     TnodoData* infoArchivo;
-    char flagParser;
+    int flagParser;
 };
 
 struct TnodoPrincipalTrie {
