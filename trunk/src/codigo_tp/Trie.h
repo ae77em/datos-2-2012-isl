@@ -22,6 +22,11 @@ struct TnodoData {
     int id;
 };
 
+struct TacumEntropia{
+	TnodoData* infoTerm;
+	float acumEntropia;
+};
+
 struct TnodoTrie {
     char letra;
     TnodoTrie* hermano;
@@ -38,6 +43,7 @@ struct TnodoPrincipalTrie {
     fstream log;
     vector<TnodoTerminoId*>* contenedor; // se usa en la persistencia del lexico
     vector<TnodoData*>* contenedorParcial;
+    vector<TacumEntropia*>* contenedorEntropia;
 };
 
 class Trie {
@@ -56,21 +62,12 @@ class Trie {
 		void aumentarCantidadDePalabrasEnLaColeccion(void);
 		void aumentarCantidadDeDocParseados(void);
 
-
 		bool buscarPalabra(string);
 		bool buscarPalabra(string,TnodoTrie*);
 		TnodoTrie* buscarLetra(char,TnodoTrie*);
 
-		void destruirArbol(TnodoTrie*,int*);
-		void destruirArbol_INI(void);
-
 		vector<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
 		void buscarPalabrasDelDocParseado(TnodoTrie*,vector<TnodoData*>*);
-
-		void persistirPalabras_INI(fstream*);
-		void persistirPalabras(TnodoTrie*,fstream*,string);
-
-		void persistirPalabrasContenedor(fstream*);
 
 		int obtenerCantidadDePalabrasIngresadas();
 		int obtenerCantidadDeDocumentosParseados();
@@ -80,6 +77,10 @@ class Trie {
 		vector<TnodoTerminoId*>* exportarPalabrasContenedor_INI();
 		void exportarPalabrasContenedor(TnodoTrie*,vector<TnodoTerminoId*>*,string);
 
+		void persistirPalabras_INI(fstream*);
+		void persistirPalabras(TnodoTrie*,fstream*,string);
+		void persistirPalabrasContenedor(fstream*);
+
 		void eliminarStopWord_INI(string);
 		void eliminarStoprWord(TnodoTrie*,string);
 
@@ -88,5 +89,11 @@ class Trie {
 
 		void vaciarContenedorParcial();
 		void inicializarFrecuenciasLocales();
+
+		void destruirArbol(TnodoTrie*,int*);
+		void destruirArbol_INI(void);
+		//////NUEVOS al 25/10
+		vector<TacumEntropia*>* exportarDatosParaEntropia_INI();
+		void exportarDatosParaEntropia(vector<TacumEntropia*>*,TnodoTrie*);
 };
 #endif

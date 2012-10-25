@@ -11,6 +11,8 @@ void Trie::inicializarRaiz(){
     this->RAIZ->cantidadDeDocumentoParseados=0;
     this->RAIZ->contenedor = new vector<TnodoTerminoId*>;
     this->RAIZ->contenedorParcial = new vector<TnodoData*>;
+    this->RAIZ->contenedorEntropia = new vector<TacumEntropia*>;
+
 }
 
 void Trie::inicializarNodo(TnodoTrie* NODO){
@@ -513,4 +515,33 @@ void Trie::actualizarIds(int idBorrado){
             cout<<--*RAIZ->contenedor->at(i)->id<<" ";
         }
     }
+}
+
+vector<TacumEntropia*>* Trie::exportarDatosParaEntropia_INI(){
+
+	this->RAIZ->contenedorEntropia->resize(this->obtenerContadorId());
+
+	this->exportarDatosParaEntropia(this->RAIZ->contenedorEntropia, this->RAIZ->hijo);
+
+	return this->RAIZ->contenedorEntropia;
+
+}
+
+void Trie::exportarDatosParaEntropia(vector<TacumEntropia*>* contenedorEntropia,TnodoTrie* NODO){
+	//condicion de corte
+	if(NODO){
+	            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
+
+	            	TacumEntropia* acumEntropia = new TacumEntropia;
+
+	            	acumEntropia->infoTerm = NODO->infoArchivo;
+	                acumEntropia->acumEntropia = 0;
+
+	                contenedorEntropia->at( NODO->infoArchivo->id) = acumEntropia;
+	            }
+
+	            exportarDatosParaEntropia(contenedorEntropia,NODO->hijo);
+	            exportarDatosParaEntropia(contenedorEntropia,NODO->hermano);
+	}
+
 }
