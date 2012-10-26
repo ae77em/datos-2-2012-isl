@@ -6,7 +6,6 @@ void Trie::inicializarRaiz(){
 
     this->RAIZ=new TnodoPrincipalTrie;
     this->RAIZ->cantidadTotalDePalabrasEnLaColeccion=0;
-    this->RAIZ->log.open("log.txt",fstream::out);
     this->RAIZ->contadorDeId_s=0;
     this->RAIZ->cantidadDeDocumentoParseados=0;
     this->RAIZ->contenedor = new vector<TnodoTerminoId*>;
@@ -24,6 +23,7 @@ void Trie::inicializarNodo(TnodoTrie* NODO){
     NODO->flagParser=0;
 
 }
+
 Trie::Trie (){
 
     this->inicializarRaiz();
@@ -34,6 +34,23 @@ Trie::Trie (){
 
     RAIZ->hijo=HIJO;
 
+}
+
+Trie::~Trie(void){
+
+    cout<<"DESTRUCTOR TRIE"<<endl;
+
+    this->vaciarContenedores();
+
+    //los clear sgtes, son necesarios???
+    RAIZ->contenedor->clear();
+    RAIZ->contenedorParcial->clear();
+    RAIZ->contenedorEntropia->clear();
+
+    delete RAIZ->contenedor;
+    delete RAIZ->contenedorParcial;
+    delete RAIZ->contenedorEntropia;
+    delete RAIZ;
 }
 
 int Trie::obtenerCantidadDePalabrasIngresadas(){
@@ -236,103 +253,6 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
     return NULL;
 }
 
-void Trie::destruirArbol_INI(){
-
-    int cantidadDeNodos=0;
-
-    destruirArbol(RAIZ->hijo,&cantidadDeNodos);
-
-}
-
-
-void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
-
-    if(NODO){
-        destruirArbol(NODO->hijo,cantidadDeNodos);
-        destruirArbol(NODO->hermano,cantidadDeNodos);
-
-
-        if(NODO->infoArchivo){
-            delete NODO->infoArchivo;
-            *cantidadDeNodos=*cantidadDeNodos + 1;
-        }
-        delete NODO;
-        (*cantidadDeNodos)++;
-    }
-}
-
-//parte de busqueda
-
-vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
-
-	//solucion parcial al problema del heap, mejora busqeuda, pero necesita memori innecesaria
-	//despues controlar con un if si es NECESARIO O NO EL RESIZE, PROVISIRIO
-	RAIZ->contenedorParcial->resize(this->obtenerContadorId());
-
-    buscarPalabrasDelDocParseado(RAIZ->hijo,RAIZ->contenedorParcial);
-
-    return RAIZ->contenedorParcial;
-
-}
-
-void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* contenedorIdFreq ){
-
-    if(NODO){
-        if(NODO->flagParser){
-
-            //pongo en cero para que posteriores parseadas no lo reconozcan salvo que forme parte de palabras de la
-            //correspondinete parseada
-            NODO->flagParser=0;
-
-            if(NODO->infoArchivo && NODO->infoArchivo->ocurrenciasEnElDocActual){
-                contenedorIdFreq->at(NODO->infoArchivo->id) = NODO->infoArchivo ;
-               }
-
-            buscarPalabrasDelDocParseado(NODO->hijo,contenedorIdFreq);
-            buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
-        }
-        else{
-
-            buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
-
-        }
-    }
-}
-
-
-
-
-void Trie::persistirPalabras_INI(fstream* salida){
-
-    string cadenaParcialDePalabras;
-
-    cadenaParcialDePalabras.clear();
-
-    persistirPalabras(RAIZ->hijo,salida,cadenaParcialDePalabras);
-
-
-}
-
-void Trie::persistirPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
-
-        if(NODO){
-
-            palabra= palabra+NODO->letra;
-
-            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
-
-                *salida<<palabra<<"  id: "<<NODO->infoArchivo->id<<endl;
-
-            }
-
-            persistirPalabras(NODO->hijo,salida,palabra);
-            palabra.resize(palabra.size()-1);
-
-            persistirPalabras(NODO->hermano,salida,palabra);
-        }
-
-}
-
 //////////************************************
 bool Trie::buscarPalabra(string palabra){
 
@@ -410,6 +330,78 @@ TnodoTrie* Trie::buscarLetra(char letraBuscada, TnodoTrie* NODO){
 
 }
 
+
+//parte de busqueda
+
+vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
+
+	//solucion parcial al problema del heap, mejora busqeuda, pero necesita memori innecesaria
+	//despues controlar con un if si es NECESARIO O NO EL RESIZE, PROVISIRIO
+	RAIZ->contenedorParcial->resize(this->obtenerContadorId());
+
+    buscarPalabrasDelDocParseado(RAIZ->hijo,RAIZ->contenedorParcial);
+
+    return RAIZ->contenedorParcial;
+
+}
+
+void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* contenedorIdFreq ){
+
+    if(NODO){
+        if(NODO->flagParser){
+
+            //pongo en cero para que posteriores parseadas no lo reconozcan salvo que forme parte de palabras de la
+            //correspondinete parseada
+            NODO->flagParser=0;
+
+            if(NODO->infoArchivo && NODO->infoArchivo->ocurrenciasEnElDocActual){
+                contenedorIdFreq->at(NODO->infoArchivo->id) = NODO->infoArchivo ;
+               }
+
+            buscarPalabrasDelDocParseado(NODO->hijo,contenedorIdFreq);
+            buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
+        }
+        else{
+
+            buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
+
+        }
+    }
+}
+
+
+void Trie::persistirPalabras_INI(fstream* salida){
+
+    string cadenaParcialDePalabras;
+
+    cadenaParcialDePalabras.clear();
+
+    persistirPalabras(RAIZ->hijo,salida,cadenaParcialDePalabras);
+
+
+}
+
+void Trie::persistirPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
+
+        if(NODO){
+
+            palabra= palabra+NODO->letra;
+
+            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
+
+                *salida<<palabra<<"  id: "<<NODO->infoArchivo->id<<endl;
+
+            }
+
+            persistirPalabras(NODO->hijo,salida,palabra);
+            palabra.resize(palabra.size()-1);
+
+            persistirPalabras(NODO->hermano,salida,palabra);
+        }
+
+}
+
+
 //se usa al final de la indexacion, vuelca todo en un vector, para facilitar la actualizacion de los id�s
 // luego de la eliminaicon de las stopwords
 vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
@@ -438,7 +430,7 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
                 terminoId->palabra = palabra;
 
                 contenedor->at(*terminoId->id)=terminoId;
-                cout<<palabra<<"  "<<"FLAG: "<<NODO->flagParser<<endl;
+
             }
 
             exportarPalabrasContenedor(NODO->hijo,contenedor,palabra);
@@ -474,56 +466,6 @@ void Trie::inicializarFrecuenciasLocales(){
 
 }
 
-
-//LOS SUIGUIENTES COMANDOS SE USARIAN EN EL CASO DE ELIMINAR STOP WORDS
-
-void Trie::eliminarStopWord_INI(string palabraParaEliminar){
-
-    eliminarStoprWord(RAIZ->hijo,palabraParaEliminar);
-
-}
-
-//este metodo no elimina ninguna palabra, solamente elimina el nodo que se usa de flag para que el trie lo
-//deje de reconocer como palabra
-void Trie::eliminarStoprWord(TnodoTrie* NODO, string palabraParaEliminar){
-
-    TnodoTrie* nodoAnalizado = buscarLetra(palabraParaEliminar[0],NODO);
-
-    if(palabraParaEliminar.size()==1){
-        if(nodoAnalizado->infoArchivo){
-
-            this->quitarTermindoDelContenedor(nodoAnalizado->infoArchivo->id);
-
-            delete nodoAnalizado->infoArchivo;
-            nodoAnalizado->infoArchivo=NULL;
-
-        }else{
-            cout<<"la palabra buscada para eliminar no se encuentra dentro del buffer"<<endl;
-        }
-    }else{
-        palabraParaEliminar= palabraParaEliminar.substr(1,palabraParaEliminar.size()-1);
-        eliminarStoprWord(nodoAnalizado->hijo,palabraParaEliminar);
-    }
-}
-
-//se usa solamente si se borra un termino, para luego actualizar los id de tola la coleccion
-void Trie::quitarTermindoDelContenedor(int id){
-
-    RAIZ->contenedor->at(id)=NULL;
-
-    actualizarIds(id);
-}
-
-//se usa solamente si se borra un termino, para luego actualizar los id de tola la coleccion
-void Trie::actualizarIds(int idBorrado){
-
-    for(unsigned int i=idBorrado+1; i<RAIZ->contenedor->size();i++){
-        if(RAIZ->contenedor->at(i)){
-            cout<<--*RAIZ->contenedor->at(i)->id<<" ";
-        }
-    }
-}
-
 vector<TacumEntropia*>* Trie::exportarDatosParaEntropia_INI(){
 
 	this->RAIZ->contenedorEntropia->resize(this->obtenerContadorId());
@@ -550,5 +492,45 @@ void Trie::exportarDatosParaEntropia(vector<TacumEntropia*>* contenedorEntropia,
 	            exportarDatosParaEntropia(contenedorEntropia,NODO->hijo);
 	            exportarDatosParaEntropia(contenedorEntropia,NODO->hermano);
 	}
+
+}
+
+void Trie::destruirArbol_INI(){
+
+    int cantidadDeNodos=0;
+
+    destruirArbol(RAIZ->hijo,&cantidadDeNodos);
+
+}
+
+void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
+
+    if(NODO){
+        destruirArbol(NODO->hijo,cantidadDeNodos);
+        destruirArbol(NODO->hermano,cantidadDeNodos);
+
+
+        if(NODO->infoArchivo){
+            delete NODO->infoArchivo;
+            *cantidadDeNodos=*cantidadDeNodos + 1;
+        }
+        delete NODO;
+        (*cantidadDeNodos)++;
+    }
+}
+
+void Trie::vaciarContenedores(){
+
+    for(register int i=0;i<this->RAIZ->contenedor->size();i++){
+        delete this->RAIZ->contenedor->at(i);
+    }
+
+    for(register int i=0;i<this->RAIZ->contenedorParcial->size();i++){
+        delete this->RAIZ->contenedorParcial->at(i);
+    }
+
+    for(register int i=0;i<this->RAIZ->contenedorEntropia->size();i++){
+        delete this->RAIZ->contenedorEntropia->at(i);
+    }
 
 }
