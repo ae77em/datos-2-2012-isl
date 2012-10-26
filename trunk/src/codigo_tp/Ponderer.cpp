@@ -48,7 +48,7 @@ void Ponderer::calcularEntropia(){
 
 			double localDivGlobal = ((double)auxReg->freq)/((double)auxEntropia->infoTerm->ocurrenciasEnLaColeccion);
 
-			auxEntropia->acumEntropia = auxEntropia->acumEntropia + (localDivGlobal*(log(localDivGlobal)/log(2)));
+			auxEntropia->acumEntropia = auxEntropia->acumEntropia + (localDivGlobal*(log10(localDivGlobal)/log10(2)));
 
 			b++;
 		}
@@ -93,8 +93,9 @@ void Ponderer::ponderarLocarPorGlobal(){
 			TregistroArchivo* aux = *b;
 
 			double entropia = this->contenedorParcialEntropia->at(aux->fil - 1)->acumEntropia;
-			double pesoLocal = log(aux->freq + 1);
-            cout<<"MULTIPLICANDO: "<<entropia<<" * "<<pesoLocal<<endl;
+			double pesoLocal = log10(aux->freq + 1);
+			//cout<<"ID: "<<aux->fil-1<<" Freq + 1: "<<aux->freq<<endl;
+			cout<<"MULTIPLICANDO: "<<entropia<<" * "<<pesoLocal<<endl;
 
 			double localPorGlobal = (entropia*pesoLocal);
 			matrizPonderada<<aux->col<<" "<<aux->fil<<" "<<localPorGlobal<<std::endl;
