@@ -11,6 +11,8 @@ Ponderer::Ponderer(Trie* unTrie,Persister* unP) {
 	this->trie=unTrie;
 	this->matrizPonderada=NULL;
 
+	unP->abrir();
+
 }
 
 Ponderer::~Ponderer() {
@@ -22,19 +24,15 @@ void Ponderer::calcularEntropia(){
 	this->contenedorParcialEntropia = trie->exportarDatosParaEntropia_INI();
 	this->cantidadDocumentosEnLaColeccion = trie->obtenerCantidadDeDocumentosParseados();
 
-	for(register int i=0; i<contenedorParcialEntropia->size();i++){
-	    std::cout<<"ID: "<<this->contenedorParcialEntropia->at(i)->infoTerm->id<<" freqGlobal: "<<contenedorParcialEntropia->at(i)->infoTerm->ocurrenciasEnLaColeccion<<" entropia: "<<contenedorParcialEntropia->at(i)->acumEntropia<<std::endl;
-	}
-
-/*
 	for(register unsigned int i=0; i<this->cantidadDocumentosEnLaColeccion; i++){
 
 		list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
+        cout<<"LEIDA: "<<i+1<<endl;
 
 		list<TregistroArchivo*>::iterator b = columna->begin();
 		list<TregistroArchivo*>::iterator e = columna->end();
 
-		while(b!=e){
+        while(b!=e){
 			TregistroArchivo* auxReg = *b; //uso el id como indice del vector que contiene las entropias parciales
 
 			TacumEntropia* auxEntropia = this->contenedorParcialEntropia->at(auxReg->fil -1);
@@ -45,17 +43,17 @@ void Ponderer::calcularEntropia(){
 
 			b++;
 		}
+		columna->clear();
+    }
 
-		this->dividirTodoPorLog();
+    this->dividirTodoPorLog();
+    matrizFreqLoc->cerrar();
 
-		matrizFreqLoc->cerrar();
-	}
-*/
 }
 
 void Ponderer::dividirTodoPorLog(){
 	for(register unsigned int i=0; i<this->contenedorParcialEntropia->size(); i++){
-		this->contenedorParcialEntropia->at(i)->acumEntropia = this->contenedorParcialEntropia->at(i)->acumEntropia / (log(cantidadDocumentosEnLaColeccion)/log(2));
+	   this->contenedorParcialEntropia->at(i)->acumEntropia = this->contenedorParcialEntropia->at(i)->acumEntropia / (log(cantidadDocumentosEnLaColeccion)/log(2));
 	}
 }
 

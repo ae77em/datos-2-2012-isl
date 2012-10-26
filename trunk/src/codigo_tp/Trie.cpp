@@ -461,8 +461,9 @@ void Trie::persistirPalabrasContenedor(fstream* salida){
 
 void Trie::vaciarContenedorParcial(){
 
-    RAIZ->contenedorParcial->clear();
-
+    for(register int i=0;i<RAIZ->contenedorParcial->size();i++){
+        RAIZ->contenedorParcial->at(i)=NULL;
+    }
 }
 
 void Trie::inicializarFrecuenciasLocales(){

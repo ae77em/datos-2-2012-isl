@@ -32,9 +32,12 @@ class Persister {
         void bajarDatosADisco();
 
         TregistroArchivo* regAux; //almacenara el registro que se le cunado se cambie de columna
+
         std::fstream salida;
         std::list<TregistroArchivo*>* contenedor;
         std::string path;
+
+        int contador;
 
 };
 

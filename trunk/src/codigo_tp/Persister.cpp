@@ -6,11 +6,10 @@ Persister::Persister(std::string path){
     salida.open(this->path.c_str(),std::fstream::out);
     contenedor = new std::list<TregistroArchivo*>;
     regAux=NULL;
+    contador=0;
 
     cout<<"PERSISTER CREADO"<<endl;
 }
-
-
 
 Persister::Persister(std::string pathMatriz,int col,int fil, int cantTerminos){
 
@@ -31,13 +30,13 @@ Persister::~Persister(void){
 void Persister::cerrar(){
 
 	salida.close();
-	cout<<"PERSISTER DESTRUIDO"<<endl;
+	cout<<"PERSISTER CERRADO"<<endl;
 
 }
 
 void Persister::abrir(){
-
-	salida.open(path.c_str(),std::fstream::in);
+    cout<<"abriendo: "<<path<<endl;
+	salida.open(this->path.c_str(),std::fstream::in);
 
 }
 //POR EL MOMENTO SE VA A HACER SECUENCIAL, MAS ADELANTE, SI ES NECESERAIO
@@ -46,28 +45,28 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 
 
 	if(regAux==NULL){//solo en la primer lectura pasa esto
-		TregistroArchivo* regAux = new TregistroArchivo;
+		regAux = new TregistroArchivo;
 		salida >> regAux->col;
 		salida >> regAux->fil;
 		salida >> regAux->freq;
 
-
 	}else{
+       // cout<<endl<<"ENTRE con col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
 	}
 
-	int columna = regAux->col;
-
-	while(columna==regAux->col && !salida.eof()){
-
-		this->contenedor->push_back(regAux);//
+    int columna=regAux->col;
+	while( ( regAux->col==columna ) && (!salida.eof() )){
+        this->contenedor->push_back(regAux);//
 
 		if(!salida.eof() && columna==regAux->col){
-			TregistroArchivo* regAux = new TregistroArchivo;
+			regAux = new TregistroArchivo;
 			salida >> regAux->col;
 			salida >> regAux->fil;
 			salida >> regAux->freq;
 		}
 	}
+
+    cout<<"sali con col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
 
 	return this->contenedor;
 }
