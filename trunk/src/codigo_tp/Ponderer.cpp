@@ -23,10 +23,10 @@ Ponderer::~Ponderer() {
 void Ponderer::ponderar(){
 
     this->calcularEntropia();
-    cout<<"APLICANDO FUNCION LOCAL X GLOBAL"<<endl;
-    this->ponderarLocarPorGlobal();
+    this->ponderarLocarPorGlobal(); //tambien persiste, despues hay que cambiarlo
 
 }
+
 
 void Ponderer::calcularEntropia(){
 
@@ -36,7 +36,6 @@ void Ponderer::calcularEntropia(){
 	for(register unsigned int i=0; i<this->cantidadDocumentosEnLaColeccion; i++){
 
 		list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
-        cout<<"LEIDA: "<<i+1<<endl;
 
 		list<TregistroArchivo*>::iterator b = columna->begin();
 		list<TregistroArchivo*>::iterator e = columna->end();
@@ -56,12 +55,9 @@ void Ponderer::calcularEntropia(){
     }
 
     this->dividirTodoPorLog();
+
     matrizFreqLoc->cerrar();
 
-   cout<<"mostrando eotroiapo"<<endl<<endl;
-    for(register int i=0;i<this->contenedorParcialEntropia->size();i++){
-        cout<<this->contenedorParcialEntropia->at(i)->acumEntropia<<endl;
-    }
 }
 
 void Ponderer::dividirTodoPorLog(){
@@ -84,7 +80,6 @@ void Ponderer::ponderarLocarPorGlobal(){
 	//recorro toda la matriz
 	while(!matrizFreqLoc->hayData()){
         list<TregistroArchivo*>* dataCol = matrizFreqLoc->obtenerColumnaMatriz();
-        cout<<"PASE"<<endl;
 
 		list<TregistroArchivo*>::iterator b = dataCol->begin();
 		list<TregistroArchivo*>::iterator e = dataCol->end();
@@ -94,10 +89,8 @@ void Ponderer::ponderarLocarPorGlobal(){
 
 			double entropia = this->contenedorParcialEntropia->at(aux->fil - 1)->acumEntropia;
 			double pesoLocal = log10(aux->freq + 1);
-			//cout<<"ID: "<<aux->fil-1<<" Freq + 1: "<<aux->freq<<endl;
-			cout<<"MULTIPLICANDO: "<<entropia<<" * "<<pesoLocal<<endl;
-
 			double localPorGlobal = (entropia*pesoLocal);
+			//persistiendo
 			matrizPonderada<<aux->col<<" "<<aux->fil<<" "<<localPorGlobal<<std::endl;
 
 			b++;
