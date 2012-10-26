@@ -16,12 +16,16 @@ struct TregistroArchivo{
 class Persister {
 
 	public:
+
 		Persister();
         Persister(std::string);
-        Persister(std::string,int col,int fil, int cantTerminos);
         ~Persister(void);
+
+        void escribirEncabezado(int col,int fil, int cantTerminos);
+
         void persistirDatos(std::vector<TnodoData*>*,unsigned int);
         list<TregistroArchivo*>* obtenerColumnaMatriz();
+
         void abrir();
         void cerrar();
 
@@ -29,16 +33,17 @@ class Persister {
         void vaciar(list<TregistroArchivo*>*);
 
 
+
 	private:
-         void bajarDatosADisco();
 
-        TregistroArchivo* regAux; //almacenara el registro que se le cunado se cambie de columna
+        TregistroArchivo* regAux; //almacenara el registro que se lee del archivo
 
-        std::fstream salida;
+        std::fstream archivo;
+
         std::list<TregistroArchivo*>* contenedor;
+
         std::string path;
 
-        int contador;
 
 };
 

@@ -40,7 +40,6 @@ struct TnodoPrincipalTrie {
     int contadorDeId_s; //lleva la cuenta de palabras diferentes ingresadas
     int cantidadDeDocumentoParseados;
     TnodoTrie* hijo;
-    fstream log;
     vector<TnodoTerminoId*>* contenedor; // se usa en la persistencia del lexico
     vector<TnodoData*>* contenedorParcial;
     vector<TacumEntropia*>* contenedorEntropia;
@@ -52,6 +51,7 @@ class Trie {
 
 	public:
 		Trie ();
+		~Trie ();
 		void inicializarRaiz();
 		void inicializarNodo(TnodoTrie*);
 
@@ -81,19 +81,15 @@ class Trie {
 		void persistirPalabras(TnodoTrie*,fstream*,string);
 		void persistirPalabrasContenedor(fstream*);
 
-		void eliminarStopWord_INI(string);
-		void eliminarStoprWord(TnodoTrie*,string);
-
-		void quitarTermindoDelContenedor(int);
-		void actualizarIds(int);
-
-		void vaciarContenedorParcial();
-		void inicializarFrecuenciasLocales();
-
 		void destruirArbol(TnodoTrie*,int*);
 		void destruirArbol_INI(void);
 		//////NUEVOS al 25/10
 		vector<TacumEntropia*>* exportarDatosParaEntropia_INI();
 		void exportarDatosParaEntropia(vector<TacumEntropia*>*,TnodoTrie*);
+		void vaciarContenedorParcial(); //no se hacen delete, solo se limpia el contenedor
+		void inicializarFrecuenciasLocales();
+
+        void vaciarContenedores();
+
 };
 #endif
