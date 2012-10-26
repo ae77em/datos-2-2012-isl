@@ -26,10 +26,11 @@ class Persister {
         void cerrar();
 
         bool hayData();
+        void vaciar(list<TregistroArchivo*>*);
+
 
 	private:
-
-        void bajarDatosADisco();
+         void bajarDatosADisco();
 
         TregistroArchivo* regAux; //almacenara el registro que se le cunado se cambie de columna
 
