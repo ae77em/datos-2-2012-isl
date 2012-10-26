@@ -1,13 +1,15 @@
 #include "Ponderer.h"
 #include "Persister.h"
 #include <math.h>
+#include <fstream>
+#include <iostream>
 
 
 Ponderer::Ponderer(Trie* unTrie,Persister* unP) {
 
-	this->contenedorParcialEntropia = unTrie->exportarDatosParaEntropia_INI();
-	this->cantidadDocumentosEnLaColeccion = unTrie->obtenerCantidadDeDocumentosParseados();
-	this->persister=unP;
+	this->matrizFreqLoc=unP;
+	this->trie=unTrie;
+	this->matrizPonderada=NULL;
 
 }
 
@@ -17,9 +19,13 @@ Ponderer::~Ponderer() {
 
 void Ponderer::calcularEntropia(){
 
+	this->contenedorParcialEntropia = trie->exportarDatosParaEntropia_INI();
+	this->cantidadDocumentosEnLaColeccion = trie->obtenerCantidadDeDocumentosParseados();
+
+
 	for(register unsigned int i=0; i<this->cantidadDocumentosEnLaColeccion; i++){
 
-		list<TregistroArchivo*>* columna = persister->obtenerColumnaMatriz(i+1);//el formato de la matriz arrance desde 1
+		list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
 
 		list<TregistroArchivo*>::iterator b = columna->begin();
 		list<TregistroArchivo*>::iterator e = columna->end();
@@ -38,7 +44,7 @@ void Ponderer::calcularEntropia(){
 
 		this->dividirTodoPorLog();
 
-		persister->destruir();
+		matrizFreqLoc->cerrar();
 	}
 
 }
@@ -51,7 +57,38 @@ void Ponderer::dividirTodoPorLog(){
 
 void Ponderer::ponderarLocarPorGlobal(){
 
-	Persister matrizPonderada("matrizPonderada.mm");
+	fstream matrizPonderada;
+	matrizPonderada.open("matrizPonderada.mm",fstream::out);
+	//inicializo cabecera de matriz MM
+	matrizPonderada<<"%%MatrixMarket matrix coordinate real general"<<std::endl;
+	matrizPonderada<<trie->obtenerCantidadDeDocumentosParseados()<<" "<<trie->obtenerContadorId()<<" "<<trie->obtenerCantidadDePalabrasIngresadas()<<endl;
+
+	//matrizPonderada = new Persister("matrizPonderada.mm",trie->obtenerCantidadDeDocumentosParseados(),trie->obtenerContadorId(),trie->obtenerCantidadDePalabrasIngresadas());
+	matrizFreqLoc->abrir();
+
+	//recorro toda la matriz
+	while(!matrizFreqLoc->hayData()){
+		list<TregistroArchivo*>* dataCol = matrizFreqLoc->obtenerColumnaMatriz();
+
+		list<TregistroArchivo*>::iterator b = dataCol->begin();
+		list<TregistroArchivo*>::iterator e = dataCol->end();
+		//recorriendo columnas de la matriz
+		while(b!=e){
+			TregistroArchivo* aux = b*;
+
+			double entropia = this->contenedorParcialEntropia->at(aux->fil - 1)->acumEntropia;
+			double pesoLocal = log(aux->freq + 1);
+
+			double localPorGlobal = (entropia*pesoLocal);
+
+			matrizPonderada<<aux->col<<" "<<aux->fil<<" "<<localPorGlobal<<std::endl;
+
+			b++;
+		}
+
+	}
+
+	matrizPonderada.close();
 
 }
 

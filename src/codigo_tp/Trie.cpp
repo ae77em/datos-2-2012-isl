@@ -36,6 +36,31 @@ Trie::Trie (){
 
 }
 
+int Trie::obtenerCantidadDePalabrasIngresadas(){
+
+    return RAIZ->cantidadTotalDePalabrasEnLaColeccion;
+
+}
+
+int Trie::obtenerCantidadDeDocumentosParseados(){
+
+    return RAIZ->cantidadDeDocumentoParseados;
+
+}
+
+int Trie::obtenerContadorId(){
+
+    return RAIZ->contadorDeId_s;
+
+}
+
+void Trie::incrementarContadorId(){
+
+    RAIZ->contadorDeId_s++;
+
+}
+
+
 void Trie::aumentarCantidadDePalabrasEnLaColeccion(){
 
     RAIZ->cantidadTotalDePalabrasEnLaColeccion++;
@@ -308,29 +333,6 @@ void Trie::persistirPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
 
 }
 
-int Trie::obtenerCantidadDePalabrasIngresadas(){
-
-    return RAIZ->cantidadTotalDePalabrasEnLaColeccion;
-
-}
-
-int Trie::obtenerCantidadDeDocumentosParseados(){
-
-    return RAIZ->cantidadDeDocumentoParseados;
-
-}
-
-int Trie::obtenerContadorId(){
-
-    return RAIZ->contadorDeId_s;
-
-}
-
-void Trie::incrementarContadorId(){
-
-    RAIZ->contadorDeId_s++;
-
-}
 //////////************************************
 bool Trie::buscarPalabra(string palabra){
 

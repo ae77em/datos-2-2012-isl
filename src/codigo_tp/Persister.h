@@ -21,9 +21,11 @@ class Persister {
         Persister(std::string,int col,int fil, int cantTerminos);
         ~Persister(void);
         void persistirDatos(std::vector<TnodoData*>*,unsigned int);
-        list<TregistroArchivo*>* obtenerColumnaMatriz(unsigned int);
-        void abrir(std::string);
-        void destruir();
+        list<TregistroArchivo*>* obtenerColumnaMatriz();
+        void abrir();
+        void cerrar();
+
+        bool hayData();
 
 	private:
 
@@ -32,6 +34,7 @@ class Persister {
         TregistroArchivo* regAux; //almacenara el registro que se le cunado se cambie de columna
         std::fstream salida;
         std::list<TregistroArchivo*>* contenedor;
+        std::string path;
 
 };
 

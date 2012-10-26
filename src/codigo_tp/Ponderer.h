@@ -20,7 +20,9 @@ private:
 
 	vector<TacumEntropia*>* contenedorParcialEntropia;
 	unsigned int cantidadDocumentosEnLaColeccion;
-	Persister* persister;
+	Persister* matrizFreqLoc;
+	Persister* matrizPonderada;
+	Trie* trie;
 };
 
 #endif /* PONDERER_H_ */
