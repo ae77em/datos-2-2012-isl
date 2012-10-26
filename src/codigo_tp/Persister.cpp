@@ -35,9 +35,7 @@ void Persister::cerrar(){
 }
 
 void Persister::abrir(){
-    cout<<"abriendo: "<<path<<endl;
-	salida.open(this->path.c_str(),std::fstream::in);
-
+    salida.open(this->path.c_str(),std::fstream::in);
 }
 //POR EL MOMENTO SE VA A HACER SECUENCIAL, MAS ADELANTE, SI ES NECESERAIO
 //AGREGARE FUNCIONALIDAD PARA PODER LEER DE A COLUMNA
@@ -62,20 +60,14 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 			salida >> regAux->col;
 			salida >> regAux->fil;
 			salida >> regAux->freq;
-			cout<<"LEIDO col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
-		}
+        }
 	}
-
-    cout<<"sali con col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
 
 	return this->contenedor;
 }
 
 
 void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int columna){
-
-    std::cout<<"iniciando persistencia"<<std::endl;
-    std::cout<<"tamanio: "<<data->size()<<std::endl;
 
 	for(register int i=0; i< data->size() ; i++){
 	    if(data->at(i)){
@@ -85,9 +77,7 @@ void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int colum
 }
 
 bool Persister::hayData(){
-    cout<<"EOF: "<<salida.eof()<<endl;
 	return salida.eof();
-
 }
 
 void Persister::vaciar(list<TregistroArchivo*>* l){
