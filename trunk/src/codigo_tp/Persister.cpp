@@ -2,12 +2,15 @@
 
 Persister::Persister(std::string path){
 
-    salida.open(path.c_str(),std::fstream::out);
+	this->path = path;
+    salida.open(this->path.c_str(),std::fstream::out);
     contenedor = new std::list<TregistroArchivo*>;
     regAux=NULL;
 
     cout<<"PERSISTER CREADO"<<endl;
 }
+
+
 
 Persister::Persister(std::string pathMatriz,int col,int fil, int cantTerminos){
 
@@ -25,21 +28,21 @@ Persister::~Persister(void){
 
 }
 
-void Persister::destruir(){
+void Persister::cerrar(){
 
 	salida.close();
 	cout<<"PERSISTER DESTRUIDO"<<endl;
 
 }
 
-void Persister::abrir(std::string path){
+void Persister::abrir(){
 
 	salida.open(path.c_str(),std::fstream::in);
 
 }
 //POR EL MOMENTO SE VA A HACER SECUENCIAL, MAS ADELANTE, SI ES NECESERAIO
 //AGREGARE FUNCIONALIDAD PARA PODER LEER DE A COLUMNA
-list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(unsigned int columna){
+list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 
 
 	if(regAux==NULL){//solo en la primer lectura pasa esto
@@ -52,6 +55,7 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(unsigned int columna){
 	}else{
 	}
 
+	int columna = regAux->col;
 
 	while(columna==regAux->col && !salida.eof()){
 
@@ -75,4 +79,10 @@ void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int colum
 									//sumo uno porque los id arrancar desde 0, y las filas desde 1
          salida<<columna<<" "<<(data->at(i)->id + 1)<<" "<<data->at(i)->ocurrenciasEnElDocActual<<std::endl;
     }
+}
+
+bool Persister::hayData(){
+
+	return salida.eof();
+
 }
