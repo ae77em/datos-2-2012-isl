@@ -24,7 +24,7 @@ struct TnodoData {
 
 struct TacumEntropia{
 	TnodoData* infoTerm;
-	float acumEntropia;
+	double acumEntropia;
 };
 
 struct TnodoTrie {
