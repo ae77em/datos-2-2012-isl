@@ -12,6 +12,7 @@ class Ponderer {
 public:
 	Ponderer(Trie*,Persister*);
 	virtual ~Ponderer();
+	void ponderar();
 
 private:
 	void dividirTodoPorLog();

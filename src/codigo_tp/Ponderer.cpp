@@ -22,7 +22,11 @@ void Ponderer::calcularEntropia(){
 	this->contenedorParcialEntropia = trie->exportarDatosParaEntropia_INI();
 	this->cantidadDocumentosEnLaColeccion = trie->obtenerCantidadDeDocumentosParseados();
 
+	for(register int i=0; i<contenedorParcialEntropia->size();i++){
+	    std::cout<<"ID: "<<this->contenedorParcialEntropia->at(i)->infoTerm->id<<" freqGlobal: "<<contenedorParcialEntropia->at(i)->infoTerm->ocurrenciasEnLaColeccion<<" entropia: "<<contenedorParcialEntropia->at(i)->acumEntropia<<std::endl;
+	}
 
+/*
 	for(register unsigned int i=0; i<this->cantidadDocumentosEnLaColeccion; i++){
 
 		list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
@@ -46,7 +50,7 @@ void Ponderer::calcularEntropia(){
 
 		matrizFreqLoc->cerrar();
 	}
-
+*/
 }
 
 void Ponderer::dividirTodoPorLog(){
@@ -74,7 +78,7 @@ void Ponderer::ponderarLocarPorGlobal(){
 		list<TregistroArchivo*>::iterator e = dataCol->end();
 		//recorriendo columnas de la matriz
 		while(b!=e){
-			TregistroArchivo* aux = b*;
+			TregistroArchivo* aux = *b;
 
 			double entropia = this->contenedorParcialEntropia->at(aux->fil - 1)->acumEntropia;
 			double pesoLocal = log(aux->freq + 1);
@@ -89,6 +93,11 @@ void Ponderer::ponderarLocarPorGlobal(){
 	}
 
 	matrizPonderada.close();
+}
+
+void Ponderer::ponderar(){
+
+    this->calcularEntropia();
 
 }
 
