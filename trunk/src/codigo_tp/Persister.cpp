@@ -75,9 +75,13 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 
 void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int columna){
 
+    std::cout<<"iniciando persistencia"<<std::endl;
+    std::cout<<"tamanio: "<<data->size()<<std::endl;
+
 	for(register int i=0; i< data->size() ; i++){
-									//sumo uno porque los id arrancar desde 0, y las filas desde 1
-         salida<<columna<<" "<<(data->at(i)->id + 1)<<" "<<data->at(i)->ocurrenciasEnElDocActual<<std::endl;
+	    if(data->at(i)){
+            salida<<columna<<" "<<(data->at(i)->id + 1)<<" "<<data->at(i)->ocurrenciasEnElDocActual<<std::endl;
+	    }
     }
 }
 
