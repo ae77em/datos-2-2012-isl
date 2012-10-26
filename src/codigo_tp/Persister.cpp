@@ -28,7 +28,7 @@ Persister::~Persister(void){
 }
 
 void Persister::cerrar(){
-
+    regAux=NULL;
 	salida.close();
 	cout<<"PERSISTER CERRADO"<<endl;
 
@@ -42,7 +42,6 @@ void Persister::abrir(){
 //POR EL MOMENTO SE VA A HACER SECUENCIAL, MAS ADELANTE, SI ES NECESERAIO
 //AGREGARE FUNCIONALIDAD PARA PODER LEER DE A COLUMNA
 list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
-
 
 	if(regAux==NULL){//solo en la primer lectura pasa esto
 		regAux = new TregistroArchivo;
@@ -63,6 +62,7 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 			salida >> regAux->col;
 			salida >> regAux->fil;
 			salida >> regAux->freq;
+			cout<<"LEIDO col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
 		}
 	}
 
@@ -85,7 +85,17 @@ void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int colum
 }
 
 bool Persister::hayData(){
-
+    cout<<"EOF: "<<salida.eof()<<endl;
 	return salida.eof();
 
+}
+
+void Persister::vaciar(list<TregistroArchivo*>* l){
+
+    /*while(l->empty()){
+        TregistroArchivo* aux = l->front();
+        delete aux;
+        l->pop_front();
+    }*/
+    l->clear();
 }
