@@ -6,6 +6,7 @@
 #include <list>
 #include "Trie.h"
 
+
 struct TregistroArchivo{
     int col;
     int fil;
@@ -17,6 +18,7 @@ class Persister {
 	public:
 		Persister();
         Persister(std::string);
+        Persister(std::string,int col,int fil, int cantTerminos);
         ~Persister(void);
         void persistirDatos(std::vector<TnodoData*>*,unsigned int);
         list<TregistroArchivo*>* obtenerColumnaMatriz(unsigned int);

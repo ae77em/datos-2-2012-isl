@@ -3,17 +3,19 @@
 Persister::Persister(std::string path){
 
     salida.open(path.c_str(),std::fstream::out);
-    //inicializo cabecera del archivo
-    salida<<"%%MatrixMarket matrix coordinate real general\n";
-    //se debe dejar un espacio en blanco para luego insertar la cantidad de col, fil e indices
-    //ese debe ser el formato respetado para que la libreria pueda andar
-    salida<<"                         \n";
-
     contenedor = new std::list<TregistroArchivo*>;
     regAux=NULL;
 
     cout<<"PERSISTER CREADO"<<endl;
 }
+
+Persister::Persister(std::string pathMatriz,int col,int fil, int cantTerminos){
+
+	salida.open(pathMatriz.c_str(),std::fstream::out);
+	//inicializo cabecera del archivo
+    salida<<"%%MatrixMarket matrix coordinate real general\n";
+    salida<<col<<" "<<fil<<" "<<cantTerminos<<endl;
+    }
 
 Persister::~Persister(void){
 
@@ -42,26 +44,25 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(unsigned int columna){
 
 	if(regAux==NULL){//solo en la primer lectura pasa esto
 		TregistroArchivo* regAux = new TregistroArchivo;
-
 		salida >> regAux->col;
 		salida >> regAux->fil;
 		salida >> regAux->freq;
-		this->contenedor->push_back(regAux);//
+
 
 	}else{
-		this->contenedor->push_back(this->regAux);//guardo el que me quedo almacenado de la ultima vez
-
 	}
 
 
-	while(columna==regAux->col){
-		TregistroArchivo* reg = new TregistroArchivo;
+	while(columna==regAux->col && !salida.eof()){
 
-		salida >> reg->col;
-		salida >> reg->fil;
-		salida >> reg->freq;
-		this->contenedor->push_back(reg);
+		this->contenedor->push_back(regAux);//
 
+		if(!salida.eof() && columna==regAux->col){
+			TregistroArchivo* regAux = new TregistroArchivo;
+			salida >> regAux->col;
+			salida >> regAux->fil;
+			salida >> regAux->freq;
+		}
 	}
 
 	return this->contenedor;

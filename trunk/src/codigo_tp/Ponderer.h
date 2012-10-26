@@ -10,13 +10,17 @@
 
 class Ponderer {
 public:
-	Ponderer(Trie*);
+	Ponderer(Trie*,Persister*);
 	virtual ~Ponderer();
-	void calcularEntropia(Persister*);
 
 private:
+	void dividirTodoPorLog();
+	void calcularEntropia();
+	void ponderarLocarPorGlobal();
+
 	vector<TacumEntropia*>* contenedorParcialEntropia;
 	unsigned int cantidadDocumentosEnLaColeccion;
+	Persister* persister;
 };
 
 #endif /* PONDERER_H_ */
