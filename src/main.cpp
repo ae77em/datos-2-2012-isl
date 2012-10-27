@@ -5,6 +5,7 @@
 #include "Indexador.h"
 
 int main (int argc, char *argv[]) {
+
 	Indexador indexador;
 	std::string nombreRepositorio;
 	std::string ruta;
