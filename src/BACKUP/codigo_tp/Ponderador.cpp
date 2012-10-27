@@ -24,10 +24,6 @@ float Ponderador::conTresDecimales(float numero){
 }
 
 
-/*
- * Calcula la norma vectorial de *this. *this debe ser un vector
- * de tipo MatrizInversa...es malo el metodo pero bueno, es lo que hay
- */
 float Ponderador::normaVectorialMatriz( MatrixXf& mat){
 
 	float norma = 0;
@@ -71,7 +67,7 @@ void Ponderador::ponderacionLocal( MatrixXf& mat ){
  * @param : ft = frecuencia del termino en el documento.
  * @param : fgt = frecuencia global del termino, esto es,
  * 			la cantidad de apariciones en la totalidad de
- * 			este.
+ * 			estos.
  * @param : n = cantidad de columnas/documentos.
 **/
 float Ponderador::cocientePonderacionGlobal( float ft, float fgt, unsigned n ){
@@ -93,10 +89,20 @@ float Ponderador::cocientePonderacionGlobal( float ft, float fgt, unsigned n ){
 void Ponderador::ponderacionGlobal( MatrixXf& mat, unsigned colIni ){
 
 	unsigned nroTermino = 0;
+
+	/* Recorro toda la matriz fila a fila, esto es, termino a
+	 * termino, ponderando su importancia en el conjunto de los
+	 * documentos.
+	 */
 	while ( nroTermino < mat.rows() ){
+
 		MatrixXf aux(1,mat.rows());
 		float sumatoria = 0;
 		float fgt = 0;
+
+		/* recorro las columnas correspondientes a los documentos donde
+		   aparece.
+		*/
 		for ( unsigned k = colIni; k < mat.cols(); ++k )
 			if ( mat(nroTermino,k) != 0 )
 				fgt += pow(10,double(mat(nroTermino,k)))-1;
@@ -106,10 +112,11 @@ void Ponderador::ponderacionGlobal( MatrixXf& mat, unsigned colIni ){
 			sumatoria += cocientePonderacionGlobal( ft, fgt, mat.cols());
 			aux(0,j) = sumatoria;
 		}
-		sumatoria++; // le sumo uno
+		sumatoria++;
 
-		// multiplico a la fila correspondiente con el termino
-			// por su ponderacion global
+		/* multiplico a la fila correspondiente con el termino
+		   por su ponderacion global
+		*/
 		for ( unsigned j = colIni; j < mat.cols(); ++j ){
 			float g = mat(nroTermino,j)*sumatoria;
 			mat(nroTermino,j) = floor ( g * 1000) / 1000;
