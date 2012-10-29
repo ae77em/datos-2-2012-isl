@@ -6,6 +6,8 @@
 
 int main (int argc, char *argv[]) {
 
+	std::cout<<"COMENZANDO INDEXACION"<<std::endl;
+
 	Indexador indexador;
 	std::string nombreRepositorio;
 	std::string ruta;
@@ -22,6 +24,7 @@ int main (int argc, char *argv[]) {
 	cantTopicos = atoi(argv[2]);
 	ruta = argv[3];
 	
+
 	if (!indexador.crearIndice(nombreRepositorio, cantTopicos, ruta)) {
 		std::cerr << "El indice no pudo ser creado." << std::endl;
 		return 1;

@@ -5,14 +5,22 @@
 #include <iostream>
 
 #include "LectorArchivo.h"
+#include "Trie.h"
 
 class Parser {
 	private:
 		LectorArchivo* lector;
+
+		//agregados por FEDE
+		Trie* contenedorLexico;
+		//
 	public:
 		Parser();
 		~Parser();
 		bool parsearArchivo(std::string nombreArchivo);
+
+		//agregados por FEDE
+		Trie* obtenerContenedorLexico();
 };
 
 #endif

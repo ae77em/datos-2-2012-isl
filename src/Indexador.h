@@ -6,11 +6,20 @@
 
 #include "ListadorDeArchivos.h"
 #include "Parser.h"
+#include "Ponderer.h"
+#include "Persister.h"
+
 
 class Indexador {
 	private:
 		ListadorDeArchivos* listador;
 		Parser* parser;
+
+		///agregado por FEDE
+		Ponderer* ponderador;
+		Persister* persistidor;
+		///
+
 	public:
 		Indexador();
 		~Indexador();

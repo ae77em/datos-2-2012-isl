@@ -1,4 +1,6 @@
 #include "Persister.h"
+#include <iostream>
+
 
 Persister::Persister(std::string path){
 
@@ -68,8 +70,8 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 
 void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int columna){
 
-	for(register int i=0; i< data->size() ; i++){
-	    if(data->at(i)){
+	for(register unsigned int i=0; i< data->size() ; i++){
+	    if(data->at(i)!=NULL){
             archivo<<columna<<" "<<(data->at(i)->id + 1)<<" "<<data->at(i)->ocurrenciasEnElDocActual<<std::endl;
 	    }
     }
