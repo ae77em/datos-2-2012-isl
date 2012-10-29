@@ -354,9 +354,9 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* cont
             //correspondinete parseada
             NODO->flagParser=0;
 
-            if(NODO->infoArchivo && NODO->infoArchivo->ocurrenciasEnElDocActual){
+            if ((NODO->infoArchivo!=NULL) && (NODO->infoArchivo->ocurrenciasEnElDocActual > 0) ){
                 contenedorIdFreq->at(NODO->infoArchivo->id) = NODO->infoArchivo ;
-               }
+            }
 
             buscarPalabrasDelDocParseado(NODO->hijo,contenedorIdFreq);
             buscarPalabrasDelDocParseado(NODO->hermano,contenedorIdFreq);
@@ -461,7 +461,9 @@ void Trie::vaciarContenedorParcial(){
 void Trie::inicializarFrecuenciasLocales(){
 
 	for(register unsigned int i=0; i<RAIZ->contenedorParcial->size();i++ ){
-		RAIZ->contenedorParcial->at(i)->ocurrenciasEnElDocActual=0;
+		if(RAIZ->contenedorParcial->at(i)!=NULL){
+			RAIZ->contenedorParcial->at(i)->ocurrenciasEnElDocActual=0;
+		}
 	}
 
 }

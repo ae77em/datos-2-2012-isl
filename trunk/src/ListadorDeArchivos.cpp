@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+
 ListadorDeArchivos::ListadorDeArchivos() {
 	archivos = new std::list<std::string>();
 }

@@ -10,6 +10,5 @@ std::string LectorArchivo::obtenerToken(std::ifstream &archivo) {
         palabra += c;
 		archivo.get(c);
 	}
-
 	return palabra;
 }

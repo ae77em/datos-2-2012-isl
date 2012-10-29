@@ -20,6 +20,8 @@ Ponderer::~Ponderer() {
 
 void Ponderer::ponderar(Trie* unTrie,Persister* unP){
 
+	std::cout<<"PONDERANDO"<<std::endl;
+
 	trie = unTrie;
 	matrizFreqLoc = unP;
 
@@ -93,6 +95,7 @@ void Ponderer::ponderarLocarPorGlobal(){
 			double entropia = this->contenedorParcialEntropia->at(aux->fil - 1)->acumEntropia;
 			double pesoLocal = log10(aux->freq + 1);
 			double localPorGlobal = (entropia*pesoLocal);
+
 			//persistiendo
 			matrizPonderada<<aux->col<<" "<<aux->fil<<" "<<localPorGlobal<<std::endl;
 
@@ -102,5 +105,7 @@ void Ponderer::ponderarLocarPorGlobal(){
 	}
 
 	matrizPonderada.close();
+
+	matrizFreqLoc->cerrar();
 }
 
