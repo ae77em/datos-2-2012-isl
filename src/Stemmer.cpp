@@ -1,76 +1,55 @@
 /*
-   This is the Porter stemming algorithm, coded up in ANSI C by the
-   author. It may be be regarded as canonical, in that it follows the
-   algorithm presented in
+   Algoritmo de Porter.
 
    Porter, 1980, An algorithm for suffix stripping, Program, Vol. 14,
    no. 3, pp 130-137,
 
-   only differing from it at the points maked --DEPARTURE-- below.
+   Esta implementacion se baso en las explicaciones y ejemplos tomados de
 
-   See also http://www.tartarus.org/~martin/PorterStemmer
+   http://snowball.tartarus.org/algorithms/porter/stemmer.html
 
-   The algorithm as described in the paper could be exactly replicated
-   by adjusting the points of DEPARTURE, but this is barely necessary,
-   because (a) the points of DEPARTURE are definitely improvements, and
-   (b) no encoding of the Porter stemmer I have seen is anything like
-   as exact as this version, even with the points of DEPARTURE!
+   y del codigo publicado en
 
-   You can compile it on Unix with 'gcc -O3 -o stem stem.c' after which
-   'stem' takes a list of inputs and sends the stemmed equivalent to
-   stdout.
+   http://www.tartarus.org/~martin/PorterStemmer
 
-   The algorithm as encoded here is particularly fast.
-
-   Release 1
 */
-
-
-/* The main part of the stemming algorithm starts here. b is a buffer
-   holding a word to be stemmed. The letters are in b[k0], b[k0+1] ...
-   ending at b[k]. In fact k0 = 0 in this demo program. k is readjusted
-   downwards as the stemming progresses. Zero termination is not in fact
-   used in the algorithm.
-
-   Note that only lower case sequences are stemmed. Forcing to lower case
-   should be done before stem(...) is called.
-*/
-
-/*----------------------------------------------------------------------*/
 
 #include "Stemmer.h"
 
 #include <cstring>
 #include <cstdlib>
 #include <cctype>
+#include <algorithm>
 
 #define INC 50           /* size units in which s is increased */
 #define LETTER(ch) (isupper(ch) || islower(ch))
 #define BUFF 16
 
-static char * b;       		/* buffer for word to be stemmed */
-static int 	k,k0,j;     	/* j is a general offset into the string */
-static char * s;        	/* a char * (=string) pointer; passed into b above */
-static int 	i_max = INC;	/* maximum offset in s */
+/* Constructor y Destructor */
+Stemmer::Stemmer(){
+	i_max = INC;
+	s.resize(i_max);
+};
 
+Stemmer::~Stemmer(){};
 
-/* cons(i) is true <=> b[i] is a consonant. */
-int Stemmer::cons(int i){
+/* esConsonante(i) es true <=> b[i] es una consonante. */
+int Stemmer::esConsonante(int i){
 
 	switch (b[i])
 	{
 		case 'a': case 'e': case 'i': case 'o': case 'u':
 			return false;
 		case 'y':
-			return (i==k0) ? true : !cons(i-1);
+			return (i==k0) ? true : !esConsonante(i-1);
 		default:
 			return true;
 	}
 }
 
-/* m() measures the number of consonant sequences between k0 and j. if c is
-   a consonant sequence and v a vowel sequence, and <..> indicates arbitrary
-   presence,
+/* m() mide la cantidad de secuencias de consonantes entre k0 y j. Si c es
+   una secuencia de consonantes y v una secuencia de vocales, y <..> indica
+   valores arbitrarios,
 
       <c><v>       gives 0
       <c>vc<v>     gives 1
@@ -86,27 +65,25 @@ int Stemmer::m(){
 	while(true){
 		if (i > j)
 			return n;
-		if (! cons(i))
+		if ( not esConsonante(i))
 			break;
 		i++;
 	}
 	i++;
-	while(true)
-	{
+	while(true){
 		while(true){
 			if (i > j)
 				return n;
-			if (cons(i))
+			if (esConsonante(i))
 				break;
 			i++;
 	  }
 	  i++;
 	  n++;
-	  while(true)
-	  {
+	  while(true){
 		  if (i > j)
 			  return n;
-		  if (! cons(i))
+		  if ( not esConsonante(i))
 			  break;
 		  i++;
 	  }
@@ -114,15 +91,19 @@ int Stemmer::m(){
 	}
 }
 
-/* vowelinstem() is true <=> k0,...j contains a vowel */
-int Stemmer::vowelinstem(){
+/* vocalEnStem() es true <=> k0,...j contiene una vocal */
+int Stemmer::vocalEnStem(){
 
-	int i; for (i = k0; i <= j; i++) if (! cons(i)) return true;
+	int i;
+	for (i = k0; i <= j; i++)
+		if (! esConsonante(i))
+			return true;
+
 	return false;
 }
 
-/* doublec(j) is true <=> j,(j-1) contain a double consonant. */
-int Stemmer::doublec(int j){
+/* dobleConsonante(j) es true <=> j,(j-1) contiene una consonate doble. */
+int Stemmer::dobleConsonante(int j){
 
 	if (j < k0+1)
 		return false;
@@ -130,12 +111,13 @@ int Stemmer::doublec(int j){
 	if (b[j] != b[j-1])
 		return false;
 
-	return cons(j);
+	return esConsonante(j);
 }
 
-/* cvc(i) is true <=> i-2,i-1,i has the form consonant - vowel - consonant
-   and also if the second c is not w,x or y. this is used when trying to
-   restore an e at the end of a short word. e.g.
+/* cvc(i) es true <=> i-2,i-1,i tiene la forma consonante - vocal - consonante
+   y tambien si la segunda consonante no es w,x or y. Se usa cuando queremos
+   restaurar una e al final de una palabra corta.
+   Ej:
 
       cav(e), lov(e), hop(e), crim(e), but
       snow, box, tray.
@@ -143,7 +125,7 @@ int Stemmer::doublec(int j){
 */
 int Stemmer::cvc(int i){
 
-	if (i < k0+2 || !cons(i) || cons(i-1) || !cons(i-2))
+	if (i < k0+2 || !esConsonante(i) || esConsonante(i-1) || !esConsonante(i-2))
 		return false;
 	{
 		int ch = b[i];
@@ -153,33 +135,48 @@ int Stemmer::cvc(int i){
 	return true;
 }
 
-/* ends(s) is true <=> k0,...k ends with the string s. */
+/* ends(s) es true si el substring del intervalo <=> k0,...k en b es s. */
 
-int Stemmer::ends(char * s){
+int Stemmer::ends(char * str){
 
-	int length = s[0];
-	if (s[length] != b[k]) return false; /* tiny speed-up */
-	if (length > k-k0+1) return false;
-	if (memcmp(b+k-length+1,s+1,length) != 0) return false;
+	int length = str[0];
+
+	if (str[length] != b[k])
+		return false;
+
+	if (length > k-k0+1)
+		return false;
+
+	if (memcmp(b+k-length+1,str+1,length) != 0)
+		return false;
+
 	j = k-length;
+
 	return true;
 }
 
-/* setto(s) sets (j+1),...k to the characters in the string s, readjusting
-   k. */
+/* setto(s) cambia s en el rango (j+1),...k por los pasados por parametro,
+   ajustando k.
+ */
 
-void Stemmer::setto(char * s)
+void Stemmer::setto(char * str)
 {
-	int length = s[0];
-	memmove(b+j+1,s+1,length);
+	int length = str[0];
+
+	/* reemplazo el string correspondiente */
+	memmove(b+j+1,str+1,length);
+
 	k = j+length;
 }
 
-/* r(s) is used further down. */
+/* este metodo es llamado en los pasos 2 y 3 */
+void Stemmer::r(char * s) {
 
-void Stemmer::r(char * s) { if (m() > 0) setto(s); }
+	if (m() > 0)
+		setto(s);
+}
 
-/* step1ab() gets rid of plurals and -ed or -ing. e.g.
+/* paso1ab() quita los plurales y -ed e -ing.
 
        caresses  ->  caress
        ponies    ->  poni
@@ -200,8 +197,7 @@ void Stemmer::r(char * s) { if (m() > 0) setto(s); }
        meetings  ->  meet
 
 */
-
-void Stemmer::step1ab(){
+void Stemmer::paso1ab(){
 
 	if (b[k] == 's'){
 		if (ends((char*)("\04" "sses")))
@@ -215,196 +211,387 @@ void Stemmer::step1ab(){
 	}
 
 	if (ends((char*)("\03" "eed"))) {
-		if (m() > 0) k--;
+		if (m() > 0)
+			k--;
 	}
 	else
-	if ((ends((char*)("\02" "ed")) || ends((char*)("\03" "ing"))) && vowelinstem()){
-		k = j;
-		if (ends((char*)("\02" "at")))
-			setto((char*)("\03" "ate"));
-		else
-		if (ends((char*)("\02" "bl")))
-			setto((char*)("\03" "ble"));
-		else
-		if (ends((char*)("\02" "iz")))
-			setto((char*)("\03" "ize"));
-		else
-		if (doublec(k))
-		{
-			k--;
-			{
-				int ch = b[k];
-				if (ch == 'l' || ch == 's' || ch == 'z') k++;
-			}
+	if (vocalEnStem()){
+		bool exit = true;
+		/* elimino los sufijos que sobran */
+		if(ends((char*)("\02" "ed"))){
+			setto((char*)("\01" "\0"));
+			exit=false;
 		}
-		else
-		if (m() == 1 && cvc(k))
-			setto((char*)("\01" "e"));
+		else if(ends((char*)("\03" "ing"))){
+			setto((char*)("\01" "\0"));
+			exit=false;
+		}
+
+		if ( not exit ){
+			k = j;
+			if (ends((char*)("\02" "at")))
+				setto((char*)("\03" "ate"));
+			else
+			if (ends((char*)("\02" "bl")))
+				setto((char*)("\03" "ble"));
+			else
+			if (ends((char*)("\02" "iz")))
+				setto((char*)("\03" "ize"));
+			else
+			if (dobleConsonante(k))
+			{
+				k--;
+				{
+					int ch = b[k];
+					if (ch == 'l' || ch == 's' || ch == 'z')
+						k++;
+				}
+			}
+			else
+			if (m() == 1 && cvc(k))
+				setto((char*)("\01" "e"));
+		}
 	}
 }
 
-/* step1c() turns terminal y to i when there is another vowel in the stem. */
+/* paso1c() cambia las y finales por i cuando está precedida de una vocal
+ * por ej:
+ * 		play -> plai
+ */
+void Stemmer::paso1c() {
 
-void Stemmer::step1c() {
-	if (ends((char*)("\01" "y")) && vowelinstem()) b[k] = 'i';
+	if (ends((char*)("\01" "y")) && vocalEnStem())
+		b[k] = 'i';
 }
 
 
-/* step2() maps double suffices to single ones. so -ization ( = -ize plus
-   -ation) maps to -ize etc. note that the string before the suffix must give
-   m() > 0. */
+/* paso2() mapea los sufijos dobles a uno simple. Asi -ization ( = -ize mas
+   -ation) cambia a -ize etc. m>0.
+   Ej:
 
-void Stemmer::step2() {
+	(m>0) ATIONAL 	-> ATE		relational		-> 	relate
+	(m>0) TIONAL	-> TION		conditional		-> 	condition
+								rational		-> 	rational
+	(m>0) ENCI		-> ENCE		valenci			-> 	valence
+	(m>0) ANCI		-> ANCE		hesitanci		->	hesitance
+	(m>0) IZER		-> IZE		digitizer		->	digitize
+	(m>0) ABLI		-> ABLE		conformabli		->	conformable
+	(m>0) ALLI		-> AL		radicalli		->	radical
+	(m>0) ENTLI		-> ENT		differentli		->	different
+	(m>0) ELI		-> E		vileli			->	vile
+	(m>0) OUSLI		-> OUS		analogousli		->	analogous
+	(m>0) IZATION	-> IZE		vietnamization	->	vietnamize
+	(m>0) ATION		-> ATE		predication		->	predicate
+	(m>0) ATOR		-> ATE		operator		->	operate
+	(m>0) ALISM		-> AL		feudalism		->	feudal
+	(m>0) IVENESS	-> IVE		decisiveness	->	decisive
+	(m>0) FULNESS	-> FUL		hopefulness		->	hopeful
+	(m>0) OUSNESS	-> OUS		callousness		->	callous
+	(m>0) ALITI		-> AL		formaliti		->	formal
+	(m>0) IVITI		-> IVE		sensitiviti		->	sensitive
+	(m>0) BILITI	-> BLE		sensibiliti		->	sensible
+*/
+void Stemmer::paso2() {
 
 	switch (b[k-1])
 	{
-		case 'a': if (ends((char*)("\07" "ational"))) { r((char*)("\03" "ate")); break; }
-				  if (ends((char*)("\06" "tional"))) { r((char*)("\04" "tion")); break; }
+		case 'a': if (ends((char*)("\07" "ational"))) {
+					  r((char*)("\03" "ate"));
+					  break;
+				  }
+				  if (ends((char*)("\06" "tional"))) {
+					  r((char*)("\04" "tion"));
+					  break;
+				  }
 				  break;
-		case 'c': if (ends((char*)("\04" "enci"))) { r((char*)("\04" "ence")); break; }
-				  if (ends((char*)("\04" "anci"))) { r((char*)("\04" "ance")); break; }
+		case 'c': if (ends((char*)("\04" "enci"))) {
+					  r((char*)("\04" "ence"));
+					  break;
+				  }
+				  if (ends((char*)("\04" "anci"))) {
+					  r((char*)("\04" "ance"));
+					  break;
+				  }
 				  break;
-		case 'e': if (ends((char*)("\04" "izer"))) { r((char*)("\03" "ize")); break; }
+		case 'e': if (ends((char*)("\04" "izer"))) {
+					  r((char*)("\03" "ize"));
+					  break;
+				  }
 				  break;
-		case 'l': if (ends((char*)("\03" "bli"))) { r((char*)("\03" "ble")); break; } /*-DEPARTURE-*/
+		case 'l': if (ends((char*)("\03" "bli"))) {
+					  r((char*)("\03" "ble"));
+					  break;
+				  }
 
-	 /* To match the published algorithm, replace this line with
-		case 'l': if (ends((char*)("\04" "abli")) { r("\04" "able"); break; } */
+				  if (ends((char*)("\04" "alli"))) {
+					  r((char*)("\02" "al"));
+					  break;
+				  }
+				  if (ends((char*)("\05" "entli"))) {
+					  r((char*)("\03" "ent"));
+					  break;
+				  }
+				  if (ends((char*)("\03" "eli"))) {
+					  r((char*)("\01" "e"));
+					  break;
+				  }
+				  if (ends((char*)("\05" "ousli"))) {
+					  r((char*)("\03" "ous"));
+					  break;
+				  }
+				  break;
+		case 'o': if (ends((char*)("\07" "ization"))) {
+					  r((char*)("\03" "ize"));
+					  break;
+				  }
+				  if (ends((char*)("\05" "ation"))) {
+					  r((char*)("\03" "ate"));
+					  break;
+				  }
+				  if (ends((char*)("\04" "ator"))) {
+					  r((char*)("\03" "ate"));
+					  break;
+				  }
+				  break;
+		case 's': if (ends((char*)("\05" "alism"))) {
+					  r((char*)("\02" "al"));
+					  break;
+				  }
+				  if (ends((char*)("\07" "iveness"))) {
+					  r((char*)("\03" "ive"));
+					  break;
+				  }
+				  if (ends((char*)("\07" "fulness"))) {
+					  r((char*)("\03" "ful"));
+					  break;
+				  }
+				  if (ends((char*)("\07" "ousness"))) {
+					  r((char*)("\03" "ous"));
+					  break;
+				  }
+				  break;
+		case 't': if (ends((char*)("\05" "aliti"))) {
+					  r((char*)("\02" "al"));
+					  break;
+				  }
+				  if (ends((char*)("\05" "iviti"))) {
+					  r((char*)("\03" "ive"));
+					  break;
+				  }
+				  if (ends((char*)("\06" "biliti"))) {
+					  r((char*)("\03" "ble"));
+					  break;
+				  }
+				  break;
+		case 'g': if (ends((char*)("\04" "logi"))) {
+					  r((char*)("\03" "log"));
+					  break;
+				  } /*-DEPARTURE-*/
+				  break;
 
-				  if (ends((char*)("\04" "alli"))) { r((char*)("\02" "al")); break; }
-				  if (ends((char*)("\05" "entli"))) { r((char*)("\03" "ent")); break; }
-				  if (ends((char*)("\03" "eli"))) { r((char*)("\01" "e")); break; }
-				  if (ends((char*)("\05" "ousli"))) { r((char*)("\03" "ous")); break; }
-				  break;
-		case 'o': if (ends((char*)("\07" "ization"))) { r((char*)("\03" "ize")); break; }
-				  if (ends((char*)("\05" "ation"))) { r((char*)("\03" "ate")); break; }
-				  if (ends((char*)("\04" "ator"))) { r((char*)("\03" "ate")); break; }
-				  break;
-		case 's': if (ends((char*)("\05" "alism"))) { r((char*)("\02" "al")); break; }
-				  if (ends((char*)("\07" "iveness"))) { r((char*)("\03" "ive")); break; }
-				  if (ends((char*)("\07" "fulness"))) { r((char*)("\03" "ful")); break; }
-				  if (ends((char*)("\07" "ousness"))) { r((char*)("\03" "ous")); break; }
-				  break;
-		case 't': if (ends((char*)("\05" "aliti"))) { r((char*)("\02" "al")); break; }
-				  if (ends((char*)("\05" "iviti"))) { r((char*)("\03" "ive")); break; }
-				  if (ends((char*)("\06" "biliti"))) { r((char*)("\03" "ble")); break; }
-				  break;
-		case 'g': if (ends((char*)("\04" "logi"))) { r((char*)("\03" "log")); break; } /*-DEPARTURE-*/
-				  break;
-
-	 /* To match the published algorithm, delete this line */
 	}
 }
 
-/* step3() deals with -ic-, -full, -ness etc. similar strategy to step2. */
+/* paso3() procesa los -ic-, -full, -ness etc. La estrategia es similar al paso 2.
+ * Ej:
 
-void Stemmer::step3() {
+	(m>0) ICATE	->	IC	triplicate	->	triplic
+	(m>0) ATIVE	->		formative	->	form
+	(m>0) ALIZE	->	AL	formalize	->	formal
+	(m>0) ICITI	->	IC	electriciti	->	electric
+	(m>0) ICAL	->	IC	electrical	->	electric
+	(m>0) FUL	->		hopeful		->	hope
+	(m>0) NESS	->		goodness	->	good
+*/
+void Stemmer::paso3() {
 
 	switch (b[k])
 	{
-		case 'e': if (ends((char*)("\05" "icate"))) { r((char*)("\02" "ic")); break; }
-				  if (ends((char*)("\05" "ative"))) { r((char*)("\00" "")); break; }
-				  if (ends((char*)("\05" "alize"))) { r((char*)("\02" "al")); break; }
+		case 'e': if (ends((char*)("\05" "icate"))) {
+					  r((char*)("\02" "ic"));
+					  break;
+				  }
+				  if (ends((char*)("\05" "ative"))) {
+					  r((char*)("\01" "\0"));
+					  break;
+				  }
+				  if (ends((char*)("\05" "alize"))) {
+					  r((char*)("\02" "al"));
+					  break;
+				  }
 				  break;
-		case 'i': if (ends((char*)("\05" "iciti"))) { r((char*)("\02" "ic")); break; }
+		case 'i': if (ends((char*)("\05" "iciti"))) {
+					  r((char*)("\02" "ic"));
+					  break;
+				  }
 				  break;
-		case 'l': if (ends((char*)("\04" "ical"))) { r((char*)("\02" "ic")); break; }
-				  if (ends((char*)("\03" "ful"))) { r((char*)("\00" "")); break; }
+		case 'l': if (ends((char*)("\04" "ical"))) {
+					  r((char*)("\02" "ic"));
+					  break;
+				  }
+				  if (ends((char*)("\03" "ful"))) {
+					  r((char*)("\01" "\0"));
+					  break;
+				  }
 				  break;
-		case 's': if (ends((char*)("\04" "ness"))) { r((char*)("\00" "")); break; }
+		case 's': if (ends((char*)("\04" "ness"))) {
+					  r((char*)("\01" "\0"));
+					  break;
+				  }
 				  break;
 	}
+	//	std::cout << "s luego de paso3 -> "<< s << std::endl;
 }
 
-/* step4() takes off -ant, -ence etc., in context <c>vcvc<v>. */
+/* paso4() quita los -ant, -ence etc., en un contexto <c>vcvc<v>.
+ *Ej:
+	(m>1) AL				->	revival		->	reviv
+	(m>1) ANCE				->	allowance	->	allow
+	(m>1) ENCE				->	inference	->	infer
+	(m>1) ER				->	airliner	->	airlin
+	(m>1) IC				->	gyroscopic	->	gyroscop
+	(m>1) ABLE				->	adjustable	->	adjust
+	(m>1) IBLE				->	defensible	->	defens
+	(m>1) ANT				->	irritant	->	irrit
+	(m>1) EMENT				->	replacement	->	replac
+	(m>1) MENT				->	adjustment	->	adjust
+	(m>1) ENT				->	dependent	->	depend
+	(m>1 and (*S or *T)) ION->	adoption	->	adopt
+	(m>1) OU				->	homologou	->	homolog
+	(m>1) ISM				->	communism	->	commun
+	(m>1) ATE				->	activate	->	activ
+	(m>1) ITI				->	angulariti	->	angular
+	(m>1) OUS				->	homologous	->	homolog
+	(m>1) IVE				->	effective	->	effect
+	(m>1) IZE				->	bowdlerize	->	bowdler
 
-void Stemmer::step4(){
+ *
+ * */
+
+void Stemmer::paso4(){
 
 	switch (b[k-1])
     {
-		case 'a': if (ends((char*)("\02" "al"))) break; return;
+		/* faltan procesar todos estos casos */
+		case 'a': if (ends((char*)("\02" "al"))) break;
+				    return;
 		case 'c': if (ends((char*)("\04" "ance"))) break;
-				 if (ends((char*)("\04" "ence"))) break; return;
-		case 'e': if (ends((char*)("\02" "er"))) break; return;
-		case 'i': if (ends((char*)("\02" "ic"))) break; return;
+				  if (ends((char*)("\04" "ence"))) break;
+				  return;
+		case 'e': if (ends((char*)("\02" "er"))) break;
+				  return;
+		case 'i': if (ends((char*)("\02" "ic"))) break;
+				  return;
 		case 'l': if (ends((char*)("\04" "able"))) break;
-				 if (ends((char*)("\04" "ible"))) break; return;
+				  if (ends((char*)("\04" "ible"))) break;
+				  return;
 		case 'n': if (ends((char*)("\03" "ant"))) break;
-				 if (ends((char*)("\05" "ement"))) break;
-				 if (ends((char*)("\04" "ment"))) break;
-				 if (ends((char*)("\03" "ent"))) break; return;
-		case 'o': if (ends((char*)("\03" "ion")) && (b[j] == 's' || b[j] == 't')) break;
-				 if (ends((char*)("\02" "ou"))) break; return;
+				  if (ends((char*)("\05" "ement"))) break;
+				  if (ends((char*)("\04" "ment"))) break;
+				  if (ends((char*)("\03" "ent"))) break;
+				  return;
+		case 'o': if (ends((char*)("\03" "ion")) && (b[j] == 's' || b[j] == 't'))
+					break;
+				  if (ends((char*)("\02" "ou"))) break;
+				  return;
 				 /* takes care of -ous */
-		case 's': if (ends((char*)("\03" "ism"))) break; return;
+		case 's': if (ends((char*)("\03" "ism"))) break;
+				  return;
 		case 't': if (ends((char*)("\03" "ate"))) break;
-				 if (ends((char*)("\03" "iti"))) break; return;
-		case 'u': if (ends((char*)("\03" "ous"))) break; return;
-		case 'v': if (ends((char*)("\03" "ive"))) break; return;
-		case 'z': if (ends((char*)("\03" "ize"))) break; return;
+				  if (ends((char*)("\03" "iti"))) break;
+				  return;
+		case 'u': if (ends((char*)("\03" "ous"))) break;
+				  return;
+		case 'v': if (ends((char*)("\03" "ive"))) break;
+				  return;
+		case 'z': if (ends((char*)("\03" "ize"))) break;
+				  return;
+
 		default: return;
     }
+	/* si hubo algun resultado positivo, elimino el sufijo correspondiente */
     if (m() > 1)
     	k = j;
+
 }
 
-/* step5() removes a final -e if m() > 1, and changes -ll to -l if
-   m() > 1. */
-void Stemmer::step5(){
+/* paso5()
+ * remueve las -e finales si m() > 1,
+ * y cambia -ll por -l si m() > 1.
+ * Ej:
+  	(m>1) E					->	probate	->	probat
+    							rate	->	rate
+	(m=1 and not *o) E		->	cease	->	ceas
+
+	(m > 1 and *d and *L)	->	single letter 	controll 	-> control
+    		 	 	 	 	 					roll		->	roll
+ *
+ * */
+void Stemmer::paso5(){
 
 	j = k;
+	int a = m();
 
 	if (b[k] == 'e'){
-		int a = m();
-		if (a > 1 || ( a == 1 && !cvc(k-1) ))
+		/* remuevo la e final */
+		if (a > 1 || ( a == 1 && !cvc(k-1) )){
 			k--;
-   }
-   if (b[k] == 'l' && doublec(k) && m() > 1)
-	   k--;
+			//setto((char*)("\01" "\0"));
+		}
+	}
+	if (b[k] == 'l' && dobleConsonante(k) && a > 1){
+		k--;
+		//setto((char*)("\01" "\0"));
+	}
+   //  std::cout << "s luego de paso5 -> "<< s << std::endl;
 }
 
-/* In stem(p,i,j), p is a char pointer, and the string to be stemmed is from
-   p[i] to p[j] inclusive. Typically i is zero and j is the offset to the last
-   character of a string, (p[j+1] == '\0'). The stemmer adjusts the
-   characters p[i] ... p[j] and returns the new end-point of the string, k.
-   Stemming never increases word length, so i <= k <= j. To turn the stemmer
-   into a module, declare 'stem' as extern, and delete the remainder of this
-   file.
+/* Recibe los parametros y llama a los distintos pasos para procesar a las
+ * palabras.
+ *
+ * @param p : puntero a char que apunta a la palabra a procesar.
+ * @param i : es una variable que siempre vale 0. Indica la primera posicion de
+ * 			  la palabra procesada.
+ * @param j : es el offset a la ultima letra de la palabra.
+ *
+   The stemmer modifica los caracteres p[i] ... p[j] y devuelve el nuevo punto
+   final de la palabra. El tamanio de la palabra procesada siempre sera menor o
+   igual a p.
+
 */
 
 int Stemmer::stem(char * p, int i, int j)
-{  b = p; k = j; k0 = i; /* copy the parameters into statics */
-   if (k <= k0+1) return k; /*-DEPARTURE-*/
+{
+	b = p;
+	k = j;
+	k0 = i;
 
-   /* With this line, strings of length 1 or 2 don't go through the
-      stemming process, although no mention is made of this in the
-      published algorithm. Remove the line to match the published
-      algorithm. */
+	/* si la palabra tiene menos de 3 letras salimos */
+	if (k <= k0+1)
+		return k;
 
-   step1ab(); step1c(); step2(); step3(); step4(); step5();
-   return k;
+	paso1ab();
+	paso1c();
+	paso2();
+	paso3();
+	paso4();
+	paso5();
+	return k;
 }
 
-/*--------------------stemmer definition ends here------------------------*/
 
 
 void Stemmer::increase_s(){
 
 	i_max += INC;
 
-	{
-		char * new_s = (char *) malloc(i_max+1);
-		{
-			int i; for (i = 0; i < i_max; i++) new_s[i] = s[i];
-		} /* copy across */
-		free(s); s = new_s;
-	}
+	s.resize(i_max+1);
 }
 
-/* applies the stem function over the parameter file.
-   Prints on the console the result.
+/* aplica el algoritmo de stemmizacion a Archivo.
+   Imprime el resultado.
 */
-void Stemmer::stemfile(FILE * f){
+void Stemmer::stemArchivo(FILE * f){
 
 	while(true){
 
@@ -423,20 +610,36 @@ void Stemmer::stemfile(FILE * f){
 
 				ch = tolower(ch); /* forces lower case */
 
-				s[i] = ch; i++;
+				s[i] = ch;
+				i++;
 				ch = getc(f);
 				if (!LETTER(ch)){
 					ungetc(ch,f);
 					break;
 				}
 			}
-			s[stem(s,0,i-1)+1] = 0;
-			/* the previous line calls the stemmer and uses its result to
-			   zero-terminate the string in s */
-			printf("%s",s);
+			stem((char*)s.c_str(),0,i-1);
+
+			std::cout << s;
 		}
 		else putchar(ch);
 	}
+}
+
+/* aplica el algoritmo de stemming a la palabra pasada como parametro.
+   retorna el string resultante.
+*/
+std::string Stemmer::stemPalabra(std::string w){
+
+
+	s = w;
+
+	/* lo paso a minusculas */
+	std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+
+	int nuevoTamanio = stem((char*)s.c_str(),0,s.size()-1);
+	s.resize(nuevoTamanio+1);
+	return s;
 }
 
 
