@@ -453,7 +453,7 @@ void Trie::persistirPalabrasContenedor(fstream* salida){
 
 void Trie::vaciarContenedorParcial(){
 
-    for(register int i=0;i<RAIZ->contenedorParcial->size();i++){
+    for(register unsigned int i=0;i<RAIZ->contenedorParcial->size();i++){
         RAIZ->contenedorParcial->at(i)=NULL;
     }
 }
