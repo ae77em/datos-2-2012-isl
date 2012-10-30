@@ -77,8 +77,8 @@ class Trie {
 		vector<TnodoTerminoId*>* exportarPalabrasContenedor_INI();
 		void exportarPalabrasContenedor(TnodoTrie*,vector<TnodoTerminoId*>*,string);
 
-		void persistirPalabras_INI(fstream*);
-		void persistirPalabras(TnodoTrie*,fstream*,string);
+		void persistirPalabras_INI(fstream*,fstream*);
+		void persistirPalabras(TnodoTrie*,fstream*,fstream*,int*,string);
 		void persistirPalabrasContenedor(fstream*);
 
 		void destruirArbol(TnodoTrie*,int*);

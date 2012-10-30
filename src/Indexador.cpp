@@ -50,5 +50,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 	ponderador->ponderar(parser->obtenerContenedorLexico(),persistidor);
 
+    parser->persistirLexico();
+
 	return true;
 }

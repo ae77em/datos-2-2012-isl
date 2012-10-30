@@ -20,7 +20,7 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	Stemmer stemedor;
 	std::string termino;
 	std::ifstream archivo(nombreArchivo.c_str());
-	
+
 	if (!archivo.good()) {
 		return false;
 	}
@@ -47,5 +47,20 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 Trie* Parser::obtenerContenedorLexico(){
 
 	return contenedorLexico;
+
+}
+
+void Parser::persistirLexico(){
+
+    fstream lexico;
+    fstream offsetLexico;
+
+    lexico.open("diccionario.txt",fstream::out);
+    offsetLexico.open("offsetLexico.txt",fstream::out);
+
+    contenedorLexico->persistirPalabras_INI(&lexico,&offsetLexico);
+
+    lexico.close();
+    offsetLexico.close();
 
 }

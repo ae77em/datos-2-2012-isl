@@ -370,37 +370,6 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* cont
 }
 
 
-void Trie::persistirPalabras_INI(fstream* salida){
-
-    string cadenaParcialDePalabras;
-
-    cadenaParcialDePalabras.clear();
-
-    persistirPalabras(RAIZ->hijo,salida,cadenaParcialDePalabras);
-
-
-}
-
-void Trie::persistirPalabras(TnodoTrie* NODO,fstream* salida,string palabra){
-
-        if(NODO){
-
-            palabra= palabra+NODO->letra;
-
-            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
-
-                *salida<<palabra<<"  id: "<<NODO->infoArchivo->id<<endl;
-
-            }
-
-            persistirPalabras(NODO->hijo,salida,palabra);
-            palabra.resize(palabra.size()-1);
-
-            persistirPalabras(NODO->hermano,salida,palabra);
-        }
-
-}
-
 
 //se usa al final de la indexacion, vuelca todo en un vector, para facilitar la actualizacion de los id�s
 // luego de la eliminaicon de las stopwords
@@ -441,15 +410,6 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
 }
 
 
-void Trie::persistirPalabrasContenedor(fstream* salida){
-
-    for(register unsigned int i=0; i<RAIZ->contenedor->size();i++){
-        //si no esta vacio
-        if(RAIZ->contenedor->at(i)){
-            *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<endl;
-        }
-    }
-}
 
 void Trie::vaciarContenedorParcial(){
 
@@ -536,3 +496,45 @@ void Trie::vaciarContenedores(){
     }
 
 }
+
+void Trie::persistirPalabrasContenedor(fstream* salida){
+
+    for(register unsigned int i=0; i<RAIZ->contenedor->size();i++){
+        //si no esta vacio
+        if(RAIZ->contenedor->at(i)){
+            *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<endl;
+        }
+    }
+}
+
+void Trie::persistirPalabras_INI(fstream* salida, fstream* offsetLexico){
+
+    string cadenaParcialDePalabras;
+
+    cadenaParcialDePalabras.clear();
+
+    int offsetL=0;
+
+    persistirPalabras(RAIZ->hijo,salida,offsetLexico,&offsetL,cadenaParcialDePalabras);
+
+
+}
+
+void Trie::persistirPalabras(TnodoTrie* NODO, fstream* salida,fstream* offsetLexico,int* offset,string palabra){
+
+        if(NODO){
+
+            palabra= palabra+NODO->letra;
+            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
+
+                *salida<<palabra<<" "<<NODO->infoArchivo->id<<endl;
+                *offsetLexico<<*offset<<endl;
+                //actualizo offset
+                *offset += palabra.size() + 6; //el offset contiene el tamaño del string,un int ,un \b y un \n
+            }
+            persistirPalabras(NODO->hijo,salida,offsetLexico,offset,palabra);
+            palabra.resize(palabra.size()-1);
+            persistirPalabras(NODO->hermano,salida,offsetLexico,offset,palabra);
+        }
+}
+
