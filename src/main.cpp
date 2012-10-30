@@ -13,12 +13,12 @@ int main (int argc, char *argv[]) {
 	std::string ruta;
 	int cantTopicos;
 	
-	if (argc < 4) {
+	/*if ( argc < 4 ) {
 		std::cerr << "Uso del programa: " << std::endl;
 		std::cerr << "TPGrupoXXi <nombre repositorio> <cantidad topicos> <directorio> " << std::endl;
 		
 		return 1;
-	}
+	}*/
 	
 	nombreRepositorio = argv[1];
 	cantTopicos = atoi(argv[2]);
