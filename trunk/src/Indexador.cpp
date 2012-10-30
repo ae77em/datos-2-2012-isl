@@ -32,12 +32,15 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 		parser->obtenerContenedorLexico()->aumentarCantidadDeDocParseados();
 
+		std::cout<<"DOC: "<<parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados()<<std::endl;
+
 		// vuelvo los datos obtenidos del documento parseado a disco
 		persistidor->persistirDatos(parser->obtenerContenedorLexico()->buscarPalabrasDelDocParseado_INI(),parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados());
-
 		//preparo el trie para una nueva parseada
 		parser->obtenerContenedorLexico()->inicializarFrecuenciasLocales();
+
 		parser->obtenerContenedorLexico()->vaciarContenedorParcial();
+
 		//finaliza ciclo de parseo
 	}
 
