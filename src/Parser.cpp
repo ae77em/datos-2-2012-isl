@@ -3,6 +3,7 @@
 Parser::Parser() {
 	lector = new LectorArchivo();
 	contenedorLexico = new Trie();
+	stemedor = new Stemmer();
 
 }
 
@@ -20,17 +21,19 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	if (!archivo.good()) {
 		return false;
 	}
+	std::cout<<"COMENCE PARSEAR ARCHIVO"<<std::endl;
 
 	while (!archivo.eof()) {
 		termino = lector->obtenerToken(archivo);
 
 		if (termino.length() > 0) {
 			// VALIDAR
-			// HACER EL STEM
+			//string terminoStemado = stemedor->stemPalabra(termino);
 			int* despuesLoSaco=NULL;
 			contenedorLexico->insertarPalabraEnRaiz(termino,despuesLoSaco);
 		}
 	}
+	std::cout<<"TERMINE PARSEAR ARCHIVO"<<std::endl;
 
 	archivo.close();
 	return true;
