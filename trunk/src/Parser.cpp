@@ -1,9 +1,10 @@
 #include "Parser.h"
+#include "Stemmer.h"
 
 Parser::Parser() {
 	lector = new LectorArchivo();
 	contenedorLexico = new Trie();
-	stemedor = new Stemmer();
+	//stemedor = new Stemmer();
 
 }
 
@@ -15,6 +16,8 @@ Parser::~Parser() {
 }
 
 bool Parser::parsearArchivo(std::string nombreArchivo) {
+
+	Stemmer stemedor;
 	std::string termino;
 	std::ifstream archivo(nombreArchivo.c_str());
 	
@@ -28,7 +31,9 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 
 		if (termino.length() > 0) {
 			// VALIDAR
-			//string terminoStemado = stemedor->stemPalabra(termino);
+			//std::cout << termino << endl;
+			std::string terminoStemado = stemedor.stemPalabra(termino);
+			//std::cout << terminoStemado << endl;
 			int* despuesLoSaco=NULL;
 			contenedorLexico->insertarPalabraEnRaiz(termino,despuesLoSaco);
 		}

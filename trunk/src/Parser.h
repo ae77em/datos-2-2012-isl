@@ -6,7 +6,6 @@
 
 #include "LectorArchivo.h"
 #include "Trie.h"
-#include "Stemmer.h"
 
 class Parser {
 	private:
@@ -14,7 +13,7 @@ class Parser {
 
 		//agregados por FEDE
 		Trie* contenedorLexico;
-		Stemmer* stemedor;
+
 		//
 	public:
 		Parser();
