@@ -71,11 +71,21 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int columna){
 
 	for(register unsigned int i=0; i< data->size() ; i++){
-	    if(data->at(i)!=NULL){
+	    if(data->at(i)){
             archivo<<columna<<" "<<(data->at(i)->id + 1)<<" "<<data->at(i)->ocurrenciasEnElDocActual<<std::endl;
 	    }
     }
 }
+
+void Persister::persistirDatos(std::list<TregistroArchivoF*>* data){
+
+	std::list<TregistroArchivoF*>::iterator iterador;
+
+	for (iterador = data->begin(); iterador != data->end(); iterador++){
+        archivo<<(*iterador)->col<<" "<<(*iterador)->fil<<" "<<(*iterador)->peso<<std::endl;
+    }
+}
+
 
 bool Persister::hayData(){
 	return archivo.eof();
@@ -89,4 +99,10 @@ void Persister::vaciar(list<TregistroArchivo*>* l){
         l->pop_back();
     }*/
     l->clear();
+}
+
+void Persister::irAlComienzo(){
+
+    archivo.seekp(ios_base::beg);
+
 }

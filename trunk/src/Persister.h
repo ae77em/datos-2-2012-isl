@@ -13,6 +13,12 @@ struct TregistroArchivo{
     int freq;
 };
 
+struct TregistroArchivoF {
+    unsigned int col;
+    unsigned int fil;
+    double peso;
+};
+
 class Persister {
 
 	public:
@@ -22,8 +28,12 @@ class Persister {
         ~Persister(void);
 
         void escribirEncabezado(int col,int fil, int cantTerminos);
-
+//se usa en la matriz con ponderacion parciales, son locales
         void persistirDatos(std::vector<TnodoData*>*,unsigned int);
+
+//se usa en la matriz final
+        void persistirDatos(std::list<TregistroArchivoF*>*);
+
         list<TregistroArchivo*>* obtenerColumnaMatriz();
 
         void abrir();
@@ -31,6 +41,8 @@ class Persister {
 
         bool hayData();
         void vaciar(list<TregistroArchivo*>*);
+
+        void irAlComienzo();
 
 
 

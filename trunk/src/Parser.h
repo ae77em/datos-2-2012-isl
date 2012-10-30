@@ -20,6 +20,8 @@ class Parser {
 		~Parser();
 		bool parsearArchivo(std::string nombreArchivo);
 
+		void persistirLexico();
+
 		//agregados por FEDE
 		Trie* obtenerContenedorLexico();
 };
