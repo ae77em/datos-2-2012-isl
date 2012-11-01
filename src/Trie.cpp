@@ -1,6 +1,9 @@
 #include "Trie.h"
 #include <iostream>
 #include <string>
+#include <stdio.h>
+#include <stdlib.h>
+
 
 void Trie::inicializarRaiz(){
 
@@ -527,10 +530,14 @@ void Trie::persistirPalabras(TnodoTrie* NODO, fstream* salida,fstream* offsetLex
             palabra= palabra+NODO->letra;
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
-                *salida<<palabra<<" "<<NODO->infoArchivo->id<<endl;
+                //parte malisima reveer con mi fantastico grupo de trbaajo
+                char buffer [33];
+                itoa (NODO->infoArchivo->id,buffer,10);
+                string idS(buffer);
+                *salida<<palabra<<" "<<idS<<endl;
                 *offsetLexico<<*offset<<endl;
                 //actualizo offset
-                *offset += palabra.size() + 6; //el offset contiene el tamaño del string,un int ,un \b y un \n
+                *offset += palabra.size() + 1 + 1 + idS.size(); //el offset contiene el tamaño del string,un int ,y un $
             }
             persistirPalabras(NODO->hijo,salida,offsetLexico,offset,palabra);
             palabra.resize(palabra.size()-1);
