@@ -534,10 +534,11 @@ void Trie::persistirPalabras(TnodoTrie* NODO, fstream* salida,fstream* offsetLex
                 char buffer [33];
                 itoa (NODO->infoArchivo->id,buffer,10);
                 string idS(buffer);
-                *salida<<palabra<<" "<<idS<<endl;
+                *salida<<palabra<<" "<<idS;
                 *offsetLexico<<*offset<<endl;
                 //actualizo offset
-                *offset += palabra.size() + 1 + 1 + idS.size(); //el offset contiene el tamaño del string,un int ,y un $
+                *offset += palabra.size() + 1 + idS.size(); //el offset contiene el tamaño del string,un int ,y un $
+                cout<<"ID: "<<idS<<" tamanio: "<<idS.size()<<endl;
             }
             persistirPalabras(NODO->hijo,salida,offsetLexico,offset,palabra);
             palabra.resize(palabra.size()-1);
