@@ -6,7 +6,8 @@
 
 
 Ponderer::Ponderer() {
-
+	contenedorParcialEntropia = NULL;
+	cantidadDocumentosEnLaColeccion = 0;
 	this->matrizFreqLoc=NULL;
 	this->trie=NULL;
 	this->matrizPonderada=NULL;
@@ -40,10 +41,10 @@ void Ponderer::calcularEntropia(){
 
 	for(register unsigned int i=0; i<this->cantidadDocumentosEnLaColeccion; i++){
 
-		list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
+		std::list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
 
-		list<TregistroArchivo*>::iterator b = columna->begin();
-		list<TregistroArchivo*>::iterator e = columna->end();
+		std::list<TregistroArchivo*>::iterator b = columna->begin();
+		std::list<TregistroArchivo*>::iterator e = columna->end();
 
         while(b!=e){
 			TregistroArchivo* auxReg = *b; //uso el id como indice del vector que contiene las entropias parciales
@@ -73,21 +74,21 @@ void Ponderer::dividirTodoPorLog(){
 
 void Ponderer::ponderarLocarPorGlobal(){
 
-	fstream matrizPonderada;
-	matrizPonderada.open("matrizPonderada.mm",fstream::out);
+	std::ofstream matrizPonderada;
+	matrizPonderada.open("matrizPonderada.mm");
 	//inicializo cabecera de matriz MM
 	matrizPonderada<<"%%MatrixMarket matrix coordinate real general"<<std::endl;
-	matrizPonderada<<trie->obtenerCantidadDeDocumentosParseados()<<" "<<trie->obtenerContadorId()<<" "<<trie->obtenerCantidadDePalabrasIngresadas()<<endl;
+	matrizPonderada<<trie->obtenerCantidadDeDocumentosParseados()<<" "<<trie->obtenerContadorId()<<" "<<trie->obtenerCantidadDePalabrasIngresadas()<<std::endl;
 
     //abriendo matriz de ponderacion locales
 	matrizFreqLoc->abrir();
 
 	//recorro toda la matriz
 	while(!matrizFreqLoc->hayData()){
-        list<TregistroArchivo*>* dataCol = matrizFreqLoc->obtenerColumnaMatriz();
+		std::list<TregistroArchivo*>* dataCol = matrizFreqLoc->obtenerColumnaMatriz();
 
-		list<TregistroArchivo*>::iterator b = dataCol->begin();
-		list<TregistroArchivo*>::iterator e = dataCol->end();
+		std::list<TregistroArchivo*>::iterator b = dataCol->begin();
+		std::list<TregistroArchivo*>::iterator e = dataCol->end();
 		//recorriendo columnas de la matriz
 		while(b!=e){
 			TregistroArchivo* aux = *b;

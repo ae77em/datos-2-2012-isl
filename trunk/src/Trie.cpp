@@ -4,16 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 void Trie::inicializarRaiz(){
 
     this->RAIZ=new TnodoPrincipalTrie;
     this->RAIZ->cantidadTotalDePalabrasEnLaColeccion=0;
     this->RAIZ->contadorDeId_s=0;
     this->RAIZ->cantidadDeDocumentoParseados=0;
-    this->RAIZ->contenedor = new vector<TnodoTerminoId*>;
-    this->RAIZ->contenedorParcial = new vector<TnodoData*>;
-    this->RAIZ->contenedorEntropia = new vector<TacumEntropia*>;
+    this->RAIZ->contenedor = new std::vector<TnodoTerminoId*>;
+    this->RAIZ->contenedorParcial = new std::vector<TnodoData*>;
+    this->RAIZ->contenedorEntropia = new std::vector<TacumEntropia*>;
 
 }
 
@@ -41,7 +40,7 @@ Trie::Trie (){
 
 Trie::~Trie(void){
 
-    cout<<"DESTRUCTOR TRIE"<<endl;
+	std::cout<<"DESTRUCTOR TRIE"<<std::endl;
 
     this->vaciarContenedores();
 
@@ -130,7 +129,7 @@ TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direc
         HijoACambiar->infoArchivo->ocurrenciasEnLaColeccion++;
     }
 
-    string palabraAux= palabra.substr(1,palabra.size()-1);
+    std::string palabraAux= palabra.substr(1,palabra.size()-1);
 
     TnodoTrie* NodoAInsertarPorLasDudas=NULL;
     //condicion de corte
@@ -257,14 +256,14 @@ TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int
 }
 
 //////////************************************
-bool Trie::buscarPalabra(string palabra){
+bool Trie::buscarPalabra(std::string palabra){
 
    return buscarPalabra(palabra,RAIZ->hijo);
 
 }
 
 //recibe al hijo de la raiz del arbol
-bool Trie::buscarPalabra(string palabra,TnodoTrie* NODO){
+bool Trie::buscarPalabra(std::string palabra,TnodoTrie* NODO){
 
     //si devuele un nodo, la letra buscada entonces fue hallada
     //entonces la busqueda continua de lo contrario quiere decir que no se halla alguna de
@@ -312,31 +311,24 @@ TnodoTrie* Trie::buscarLetra(char letraBuscada, TnodoTrie* NODO){
         return NULL;
     }
 
-    else if (NODO->letra<letraBuscada){
+    TnodoTrie* nodoActual=NODO->hermano;
 
+	while(!(nodoActual==NULL)){
 
-            TnodoTrie* nodoActual=NODO->hermano;
-            TnodoTrie* nodoAnterior=NODO;
+		if(nodoActual->letra==letraBuscada){
+			return nodoActual;
 
-            while(!(nodoActual==NULL)){
-
-                if(nodoActual->letra==letraBuscada){
-                    return nodoActual;
-
-                }
-                //BUSCO EN EL SGTE NODO
-                nodoAnterior=nodoActual;
-                nodoActual=nodoActual->hermano;
-            }
-            return NULL;
-    }
-
+		}
+		//BUSCO EN EL SGTE NODO
+		nodoActual=nodoActual->hermano;
+	}
+	return NULL;
 }
 
 
 //parte de busqueda
 
-vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
+std::vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 
 	//solucion parcial al problema del heap, mejora busqeuda, pero necesita memori innecesaria
 	//despues controlar con un if si es NECESARIO O NO EL RESIZE, PROVISIRIO
@@ -348,7 +340,7 @@ vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 
 }
 
-void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* contenedorIdFreq ){
+void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,std::vector<TnodoData*>* contenedorIdFreq ){
 
     if(NODO){
         if(NODO->flagParser){
@@ -376,11 +368,11 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,vector<TnodoData*>* cont
 
 //se usa al final de la indexacion, vuelca todo en un vector, para facilitar la actualizacion de los id�s
 // luego de la eliminaicon de las stopwords
-vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
+std::vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
 
     RAIZ->contenedor->resize(this->obtenerContadorId()); //el id arranca desde cero
 
-    string palabraAux = "";
+    std::string palabraAux = "";
 
     this->exportarPalabrasContenedor(this->RAIZ->hijo,RAIZ->contenedor,palabraAux);
 
@@ -389,7 +381,7 @@ vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
 }
 
 //SE USA para volvar la data ID,TERM a un vector,
-void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*contenedor, string palabra){
+void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,std::vector<TnodoTerminoId*>*contenedor, std::string palabra){
 
     if(NODO){
             palabra= palabra + NODO->letra;
@@ -416,14 +408,14 @@ void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,vector<TnodoTerminoId*>*c
 
 void Trie::vaciarContenedorParcial(){
 
-    for(register unsigned int i=0;i<RAIZ->contenedorParcial->size();i++){
+    for(unsigned int i=0;i<RAIZ->contenedorParcial->size();i++){
         RAIZ->contenedorParcial->at(i)=NULL;
     }
 }
 
 void Trie::inicializarFrecuenciasLocales(){
 
-	for(register unsigned int i=0; i<RAIZ->contenedorParcial->size();i++ ){
+	for(unsigned int i=0; i<RAIZ->contenedorParcial->size();i++ ){
 		if(RAIZ->contenedorParcial->at(i)!=NULL){
 			RAIZ->contenedorParcial->at(i)->ocurrenciasEnElDocActual=0;
 		}
@@ -431,7 +423,7 @@ void Trie::inicializarFrecuenciasLocales(){
 
 }
 
-vector<TacumEntropia*>* Trie::exportarDatosParaEntropia_INI(){
+std::vector<TacumEntropia*>* Trie::exportarDatosParaEntropia_INI(){
 
 	this->RAIZ->contenedorEntropia->resize(this->obtenerContadorId());
 
@@ -441,7 +433,7 @@ vector<TacumEntropia*>* Trie::exportarDatosParaEntropia_INI(){
 
 }
 
-void Trie::exportarDatosParaEntropia(vector<TacumEntropia*>* contenedorEntropia,TnodoTrie* NODO){
+void Trie::exportarDatosParaEntropia(std::vector<TacumEntropia*>* contenedorEntropia,TnodoTrie* NODO){
 	//condicion de corte
 	if(NODO){
 	            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
@@ -486,33 +478,33 @@ void Trie::destruirArbol(TnodoTrie* NODO,int* cantidadDeNodos){
 
 void Trie::vaciarContenedores(){
 
-    for(register int i=0;i<this->RAIZ->contenedor->size();i++){
+    for(unsigned int i=0;i<this->RAIZ->contenedor->size();i++){
         delete this->RAIZ->contenedor->at(i);
     }
 
-    for(register int i=0;i<this->RAIZ->contenedorParcial->size();i++){
+    for(unsigned int i=0;i<this->RAIZ->contenedorParcial->size();i++){
         delete this->RAIZ->contenedorParcial->at(i);
     }
 
-    for(register int i=0;i<this->RAIZ->contenedorEntropia->size();i++){
+    for(unsigned int i=0;i<this->RAIZ->contenedorEntropia->size();i++){
         delete this->RAIZ->contenedorEntropia->at(i);
     }
 
 }
 
-void Trie::persistirPalabrasContenedor(fstream* salida){
+void Trie::persistirPalabrasContenedor(std::ofstream* salida){
 
-    for(register unsigned int i=0; i<RAIZ->contenedor->size();i++){
+    for(unsigned int i=0; i<RAIZ->contenedor->size();i++){
         //si no esta vacio
         if(RAIZ->contenedor->at(i)){
-            *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<endl;
+            *salida <<*RAIZ->contenedor->at(i)->id <<"  "<<RAIZ->contenedor->at(i)->palabra<<std::endl;
         }
     }
 }
 
-void Trie::persistirPalabras_INI(fstream* salida, fstream* offsetLexico){
+void Trie::persistirPalabras_INI(std::ofstream* salida, std::ofstream* offsetLexico){
 
-    string cadenaParcialDePalabras;
+	std::string cadenaParcialDePalabras;
 
     cadenaParcialDePalabras.clear();
 
@@ -523,7 +515,7 @@ void Trie::persistirPalabras_INI(fstream* salida, fstream* offsetLexico){
 
 }
 
-void Trie::persistirPalabras(TnodoTrie* NODO, fstream* salida,fstream* offsetLexico,int* offset,string palabra){
+void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstream* offsetLexico,int* offset,std::string palabra){
 
         if(NODO){
 
@@ -532,13 +524,15 @@ void Trie::persistirPalabras(TnodoTrie* NODO, fstream* salida,fstream* offsetLex
 
                 //parte malisima reveer con mi fantastico grupo de trbaajo
                 char buffer [33];
-                itoa (NODO->infoArchivo->id,buffer,10);
-                string idS(buffer);
-                *salida<<palabra<<" "<<idS;
-                *offsetLexico<<*offset<<endl;
-                //actualizo offset
+
+				sprintf(buffer,"%d",NODO->infoArchivo->id);
+                std::string idS(buffer);
+                *salida<<palabra<<" "<<idS<<std::endl;
+                *offsetLexico<<*offset<<std::endl;
+
+				//actualizo offset
                 *offset += palabra.size() + 1 + idS.size(); //el offset contiene el tamaño del string,un int ,y un $
-                cout<<"ID: "<<idS<<" tamanio: "<<idS.size()<<endl;
+                std::cout<<"ID: "<<idS<<" tamanio: "<<idS.size()<<std::endl;
             }
             persistirPalabras(NODO->hijo,salida,offsetLexico,offset,palabra);
             palabra.resize(palabra.size()-1);

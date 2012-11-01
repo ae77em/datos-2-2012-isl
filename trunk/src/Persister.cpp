@@ -14,7 +14,7 @@ Persister::Persister(std::string path){
 void Persister::escribirEncabezado(int col,int fil, int cantTerminos){
 
 	archivo<<"%%MatrixMarket matrix coordinate real general\n";
-    archivo<<col<<" "<<fil<<" "<<cantTerminos<<endl;
+    archivo<<col<<" "<<fil<<" "<<cantTerminos<<std::endl;
 
 }
 
@@ -22,16 +22,19 @@ Persister::~Persister(void){
 
    // archivo.close();
     delete contenedor;
-    cout<<"PERSISTER DESTRUIDO"<<endl;
+    std::cout<<"PERSISTER DESTRUIDO"<<std::endl;
     //vaciar contenedor
-
+	
+	if (regAux != NULL) {
+		delete regAux;
+	}
 }
 
 void Persister::cerrar(){
 
     regAux=NULL;
 	archivo.close();
-	cout<<"PERSISTER CERRADO"<<endl;
+	std::cout<<"PERSISTER CERRADO"<<std::endl;
 
 }
 
@@ -40,7 +43,7 @@ void Persister::abrir(){
 }
 //POR EL MOMENTO SE VA A HACER SECUENCIAL, MAS ADELANTE, SI ES NECESERAIO
 //AGREGARE FUNCIONALIDAD PARA PODER LEER DE A COLUMNA
-list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
+std::list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 
 	if(regAux==NULL){//solo en la primer lectura pasa esto
 		regAux = new TregistroArchivo;
@@ -57,6 +60,7 @@ list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
         this->contenedor->push_back(regAux);//
 
 		if(!archivo.eof() && columna==regAux->col){
+			delete regAux;
 			regAux = new TregistroArchivo;
 			archivo >> regAux->col;
 			archivo >> regAux->fil;
@@ -91,7 +95,7 @@ bool Persister::hayData(){
 	return archivo.eof();
 }
 
-void Persister::vaciar(list<TregistroArchivo*>* l){
+void Persister::vaciar(std::list<TregistroArchivo*>* l){
     //por algun motivo cuando libero lo que pedi altera los resultados, queda provisorio l->clear()
     /*while(l->empty()){
         TregistroArchivo* aux = l->back();
@@ -103,6 +107,6 @@ void Persister::vaciar(list<TregistroArchivo*>* l){
 
 void Persister::irAlComienzo(){
 
-    archivo.seekp(ios_base::beg);
+    archivo.seekp(std::ios_base::beg);
 
 }

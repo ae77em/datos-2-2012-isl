@@ -14,12 +14,8 @@ class Indexador {
 	private:
 		ListadorDeArchivos* listador;
 		Parser* parser;
-
-		///agregado por FEDE
 		Ponderer* ponderador;
 		Persister* persistidor;
-		///
-
 	public:
 		Indexador();
 		~Indexador();
