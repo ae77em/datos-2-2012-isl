@@ -26,16 +26,23 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	}
 	std::cout<<"COMENCE PARSEAR ARCHIVO"<<std::endl;
 
+	//int cont = 0;
+
 	while (!archivo.eof()) {
 		termino = lector->obtenerToken(archivo);
 
 		if (termino.length() > 0) {
 			// VALIDAR
-			//std::cout << termino << endl;
 			std::string terminoStemado = stemedor.stemPalabra(termino);
-			//std::cout << terminoStemado << endl;
 			int* despuesLoSaco=NULL;
-			contenedorLexico->insertarPalabraEnRaiz(termino,despuesLoSaco);
+			/* por si justo la palabra que entra es un stemm,
+			 * y luego de procesar queda vacia
+			 * ESTA VALIDACION SERIA MAS INDICADA DENTRO DEL TRIE.
+			 * QUE QUEDE A JUICIO DE FEDE HACERLA O NO.
+			 */
+			if ( terminoStemado != "" )
+				contenedorLexico->insertarPalabraEnRaiz(terminoStemado,despuesLoSaco);
+
 		}
 	}
 	std::cout<<"TERMINE PARSEAR ARCHIVO"<<std::endl;

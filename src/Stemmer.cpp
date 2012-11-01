@@ -203,17 +203,17 @@ void Stemmer::r(int length, std::string s) {
 void Stemmer::paso1ab(){
 
 	if (b[k] == 's'){
-		if (ends(4, "sses"))
+		if (ends(4, std::string("sses")))
 			k -= 2;
 		else
-		if (ends(3, "ies"))
-			setto(1, "i");
+		if (ends(3, std::string("ies")))
+			setto(1, std::string("i"));
 		else
 		if (b[k-1] != 's')
 			k--;
 	}
 
-	if (ends(3, "eed")) {
+	if (ends(3, std::string("eed"))) {
 		if (m() > 0)
 			k--;
 	}
@@ -221,25 +221,25 @@ void Stemmer::paso1ab(){
 	if (vocalEnStem()){
 		bool salir = true;
 		/* elimino los sufijos que sobran */
-		if(ends(2, "ed")){
-			setto(1, "\0");
+		if(ends(2, std::string("ed"))){
+			setto(1, std::string("\0"));
 			salir=false;
 		}
-		else if(ends(3, "ing")){
-			setto(1, "\0");
+		else if(ends(3, std::string("ing"))){
+			setto(1, std::string("\0"));
 			salir=false;
 		}
 
 		if ( not salir ){
 			k = j;
-			if (ends(2, "at"))
-				setto(3, "ate");
+			if (ends(2, std::string("at")))
+				setto(3, std::string("ate"));
 			else
-			if (ends(2, "bl"))
-				setto(3, "ble");
+			if (ends(2, std::string("bl")))
+				setto(3, std::string("ble"));
 			else
-			if (ends(2, "iz"))
-				setto(3, "ize");
+			if (ends(2, std::string("iz")))
+				setto(3, std::string("ize"));
 			else
 			if (dobleConsonante(k))
 			{
@@ -252,7 +252,7 @@ void Stemmer::paso1ab(){
 			}
 			else
 			if (m() == 1 && cvc(k))
-				setto(1, "e");
+				setto(1, std::string("e"));
 		}
 	}
 }
@@ -263,7 +263,7 @@ void Stemmer::paso1ab(){
  */
 void Stemmer::paso1c() {
 
-	if (ends(1, "y") && vocalEnStem())
+	if (ends(1, std::string("y")) && vocalEnStem())
 		b[k] = 'i';
 }
 
@@ -298,100 +298,99 @@ void Stemmer::paso2() {
 
 	switch (b[k-1])
 	{
-		case 'a': if (ends(7, "ational")) {
-					  r(3, "ate");
+		case 'a': if (ends(7, std::string("ational"))) {
+					  r(3, std::string("ate"));
 					  break;
 				  }
-				  if (ends(6, "tional")) {
-					  r(4, "tion");
-					  break;
-				  }
-				  break;
-		case 'c': if (ends(4, "enci")) {
-					  r(4, "ence");
-					  break;
-				  }
-				  if (ends(4, "anci")) {
-					  r(4, "ance");
+				  if (ends(6, std::string("tional"))) {
+					  r(4, std::string("tion"));
 					  break;
 				  }
 				  break;
-		case 'e': if (ends(4, "izer")) {
-					  r(3, "ize");
+		case 'c': if (ends(4, std::string("enci"))) {
+					  r(4, std::string("ence"));
+					  break;
+				  }
+				  if (ends(4, std::string("anci"))) {
+					  r(4, std::string("ance"));
 					  break;
 				  }
 				  break;
-		case 'l': if (ends(3, "bli")) {
-					  r(3, "ble");
+		case 'e': if (ends(4, std::string("izer"))) {
+					  r(3, std::string("ize"));
+					  break;
+				  }
+				  break;
+		case 'l': if (ends(3, std::string("bli"))) {
+					  r(3, std::string("ble"));
 					  break;
 				  }
 
-				  if (ends(4, "alli")) {
-					  r(2, "al");
+				  if (ends(4, std::string("alli"))) {
+					  r(2, std::string("al"));
 					  break;
 				  }
-				  if (ends(5, "entli")) {
-					  r(3, "ent");
+				  if (ends(5, std::string("entli"))) {
+					  r(3, std::string("ent"));
 					  break;
 				  }
-				  if (ends(3, "eli")) {
-					  r(1, "e");
+				  if (ends(3, std::string("eli"))) {
+					  r(1, std::string("e"));
 					  break;
 				  }
-				  if (ends(5, "ousli")) {
-					  r(3, "ous");
-					  break;
-				  }
-				  break;
-		case 'o': if (ends(7, "ization")) {
-					  r(3, "ize");
-					  break;
-				  }
-				  if (ends(5, "ation")) {
-					  r(3, "ate");
-					  break;
-				  }
-				  if (ends(4, "ator")) {
-					  r(3, "ate");
+				  if (ends(5, std::string("ousli"))) {
+					  r(3, std::string("ous"));
 					  break;
 				  }
 				  break;
-		case 's': if (ends(5, "alism")) {
-					  r(2, "al");
+		case 'o': if (ends(7, std::string("ization"))) {
+					  r(3, std::string("ize"));
 					  break;
 				  }
-				  if (ends(7, "iveness")) {
-					  r(3, "ive");
+				  if (ends(5, std::string("ation"))) {
+					  r(3, std::string("ate"));
 					  break;
 				  }
-				  if (ends(7, "fulness")) {
-					  r(3, "ful");
-					  break;
-				  }
-				  if (ends(7, "ousness")) {
-					  r(3, "ous");
+				  if (ends(4, std::string("ator"))) {
+					  r(3, std::string("ate"));
 					  break;
 				  }
 				  break;
-		case 't': if (ends(5, "aliti")) {
-					  r(2, "al");
+		case 's': if (ends(5, std::string("alism"))) {
+					  r(2, std::string("al"));
 					  break;
 				  }
-				  if (ends(5, "iviti")) {
-					  r(3, "ive");
+				  if (ends(7, std::string("iveness"))) {
+					  r(3, std::string("ive"));
 					  break;
 				  }
-				  if (ends(6, "biliti")) {
-					  r(3, "ble");
+				  if (ends(7, std::string("fulness"))) {
+					  r(3, std::string("ful"));
+					  break;
+				  }
+				  if (ends(7, std::string("ousness"))) {
+					  r(3, std::string("ous"));
 					  break;
 				  }
 				  break;
-		case 'g': if (ends(4, "logi")) {
-					  r(3, "log");
+		case 't': if (ends(5, std::string("aliti"))) {
+					  r(2, std::string("al"));
 					  break;
-				  } /*-DEPARTURE-*/
+				  }
+				  if (ends(5, std::string("iviti"))) {
+					  r(3, std::string("ive"));
+					  break;
+				  }
+				  if (ends(6, std::string("biliti"))) {
+					  r(3, std::string("ble"));
+					  break;
+				  }
 				  break;
-
+		case 'g': if (ends(4, std::string("logi"))) {
+					  r(3, std::string("log"));
+					  break;
+				  }
+				  break;
 	}
 }
 
@@ -410,35 +409,35 @@ void Stemmer::paso3() {
 
 	switch (b[k])
 	{
-		case 'e': if (ends(5, "icate")) {
-					  r(2, "ic");
+		case 'e': if (ends(5, std::string("icate"))) {
+					  r(2, std::string("ic"));
 					  break;
 				  }
-				  if (ends(5, "ative")) {
-					  r(1, "\0");
+				  if (ends(5, std::string("ative"))) {
+					  r(1, std::string("\0"));
 					  break;
 				  }
-				  if (ends(5, "alize")) {
-					  r(2, "al");
-					  break;
-				  }
-				  break;
-		case 'i': if (ends(5, "iciti")) {
-					  r(2, "ic");
+				  if (ends(5, std::string("alize"))) {
+					  r(2, std::string("al"));
 					  break;
 				  }
 				  break;
-		case 'l': if (ends(4, "ical")) {
-					  r(2, "ic");
-					  break;
-				  }
-				  if (ends(3, "ful")) {
-					  r(1, "\0");
+		case 'i': if (ends(5, std::string("iciti"))) {
+					  r(2, std::string("ic"));
 					  break;
 				  }
 				  break;
-		case 's': if (ends(4, "ness")) {
-					  r(1, "\0");
+		case 'l': if (ends(4, std::string("ical"))) {
+					  r(2, std::string("ic"));
+					  break;
+				  }
+				  if (ends(3, std::string("ful"))) {
+					  r(1, std::string("\0"));
+					  break;
+				  }
+				  break;
+		case 's': if (ends(4, std::string("ness"))) {
+					  r(1, std::string("\0"));
 					  break;
 				  }
 				  break;
@@ -475,38 +474,38 @@ void Stemmer::paso4(){
 	switch (b[k-1])
     {
 		/* faltan procesar todos estos casos */
-		case 'a': if (ends(2, "al")) break;
+		case 'a': if (ends(2, std::string("al"))) break;
 				    return;
-		case 'c': if (ends(4, "ance")) break;
-				  if (ends(4, "ence")) break;
+		case 'c': if (ends(4, std::string("ance"))) break;
+				  if (ends(4, std::string("ence"))) break;
 				  return;
-		case 'e': if (ends(2, "er")) break;
+		case 'e': if (ends(2, std::string("er"))) break;
 				  return;
-		case 'i': if (ends(2, "ic")) break;
+		case 'i': if (ends(2, std::string("ic"))) break;
 				  return;
-		case 'l': if (ends(4, "able")) break;
-				  if (ends(4, "ible")) break;
+		case 'l': if (ends(4, std::string("able"))) break;
+				  if (ends(4, std::string("ible"))) break;
 				  return;
-		case 'n': if (ends(3, "ant")) break;
-				  if (ends(5, "ement")) break;
-				  if (ends(4, "ment")) break;
-				  if (ends(3, "ent")) break;
+		case 'n': if (ends(3, std::string("ant"))) break;
+				  if (ends(5, std::string("ement"))) break;
+				  if (ends(4, std::string("ment"))) break;
+				  if (ends(3, std::string("ent"))) break;
 				  return;
-		case 'o': if (ends(3, "ion") && (b[j] == 's' || b[j] == 't'))
+		case 'o': if (ends(3, std::string("ion")) && (b[j] == 's' || b[j] == 't'))
 					break;
-				  if (ends(2, "ou")) break;
+				  if (ends(2, std::string("ou"))) break;
 				  return;
 				 /* takes care of -ous */
-		case 's': if (ends(3, "ism")) break;
+		case 's': if (ends(3, std::string("ism"))) break;
 				  return;
-		case 't': if (ends(3, "ate")) break;
-				  if (ends(3, "iti")) break;
+		case 't': if (ends(3, std::string("ate"))) break;
+				  if (ends(3, std::string("iti"))) break;
 				  return;
-		case 'u': if (ends(3, "ous")) break;
+		case 'u': if (ends(3, std::string("ous"))) break;
 				  return;
-		case 'v': if (ends(3, "ive")) break;
+		case 'v': if (ends(3, std::string("ive"))) break;
 				  return;
-		case 'z': if (ends(3, "ize")) break;
+		case 'z': if (ends(3, std::string("ize"))) break;
 				  return;
 
 		default: return;
@@ -536,16 +535,13 @@ void Stemmer::paso5(){
 
 	if (b[k] == 'e'){
 		/* remuevo la e final */
-		if (a > 1 || ( a == 1 && !cvc(k-1) )){
+		if (a > 1 || ( a == 1 && !cvc(k-1) ))
 			k--;
-			//setto(1, "\0");
-		}
+
 	}
-	if (b[k] == 'l' && dobleConsonante(k) && a > 1){
+	if (b[k] == 'l' && dobleConsonante(k) && a > 1)
 		k--;
-		//setto(1, "\0");
-	}
-   //  std::cout << "s luego de paso5 -> "<< s << std::endl;
+
 }
 
 /* Recibe los parametros y llama a los distintos pasos para procesar a las
