@@ -37,8 +37,6 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 			int* despuesLoSaco=NULL;
 			/* por si justo la palabra que entra es un stemm,
 			 * y luego de procesar queda vacia
-			 * ESTA VALIDACION SERIA MAS INDICADA DENTRO DEL TRIE.
-			 * QUE QUEDE A JUICIO DE FEDE HACERLA O NO.
 			 */
 			if ( terminoStemado != "" )
 				contenedorLexico->insertarPalabraEnRaiz(terminoStemado,despuesLoSaco);
