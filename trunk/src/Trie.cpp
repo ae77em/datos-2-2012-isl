@@ -522,17 +522,14 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
             palabra= palabra+NODO->letra;
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
-                //parte malisima reveer con mi fantastico grupo de trbaajo
                 char buffer [33];
-
 				char tamanio = sprintf(buffer,"%d",NODO->infoArchivo->id);
-               // std::string idS(buffer);
                 *salida<<palabra<<" "<<buffer;
                 *offsetLexico<<*offset<<std::endl;
 
 				//actualizo offset
-                *offset += palabra.size() + 1 + (int)tamanio; //el offset contiene el tamaño del string,un int ,y un $
-                std::cout<<"ID: "<<idS<<" tamanio: "<<idS.size()<<std::endl;
+                *offset += palabra.size() + 1 + (int)tamanio; //el offset contiene el tamaño del string, del string id ,y un \b
+                std::cout<<"ID: "<<buffer<<" tamanio: "<<(int)tamanio<<std::endl;
             }
             persistirPalabras(NODO->hijo,salida,offsetLexico,offset,palabra);
             palabra.resize(palabra.size()-1);
