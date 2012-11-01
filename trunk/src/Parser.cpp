@@ -2,38 +2,56 @@
 #include "Stemmer.h"
 
 Parser::Parser() {
-	lector = new LectorArchivo();
 	contenedorLexico = new Trie();
+	lector = new LectorArchivo();
 	stemmer = new Stemmer();
+	validador = new Validador();
 }
 
 Parser::~Parser() {
-	delete lector;
 	contenedorLexico->destruirArbol_INI();
 	delete contenedorLexico;
+	delete lector;
 	delete stemmer;
+	delete validador;
 }
 
 bool Parser::parsearArchivo(std::string nombreArchivo) {
-	std::string termino;
+	std::string termino, terminoSiguiente, bufferOracion;
 	std::ifstream archivo(nombreArchivo.c_str());
+
+	int contadorBuffer = 0;
 
 	if (!archivo.good()) {
 		return false;
 	}
 
+	termino = lector->obtenerToken(archivo);
 	while (!archivo.eof()) {
-		termino = lector->obtenerToken(archivo);
+		terminoSiguiente = lector->obtenerToken(archivo);
 
 		if (termino.length() > 0) {
-			// VALIDAR
+			if (validador->esPalabraCompuesta(termino, terminoSiguiente)) {
+				if (terminoSiguiente.length() > 0) {
+					termino += " " + terminoSiguiente;
+				}
+			}else {
+				std::string terminoStemado = stemmer->stemPalabra(termino);
 
-			std::string terminoStemado = stemmer->stemPalabra(termino);
-			int* despuesLoSaco = NULL;
+				// Por si justo la palabra que entra es un stemm y luego de procesar queda vacia
+				if (terminoStemado.size() > 0) {
+					contenedorLexico->insertarPalabraEnRaiz(terminoStemado, NULL); // TODO eliminar segundo parametro
+				}
 
-			// Por si justo la palabra que entra es un stemm y luego de procesar queda vacia
-			if (terminoStemado.size() > 0) {
-				contenedorLexico->insertarPalabraEnRaiz(terminoStemado,despuesLoSaco);
+				bufferOracion += termino + " ";
+				contadorBuffer++;
+
+				if (contadorBuffer == PALABRAS_FRASE) {
+					bufferOracion = "";
+					contadorBuffer--;
+				}
+
+				termino = terminoSiguiente;
 			}
 		}
 	}

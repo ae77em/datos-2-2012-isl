@@ -7,12 +7,16 @@
 #include "LectorArchivo.h"
 #include "Stemmer.h"
 #include "Trie.h"
+#include "Validador.h"
+
+#define PALABRAS_FRASE 4
 
 class Parser {
 	private:
 		LectorArchivo* lector;
-		Trie* contenedorLexico;
 		Stemmer* stemmer;
+		Trie* contenedorLexico;
+		Validador* validador;
 	public:
 		Parser();
 		~Parser();
