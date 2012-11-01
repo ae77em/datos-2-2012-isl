@@ -29,9 +29,9 @@
 Stemmer::Stemmer(){
 	i_max = INC;
 	s.resize(i_max);
-};
+}
 
-Stemmer::~Stemmer(){};
+Stemmer::~Stemmer(){}
 
 /* esConsonante(i) es true <=> b[i] es una consonante. */
 int Stemmer::esConsonante(int i){
@@ -591,9 +591,7 @@ void Stemmer::increase_s(){
 /* aplica el algoritmo de stemming a la palabra pasada como parametro.
    retorna el string resultante.
 */
-std::string Stemmer::stemPalabra(std::string w){
-
-
+std::string Stemmer::stemPalabra(std::string w) {
 	s = w;
 
 	/* lo paso a minusculas */

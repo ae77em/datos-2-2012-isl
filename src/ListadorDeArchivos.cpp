@@ -5,17 +5,18 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-
 ListadorDeArchivos::ListadorDeArchivos() {
-	archivos = new std::list<std::string>();
+
 }
 
 ListadorDeArchivos::~ListadorDeArchivos() {
-	delete archivos;
+
 }
 
 std::list<std::string>* ListadorDeArchivos::listarArchivos(std::string ruta) {
+	std::list<std::string>* archivos = new std::list<std::string>();
 	listarArchivos(ruta, archivos);
+
 	return archivos;
 }
 

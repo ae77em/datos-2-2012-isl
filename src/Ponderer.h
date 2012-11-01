@@ -19,7 +19,7 @@ private:
 	void calcularEntropia();
 	void ponderarLocarPorGlobal();
 
-	vector<TacumEntropia*>* contenedorParcialEntropia;
+	std::vector<TacumEntropia*>* contenedorParcialEntropia;
 	unsigned int cantidadDocumentosEnLaColeccion;
 	Persister* matrizFreqLoc;
 	Persister* matrizPonderada;

@@ -9,10 +9,8 @@
 #include <list>
 #include <vector>
 
-using namespace std;
-
 struct TnodoTerminoId {
-    string palabra;
+    std::string palabra;
     int* id;
 };
 
@@ -40,9 +38,9 @@ struct TnodoPrincipalTrie {
     int contadorDeId_s; //lleva la cuenta de palabras diferentes ingresadas
     int cantidadDeDocumentoParseados;
     TnodoTrie* hijo;
-    vector<TnodoTerminoId*>* contenedor; // se usa en la persistencia del lexico
-    vector<TnodoData*>* contenedorParcial;
-    vector<TacumEntropia*>* contenedorEntropia;
+    std::vector<TnodoTerminoId*>* contenedor; // se usa en la persistencia del lexico
+    std::vector<TnodoData*>* contenedorParcial;
+    std::vector<TacumEntropia*>* contenedorEntropia;
 };
 
 class Trie {
@@ -62,30 +60,30 @@ class Trie {
 		void aumentarCantidadDePalabrasEnLaColeccion(void);
 		void aumentarCantidadDeDocParseados(void);
 
-		bool buscarPalabra(string);
-		bool buscarPalabra(string,TnodoTrie*);
+		bool buscarPalabra(std::string);
+		bool buscarPalabra(std::string,TnodoTrie*);
 		TnodoTrie* buscarLetra(char,TnodoTrie*);
 
-		vector<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
-		void buscarPalabrasDelDocParseado(TnodoTrie*,vector<TnodoData*>*);
+		std::vector<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
+		void buscarPalabrasDelDocParseado(TnodoTrie*, std::vector<TnodoData*>*);
 
 		int obtenerCantidadDePalabrasIngresadas();
 		int obtenerCantidadDeDocumentosParseados();
 		int obtenerContadorId();
 		void incrementarContadorId();
 
-		vector<TnodoTerminoId*>* exportarPalabrasContenedor_INI();
-		void exportarPalabrasContenedor(TnodoTrie*,vector<TnodoTerminoId*>*,string);
+		std::vector<TnodoTerminoId*>* exportarPalabrasContenedor_INI();
+		void exportarPalabrasContenedor(TnodoTrie*, std::vector<TnodoTerminoId*>*, std::string);
 
-		void persistirPalabras_INI(fstream*,fstream*);
-		void persistirPalabras(TnodoTrie*,fstream*,fstream*,int*,string);
-		void persistirPalabrasContenedor(fstream*);
+		void persistirPalabras_INI(std::ofstream*, std::ofstream*);
+		void persistirPalabras(TnodoTrie*, std::ofstream*, std::ofstream*, int*, std::string);
+		void persistirPalabrasContenedor(std::ofstream*);
 
 		void destruirArbol(TnodoTrie*,int*);
 		void destruirArbol_INI(void);
 		//////NUEVOS al 25/10
-		vector<TacumEntropia*>* exportarDatosParaEntropia_INI();
-		void exportarDatosParaEntropia(vector<TacumEntropia*>*,TnodoTrie*);
+		std::vector<TacumEntropia*>* exportarDatosParaEntropia_INI();
+		void exportarDatosParaEntropia(std::vector<TacumEntropia*>*,TnodoTrie*);
 		void vaciarContenedorParcial(); //no se hacen delete, solo se limpia el contenedor
 		void inicializarFrecuenciasLocales();
 

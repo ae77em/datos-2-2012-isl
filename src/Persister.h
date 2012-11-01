@@ -34,13 +34,13 @@ class Persister {
 //se usa en la matriz final
         void persistirDatos(std::list<TregistroArchivoF*>*);
 
-        list<TregistroArchivo*>* obtenerColumnaMatriz();
+        std::list<TregistroArchivo*>* obtenerColumnaMatriz();
 
         void abrir();
         void cerrar();
 
         bool hayData();
-        void vaciar(list<TregistroArchivo*>*);
+        void vaciar(std::list<TregistroArchivo*>*);
 
         void irAlComienzo();
 
