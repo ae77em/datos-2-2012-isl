@@ -21,8 +21,9 @@ class Indexador {
 	public:
 		Indexador();
 		~Indexador();
-		
+
 		bool crearIndice(std::string nombreRepositorio, int cantTopicos, std::string directorio);
+
 
 	private:
 		void calcularLSI(int);
