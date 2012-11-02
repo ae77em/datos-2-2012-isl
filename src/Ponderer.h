@@ -7,7 +7,6 @@
 #include <vector>
 
 
-
 class Ponderer {
 public:
 	Ponderer();

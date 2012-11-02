@@ -24,7 +24,7 @@ Persister::~Persister(void){
     delete contenedor;
     std::cout<<"PERSISTER DESTRUIDO"<<std::endl;
     //vaciar contenedor
-	
+
 	if (regAux != NULL) {
 		delete regAux;
 	}
@@ -54,14 +54,17 @@ std::list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 	}else{
        // cout<<endl<<"ENTRE con col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
 	}
+    std::cout<<"tomando columna"<<std::endl;
 
     int columna=regAux->col;
+
 	while( ( regAux->col==columna ) && (!archivo.eof() )){
+        std::cout<<regAux->col<<" "<<regAux->fil<<" "<<regAux->freq<<std::endl;
         this->contenedor->push_back(regAux);//
 
 		if(!archivo.eof() && columna==regAux->col){
-			delete regAux;
-			regAux = new TregistroArchivo;
+
+            regAux = new TregistroArchivo;
 			archivo >> regAux->col;
 			archivo >> regAux->fil;
 			archivo >> regAux->freq;
@@ -96,6 +99,7 @@ bool Persister::hayData(){
 }
 
 void Persister::vaciar(std::list<TregistroArchivo*>* l){
+
     //por algun motivo cuando libero lo que pedi altera los resultados, queda provisorio l->clear()
     /*while(l->empty()){
         TregistroArchivo* aux = l->back();
