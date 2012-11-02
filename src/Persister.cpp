@@ -54,7 +54,6 @@ std::list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 	}else{
        // cout<<endl<<"ENTRE con col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
 	}
-    std::cout<<"tomando columna"<<std::endl;
 
     int columna=regAux->col;
 

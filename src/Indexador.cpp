@@ -34,7 +34,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 		if (!parser->parsearArchivo(nombreArchivo)) {
 			std::cerr << "El archivo " << nombreArchivo << " no pudo ser parseado" << std::endl;
-		}
+		}else{
 
 		parser->obtenerContenedorLexico()->aumentarCantidadDeDocParseados();
 
@@ -44,6 +44,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 		//preparo el trie para una nueva parseada
 		parser->obtenerContenedorLexico()->inicializarFrecuenciasLocales();
 		parser->obtenerContenedorLexico()->vaciarContenedorParcial();
+		}
 	}
 
 	persistidor->cerrar();
