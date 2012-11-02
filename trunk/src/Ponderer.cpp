@@ -63,23 +63,13 @@ void Ponderer::calcularEntropia(){
 
 			auxEntropia->acumEntropia += (localDivGlobal*(log2(localDivGlobal)));
 
-			std::cout<<"id: "<<(auxReg->fil-1)<<" acumEntropy: "<< auxEntropia->acumEntropia<<std::endl;
-
 			b++;
 		}
 		matrizFreqLoc->vaciar(columna);
     }
 
-    for(int i=0;i<contenedorParcialEntropia->size();i++){
-        std::cout<<"ID: "<<contenedorParcialEntropia->at(i)->infoTerm->id<<" entropia: "<<contenedorParcialEntropia->at(i)->acumEntropia<<std::endl;
-	}
-
 
     this->dividirTodoPorLog();
-
-    for(int i=0;i<contenedorParcialEntropia->size();i++){
-        std::cout<<"ID: "<<contenedorParcialEntropia->at(i)->infoTerm->id<<" entropia: "<<contenedorParcialEntropia->at(i)->acumEntropia<<std::endl;
-	}
 
     matrizFreqLoc->cerrar();
 
