@@ -44,17 +44,18 @@ class Persister {
 
         void irAlComienzo();
 
-
-
 	private:
 
+        std::vector<std::vector<double>*>* generadorContenedorMatriz(int);
+        void parserLSI(int);
+
         TregistroArchivo* regAux; //almacenara el registro que se lee del archivo
-
         std::fstream archivo;
-
         std::list<TregistroArchivo*>* contenedor;
-
         std::string path;
+
+
+
 
 
 };

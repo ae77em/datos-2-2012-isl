@@ -44,8 +44,6 @@ void Ponderer::calcularEntropia(){
 
 	this->cantidadDocumentosEnLaColeccion = trie->obtenerCantidadDeDocumentosParseados();
 
-    std::cout<<"entropas parciasles"<<std::endl;
-
 	for(register unsigned int i=0; i<this->cantidadDocumentosEnLaColeccion; i++){
 
 		std::list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
@@ -66,7 +64,6 @@ void Ponderer::calcularEntropia(){
 		}
 		matrizFreqLoc->vaciar(columna);
     }
-
 
     this->dividirTodoPorLog();
 

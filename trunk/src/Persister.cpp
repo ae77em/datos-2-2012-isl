@@ -1,5 +1,8 @@
 #include "Persister.h"
 #include <iostream>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 Persister::Persister(std::string path){
@@ -58,7 +61,6 @@ std::list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
     int columna=regAux->col;
 
 	while( ( regAux->col==columna ) && (!archivo.eof() )){
-        std::cout<<regAux->col<<" "<<regAux->fil<<" "<<regAux->freq<<std::endl;
         this->contenedor->push_back(regAux);//
 
 		if(!archivo.eof() && columna==regAux->col){
@@ -112,4 +114,85 @@ void Persister::irAlComienzo(){
 
     archivo.seekp(std::ios_base::beg);
 
+}
+
+std::vector<std::vector<double>*>* generadorContenedorMatriz(int cantCol){
+
+    std::vector<std::vector<double>*>* matriz = new std::vector<std::vector<double>*>;
+
+    for(int i=0;i<cantCol;i++){
+        matriz->push_back(new std::vector<double>);
+    }
+
+    return matriz;
+}
+
+void Persister::parserLSI(int cantidadDeDocumetos){
+
+    int cantCol=cantidadDeDocumetos;
+
+    std::vector<std::vector<double>*>* bufferMatriz = generadorContenedorMatriz(cantCol);
+
+    std::ifstream matriz;
+    matriz.open("salidaGensim.txt");
+
+    char letra;
+    bool armarNro = false;
+    int col=0;
+    std:: string nro="";
+    int cantidadDeDocumentos=3;
+
+    double valor=0;
+
+    while(!matriz.eof()){
+
+        letra = matriz.get(); //si es un nro o un punto
+
+        if((letra <= 57 && letra >= 48) || (letra == 46) || (letra==45)){
+            while( (letra <= 57 && letra >= 48) || (letra == 46) || (letra==45)){
+                nro += letra;
+                letra = matriz.get(); //si es un nro o un punto
+            }
+            valor = atof(nro.c_str());
+            bufferMatriz->at(col)->push_back(valor);
+
+            col++;
+            if(col == cantidadDeDocumentos){
+                col=0;
+            }
+            nro="";
+        }
+    }
+
+    /*cout<<"PROBANDO VALORES: "<<endl;
+    for(int i=0;i<bufferMatriz->size();i++){
+        for(int j=0; j<cantidadDeDocumentos;j++){
+            cout<<"D"<<j<<": "<<bufferMatriz->at(i)->at(j)<<" ";
+        }
+        cout<<endl;
+    }*/
+
+    std::ofstream matrizSinComasNiCorchetes;
+    matrizSinComasNiCorchetes.open("matrizFinal.txt");
+
+    for(int i=0;i<bufferMatriz->size();i++){
+        for(int j=0; j<cantidadDeDocumentos;j++){
+            matrizSinComasNiCorchetes<<bufferMatriz->at(i)->at(j)<<" ";
+        }
+        matrizSinComasNiCorchetes<<std::endl;
+    }
+
+    matriz.close();
+    matrizSinComasNiCorchetes.close();
+
+}
+std::vector<std::vector<double>*>* Persister::generadorContenedorMatriz(int cantCol){
+
+    std::vector<std::vector<double>*>* matriz = new std::vector<std::vector<double>*>;
+
+    for(int i=0;i<cantCol;i++){
+        matriz->push_back(new std::vector<double>);
+    }
+
+    return matriz;
 }
