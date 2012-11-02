@@ -528,7 +528,7 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
                 *offsetLexico<<*offset<<std::endl;
 
 				//actualizo offset
-                *offset += palabra.size() + 1 + (int)tamanio; //el offset contiene el tamaño del string, del string id ,y un \b
+                *offset += palabra.size() + 1 + (int)tamanio + 1; //el offset contiene el tamaño del string, del string id ,y dos \b
 
             }
             persistirPalabras(NODO->hijo,salida,offsetLexico,offset,palabra);
