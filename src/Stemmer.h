@@ -7,8 +7,10 @@
 
 class Stemmer {
 private:
-	std::string b;       /* buffer para la palabra a procesar */
-	int k,k0,j;     /* offset del string */
+	std::string palabraEnProcesamiento;       /* buffer para la palabra a procesar */
+	int tamanioFinal;
+	int posPrimeraLetra;
+	int posUltimaLetra;     /* offset del string */
 	std::string s;  /* almacena la palabra a procesar al inicio, y almacena la
 	 	 	 	 	   misma procesada. Es la variable de retorno*/
 	int i_max;		/* tamanio maximo del offset. Aumenta su capacidad de ser necesario. */
@@ -28,8 +30,8 @@ private:
 	void paso1ab();
 	void paso1c();
 	void r(int length,std::string s);
-	void setto(int length,std::string s);
-	int ends(int length,std::string s);
+	void cambiarPor(int length,std::string s);
+	int terminaCon(int length,std::string s);
 	int cvc(int i);
 	int dobleConsonante(int j);
 	int vocalEnStem();
