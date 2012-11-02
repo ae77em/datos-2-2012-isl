@@ -372,7 +372,7 @@ void Stemmer::step5(){
    file.
 */
 
-int Stemmer::stem(char * p, int i, int j)
+int Stemmer::stem(std::string p, int i, int j)
 {  b = p; k = j; k0 = i; /* copy the parameters into statics */
    if (k <= k0+1) return k; /*-DEPARTURE-*/
 

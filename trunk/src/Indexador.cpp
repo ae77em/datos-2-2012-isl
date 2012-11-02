@@ -7,6 +7,7 @@ Indexador::Indexador() {
 	parser = new Parser();
 	persistidor = new Persister("matrizFreqLoc.mm");
 	ponderador = new Ponderer();
+	calculador = new CalculadorLSI();
 }
 
 Indexador::~Indexador() {
@@ -14,16 +15,21 @@ Indexador::~Indexador() {
 	delete parser;
 	delete persistidor;
 	delete ponderador;
+	delete calculador;
 }
+
 
 /**
  * Realiza los procesos necesarios para la creacion del indice
  */
 bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std::string directorio) {
+
 	std::list<std::string>* archivos = listador->listarArchivos(directorio);
 
 	std::list<std::string>::iterator iterador;
+
 	for (iterador = archivos->begin(); iterador != archivos->end(); iterador++) {
+
 		std::string nombreArchivo = (*iterador);
 
 		if (!parser->parsearArchivo(nombreArchivo)) {
@@ -41,9 +47,12 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 	}
 
 	persistidor->cerrar();
-	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor);
+	//ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor);
     parser->persistirLexico();
+
+    calculador->calcularLSI(cantTopicos);
 
     delete archivos;
 	return true;
+
 }
