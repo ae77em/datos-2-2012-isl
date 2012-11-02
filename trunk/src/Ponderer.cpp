@@ -55,7 +55,6 @@ void Ponderer::calcularEntropia(){
 
         while(b!=e){
 			TregistroArchivo* auxReg = *b; //uso el id como indice del vector que contiene las entropias parciales
-   			std::cout<<" col: "<<(auxReg->col)<<"fil: "<<(auxReg->fil)<<std::endl;
 
 			TacumEntropia* auxEntropia = this->contenedorParcialEntropia->at(auxReg->fil -1);
 
