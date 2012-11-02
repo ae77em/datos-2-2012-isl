@@ -33,37 +33,38 @@ Stemmer::Stemmer(){
 
 Stemmer::~Stemmer(){}
 
-/* esConsonante(i) es true <=> b[i] es una consonante. */
+/* esConsonante(i) es true <=> palabraEnProcesamiento[i] es una consonante. */
 int Stemmer::esConsonante(int i){
 
-	switch (b[i])
+	switch (palabraEnProcesamiento[i])
 	{
 		case 'a': case 'e': case 'i': case 'o': case 'u':
 			return false;
 		case 'y':
-			return (i==k0) ? true : !esConsonante(i-1);
+			return (i==posPrimeraLetra) ? true : !esConsonante(i-1);
 		default:
 			return true;
 	}
 }
 
-/* m() mide la cantidad de secuencias de consonantes entre k0 y j. Si c es
+/* m() mide la cantidad de secuencias de consonantes entre posPrimeraLetra y posUltimaLetra. Si c es
    una secuencia de consonantes y v una secuencia de vocales, y <..> indica
-   valores arbitrarios,
+   valores arbitrarios. m se refiere a la medida de estas secuencias, bajo el
+   siguiente criterio
 
-      <c><v>       gives 0
-      <c>vc<v>     gives 1
-      <c>vcvc<v>   gives 2
-      <c>vcvcvc<v> gives 3
+      <c><v>       retorna 0
+      <c>vc<v>     retorna 1
+      <c>vcvc<v>   retorna 2
+      <c>vcvcvc<v> retorna 3
       ....
 */
 int Stemmer::m(){
 
 	int n = 0;
-	int i = k0;
+	int i = posPrimeraLetra;
 
 	while(true){
-		if (i > j)
+		if (i > posUltimaLetra)
 			return n;
 		if ( not esConsonante(i))
 			break;
@@ -72,7 +73,7 @@ int Stemmer::m(){
 	i++;
 	while(true){
 		while(true){
-			if (i > j)
+			if (i > posUltimaLetra)
 				return n;
 			if (esConsonante(i))
 				break;
@@ -81,7 +82,7 @@ int Stemmer::m(){
 	  i++;
 	  n++;
 	  while(true){
-		  if (i > j)
+		  if (i > posUltimaLetra)
 			  return n;
 		  if ( not esConsonante(i))
 			  break;
@@ -91,27 +92,27 @@ int Stemmer::m(){
 	}
 }
 
-/* vocalEnStem() es true <=> k0,...j contiene una vocal */
+/* vocalEnStem() es true <=> posPrimeraLetra,...posUltimaLetra contiene una vocal */
 int Stemmer::vocalEnStem(){
 
 	int i;
-	for (i = k0; i <= j; i++)
+	for (i = posPrimeraLetra; i <= posUltimaLetra; i++)
 		if (! esConsonante(i))
 			return true;
 
 	return false;
 }
 
-/* dobleConsonante(j) es true <=> j,(j-1) contiene una consonate doble. */
-int Stemmer::dobleConsonante(int j){
+/* dobleConsonante(posUltimaLetra) es true <=> posUltimaLetra,(posUltimaLetra-1) contiene una consonate doble. */
+int Stemmer::dobleConsonante(int posUltimaLetra){
 
-	if (j < k0+1)
+	if (posUltimaLetra < posPrimeraLetra+1)
 		return false;
 
-	if (b[j] != b[j-1])
+	if (palabraEnProcesamiento[posUltimaLetra] != palabraEnProcesamiento[posUltimaLetra-1])
 		return false;
 
-	return esConsonante(j);
+	return esConsonante(posUltimaLetra);
 }
 
 /* cvc(i) es true <=> i-2,i-1,i tiene la forma consonante - vocal - consonante
@@ -125,58 +126,50 @@ int Stemmer::dobleConsonante(int j){
 */
 int Stemmer::cvc(int i){
 
-	if (i < k0+2 || !esConsonante(i) || esConsonante(i-1) || !esConsonante(i-2))
+	if (i < posPrimeraLetra+2 || !esConsonante(i) || esConsonante(i-1) || !esConsonante(i-2))
 		return false;
 	{
-		int ch = b[i];
+		int ch = palabraEnProcesamiento[i];
 		if (ch == 'w' || ch == 'x' || ch == 'y')
 			return false;
 	}
 	return true;
 }
 
-/* ends(s) es true si el substring del intervalo <=> k0,...k en b es s. */
+/* terminaCon( s) es true si el substring del intervalo <=> posPrimeraLetra,...tamanioFinal en palabraEnProcesamiento es s. */
 
-int Stemmer::ends(int length, std::string str){
+int Stemmer::terminaCon( int length, std::string str){
 
-//	int length = str[0];
-
-	if (str[length-1] != b[k])
+	if (str[length-1] != palabraEnProcesamiento[tamanioFinal])
 		return false;
 
-	if (length > k-k0+1)
+	if (length > tamanioFinal-posPrimeraLetra+1)
 		return false;
 
-	if (str.compare(0,length,b,k-length+1,length) != 0)
+	if (str.compare(0,length,palabraEnProcesamiento,tamanioFinal-length+1,length) != 0)
 		return false;
 
-	/*if (memcmp(b+k-length+1, str+1 , length) != 0)
-		return false;*/
-
-	j = k-length;
+	posUltimaLetra = tamanioFinal-length;
 
 	return true;
 }
 
-/* setto(s) cambia s en el rango (j+1),...k por los pasados por parametro,
-   ajustando k.
+/* cambiarPor(s) cambia s en el rango (posUltimaLetra+1),...tamanioFinal por los pasados por parametro,
+   ajustando tamanioFinal.
  */
-void Stemmer::setto(int length,std::string str)
+void Stemmer::cambiarPor(int length,std::string str)
 {
-	//int length = str[0];
-
 	/* reemplazo el string correspondiente */
-	b.replace(j+1,length,str);
-	//memmove(b+j+1,str+1,length);
+	palabraEnProcesamiento.replace(posUltimaLetra+1,length,str);
 
-	k = j+length;
+	tamanioFinal = posUltimaLetra+length;
 }
 
 /* este metodo es llamado en los pasos 2 y 3 */
 void Stemmer::r(int length, std::string s) {
 
 	if (m() > 0)
-		setto(length,s);
+		cambiarPor(length,s);
 }
 
 /* paso1ab() quita los plurales y -ed e -ing.
@@ -202,57 +195,57 @@ void Stemmer::r(int length, std::string s) {
 */
 void Stemmer::paso1ab(){
 
-	if (b[k] == 's'){
-		if (ends(4, std::string("sses")))
-			k -= 2;
+	if (palabraEnProcesamiento[tamanioFinal] == 's'){
+		if ( terminaCon( 4, std::string("sses")))
+			tamanioFinal -= 2;
 		else
-		if (ends(3, std::string("ies")))
-			setto(1, std::string("i"));
+		if ( terminaCon( 3, std::string("ies")))
+			cambiarPor(1, std::string("i"));
 		else
-		if (b[k-1] != 's')
-			k--;
+		if (palabraEnProcesamiento[tamanioFinal-1] != 's')
+			tamanioFinal--;
 	}
 
-	if (ends(3, std::string("eed"))) {
+	if ( terminaCon( 3, std::string("eed"))) {
 		if (m() > 0)
-			k--;
+			tamanioFinal--;
 	}
 	else
 	if (vocalEnStem()){
 		bool salir = true;
 		/* elimino los sufijos que sobran */
-		if(ends(2, std::string("ed"))){
-			setto(1, std::string("\0"));
+		if( terminaCon( 2, std::string("ed"))){
+			cambiarPor(1, std::string("\0"));
 			salir=false;
 		}
-		else if(ends(3, std::string("ing"))){
-			setto(1, std::string("\0"));
+		else if( terminaCon( 3, std::string("ing"))){
+			cambiarPor(1, std::string("\0"));
 			salir=false;
 		}
 
 		if ( not salir ){
-			k = j;
-			if (ends(2, std::string("at")))
-				setto(3, std::string("ate"));
+			tamanioFinal = posUltimaLetra;
+			if ( terminaCon( 2, std::string("at")))
+				cambiarPor(3, std::string("ate"));
 			else
-			if (ends(2, std::string("bl")))
-				setto(3, std::string("ble"));
+			if ( terminaCon( 2, std::string("bl")))
+				cambiarPor(3, std::string("ble"));
 			else
-			if (ends(2, std::string("iz")))
-				setto(3, std::string("ize"));
+			if ( terminaCon( 2, std::string("iz")))
+				cambiarPor(3, std::string("ize"));
 			else
-			if (dobleConsonante(k))
+			if (dobleConsonante(tamanioFinal))
 			{
-				k--;
+				tamanioFinal--;
 				{
-					int ch = b[k];
+					int ch = palabraEnProcesamiento[tamanioFinal];
 					if (ch == 'l' || ch == 's' || ch == 'z')
-						k++;
+						tamanioFinal++;
 				}
 			}
 			else
-			if (m() == 1 && cvc(k))
-				setto(1, std::string("e"));
+			if (m() == 1 && cvc(tamanioFinal))
+				cambiarPor(1, std::string("e"));
 		}
 	}
 }
@@ -263,8 +256,8 @@ void Stemmer::paso1ab(){
  */
 void Stemmer::paso1c() {
 
-	if (ends(1, std::string("y")) && vocalEnStem())
-		b[k] = 'i';
+	if ( terminaCon( 1, std::string("y")) && vocalEnStem())
+		palabraEnProcesamiento[tamanioFinal] = 'i';
 }
 
 
@@ -296,97 +289,97 @@ void Stemmer::paso1c() {
 */
 void Stemmer::paso2() {
 
-	switch (b[k-1])
+	switch (palabraEnProcesamiento[tamanioFinal-1])
 	{
-		case 'a': if (ends(7, std::string("ational"))) {
+		case 'a': if ( terminaCon( 7, std::string("ational"))) {
 					  r(3, std::string("ate"));
 					  break;
 				  }
-				  if (ends(6, std::string("tional"))) {
+				  if ( terminaCon( 6, std::string("tional"))) {
 					  r(4, std::string("tion"));
 					  break;
 				  }
 				  break;
-		case 'c': if (ends(4, std::string("enci"))) {
+		case 'c': if ( terminaCon( 4, std::string("enci"))) {
 					  r(4, std::string("ence"));
 					  break;
 				  }
-				  if (ends(4, std::string("anci"))) {
+				  if ( terminaCon( 4, std::string("anci"))) {
 					  r(4, std::string("ance"));
 					  break;
 				  }
 				  break;
-		case 'e': if (ends(4, std::string("izer"))) {
+		case 'e': if ( terminaCon( 4, std::string("izer"))) {
 					  r(3, std::string("ize"));
 					  break;
 				  }
 				  break;
-		case 'l': if (ends(3, std::string("bli"))) {
+		case 'l': if ( terminaCon( 3, std::string("bli"))) {
 					  r(3, std::string("ble"));
 					  break;
 				  }
 
-				  if (ends(4, std::string("alli"))) {
+				  if ( terminaCon( 4, std::string("alli"))) {
 					  r(2, std::string("al"));
 					  break;
 				  }
-				  if (ends(5, std::string("entli"))) {
+				  if ( terminaCon( 5, std::string("entli"))) {
 					  r(3, std::string("ent"));
 					  break;
 				  }
-				  if (ends(3, std::string("eli"))) {
+				  if ( terminaCon( 3, std::string("eli"))) {
 					  r(1, std::string("e"));
 					  break;
 				  }
-				  if (ends(5, std::string("ousli"))) {
+				  if ( terminaCon( 5, std::string("ousli"))) {
 					  r(3, std::string("ous"));
 					  break;
 				  }
 				  break;
-		case 'o': if (ends(7, std::string("ization"))) {
+		case 'o': if ( terminaCon( 7, std::string("ization"))) {
 					  r(3, std::string("ize"));
 					  break;
 				  }
-				  if (ends(5, std::string("ation"))) {
+				  if ( terminaCon( 5, std::string("ation"))) {
 					  r(3, std::string("ate"));
 					  break;
 				  }
-				  if (ends(4, std::string("ator"))) {
+				  if ( terminaCon( 4, std::string("ator"))) {
 					  r(3, std::string("ate"));
 					  break;
 				  }
 				  break;
-		case 's': if (ends(5, std::string("alism"))) {
+		case 's': if ( terminaCon( 5, std::string("alism"))) {
 					  r(2, std::string("al"));
 					  break;
 				  }
-				  if (ends(7, std::string("iveness"))) {
+				  if ( terminaCon( 7, std::string("iveness"))) {
 					  r(3, std::string("ive"));
 					  break;
 				  }
-				  if (ends(7, std::string("fulness"))) {
+				  if ( terminaCon( 7, std::string("fulness"))) {
 					  r(3, std::string("ful"));
 					  break;
 				  }
-				  if (ends(7, std::string("ousness"))) {
+				  if ( terminaCon( 7, std::string("ousness"))) {
 					  r(3, std::string("ous"));
 					  break;
 				  }
 				  break;
-		case 't': if (ends(5, std::string("aliti"))) {
+		case 't': if ( terminaCon( 5, std::string("aliti"))) {
 					  r(2, std::string("al"));
 					  break;
 				  }
-				  if (ends(5, std::string("iviti"))) {
+				  if ( terminaCon( 5, std::string("iviti"))) {
 					  r(3, std::string("ive"));
 					  break;
 				  }
-				  if (ends(6, std::string("biliti"))) {
+				  if ( terminaCon( 6, std::string("biliti"))) {
 					  r(3, std::string("ble"));
 					  break;
 				  }
 				  break;
-		case 'g': if (ends(4, std::string("logi"))) {
+		case 'g': if ( terminaCon( 4, std::string("logi"))) {
 					  r(3, std::string("log"));
 					  break;
 				  }
@@ -407,36 +400,36 @@ void Stemmer::paso2() {
 */
 void Stemmer::paso3() {
 
-	switch (b[k])
+	switch (palabraEnProcesamiento[tamanioFinal])
 	{
-		case 'e': if (ends(5, std::string("icate"))) {
+		case 'e': if ( terminaCon( 5, std::string("icate"))) {
 					  r(2, std::string("ic"));
 					  break;
 				  }
-				  if (ends(5, std::string("ative"))) {
+				  if ( terminaCon( 5, std::string("ative"))) {
 					  r(1, std::string("\0"));
 					  break;
 				  }
-				  if (ends(5, std::string("alize"))) {
+				  if ( terminaCon( 5, std::string("alize"))) {
 					  r(2, std::string("al"));
 					  break;
 				  }
 				  break;
-		case 'i': if (ends(5, std::string("iciti"))) {
+		case 'i': if ( terminaCon( 5, std::string("iciti"))) {
 					  r(2, std::string("ic"));
 					  break;
 				  }
 				  break;
-		case 'l': if (ends(4, std::string("ical"))) {
+		case 'l': if ( terminaCon( 4, std::string("ical"))) {
 					  r(2, std::string("ic"));
 					  break;
 				  }
-				  if (ends(3, std::string("ful"))) {
+				  if ( terminaCon( 3, std::string("ful"))) {
 					  r(1, std::string("\0"));
 					  break;
 				  }
 				  break;
-		case 's': if (ends(4, std::string("ness"))) {
+		case 's': if ( terminaCon( 4, std::string("ness"))) {
 					  r(1, std::string("\0"));
 					  break;
 				  }
@@ -471,48 +464,48 @@ void Stemmer::paso3() {
 
 void Stemmer::paso4(){
 
-	switch (b[k-1])
+	switch (palabraEnProcesamiento[tamanioFinal-1])
     {
 		/* faltan procesar todos estos casos */
-		case 'a': if (ends(2, std::string("al"))) break;
+		case 'a': if ( terminaCon( 2, std::string("al"))) break;
 				    return;
-		case 'c': if (ends(4, std::string("ance"))) break;
-				  if (ends(4, std::string("ence"))) break;
+		case 'c': if ( terminaCon( 4, std::string("ance"))) break;
+				  if ( terminaCon( 4, std::string("ence"))) break;
 				  return;
-		case 'e': if (ends(2, std::string("er"))) break;
+		case 'e': if ( terminaCon( 2, std::string("er"))) break;
 				  return;
-		case 'i': if (ends(2, std::string("ic"))) break;
+		case 'i': if ( terminaCon( 2, std::string("ic"))) break;
 				  return;
-		case 'l': if (ends(4, std::string("able"))) break;
-				  if (ends(4, std::string("ible"))) break;
+		case 'l': if ( terminaCon( 4, std::string("able"))) break;
+				  if ( terminaCon( 4, std::string("ible"))) break;
 				  return;
-		case 'n': if (ends(3, std::string("ant"))) break;
-				  if (ends(5, std::string("ement"))) break;
-				  if (ends(4, std::string("ment"))) break;
-				  if (ends(3, std::string("ent"))) break;
+		case 'n': if ( terminaCon( 3, std::string("ant"))) break;
+				  if ( terminaCon( 5, std::string("ement"))) break;
+				  if ( terminaCon( 4, std::string("ment"))) break;
+				  if ( terminaCon( 3, std::string("ent"))) break;
 				  return;
-		case 'o': if (ends(3, std::string("ion")) && (b[j] == 's' || b[j] == 't'))
+		case 'o': if ( terminaCon( 3, std::string("ion")) && (palabraEnProcesamiento[posUltimaLetra] == 's' || palabraEnProcesamiento[posUltimaLetra] == 't'))
 					break;
-				  if (ends(2, std::string("ou"))) break;
+				  if ( terminaCon( 2, std::string("ou"))) break;
 				  return;
 				 /* takes care of -ous */
-		case 's': if (ends(3, std::string("ism"))) break;
+		case 's': if ( terminaCon( 3, std::string("ism"))) break;
 				  return;
-		case 't': if (ends(3, std::string("ate"))) break;
-				  if (ends(3, std::string("iti"))) break;
+		case 't': if ( terminaCon( 3, std::string("ate"))) break;
+				  if ( terminaCon( 3, std::string("iti"))) break;
 				  return;
-		case 'u': if (ends(3, std::string("ous"))) break;
+		case 'u': if ( terminaCon( 3, std::string("ous"))) break;
 				  return;
-		case 'v': if (ends(3, std::string("ive"))) break;
+		case 'v': if ( terminaCon( 3, std::string("ive"))) break;
 				  return;
-		case 'z': if (ends(3, std::string("ize"))) break;
+		case 'z': if ( terminaCon( 3, std::string("ize"))) break;
 				  return;
 
 		default: return;
     }
 	/* si hubo algun resultado positivo, elimino el sufijo correspondiente */
     if (m() > 1)
-    	k = j;
+    	tamanioFinal = posUltimaLetra;
 
 }
 
@@ -530,17 +523,17 @@ void Stemmer::paso4(){
  * */
 void Stemmer::paso5(){
 
-	j = k;
+	posUltimaLetra = tamanioFinal;
 	int a = m();
 
-	if (b[k] == 'e'){
+	if (palabraEnProcesamiento[tamanioFinal] == 'e'){
 		/* remuevo la e final */
-		if (a > 1 || ( a == 1 && !cvc(k-1) ))
-			k--;
+		if (a > 1 || ( a == 1 && !cvc(tamanioFinal-1) ))
+			tamanioFinal--;
 
 	}
-	if (b[k] == 'l' && dobleConsonante(k) && a > 1)
-		k--;
+	if (palabraEnProcesamiento[tamanioFinal] == 'l' && dobleConsonante(tamanioFinal) && a > 1)
+		tamanioFinal--;
 
 }
 
@@ -550,23 +543,23 @@ void Stemmer::paso5(){
  * @param p : puntero a char que apunta a la palabra a procesar.
  * @param i : es una variable que siempre vale 0. Indica la primera posicion de
  * 			  la palabra procesada.
- * @param j : es el offset a la ultima letra de la palabra.
+ * @param posUltimaLetra : es el offset a la ultima letra de la palabra.
  *
-   The stemmer modifica los caracteres p[i] ... p[j] y devuelve el nuevo punto
+   The stemmer modifica los caracteres p[i] ... p[posUltimaLetra] y devuelve el nuevo punto
    final de la palabra. El tamanio de la palabra procesada siempre sera menor o
    igual a p.
 
 */
 
-int Stemmer::stem(std::string p, int i, int j)
+int Stemmer::stem(std::string p, int i, int posUltimaLetra)
 {
-	b = p;
-	k = j;
-	k0 = i;
+	palabraEnProcesamiento = p;
+	tamanioFinal = posUltimaLetra;
+	posPrimeraLetra = i;
 
 	/* si la palabra tiene menos de 3 letras salimos */
-	if (k <= k0+1)
-		return k;
+	if (tamanioFinal <= posPrimeraLetra+1)
+		return tamanioFinal;
 
 	paso1ab();
 	paso1c();
@@ -575,8 +568,8 @@ int Stemmer::stem(std::string p, int i, int j)
 	paso4();
 	paso5();
 
-	s = b;
-	return k;
+	s = palabraEnProcesamiento;
+	return tamanioFinal;
 }
 
 
