@@ -11,17 +11,17 @@ int main (int argc, char *argv[]) {
 	int cantTopicos;
 	
 	// Validacion de los argumentos
-	if (argc < 4) {
+	/*if (argc < 4) {
 		std::cerr << "Uso del programa: " << std::endl;
 		std::cerr << "TPGrupoXXi <nombre repositorio> <cantidad topicos> <directorio> " << std::endl;
 		
 		return 1;
-	}
+	}*/
 	
-	// Tomo los argumentos
-	nombreRepositorio = argv[1];
-	cantTopicos = atoi(argv[2]);
-	ruta = argv[3];
+	nombreRepositorio = "repo";//argv[1];
+	cantTopicos = 50; //atoi(argv[2]);
+	ruta = "textos"; //argv[3];
+
 	
 	// Creo el indice
 	indexador = new Indexador();

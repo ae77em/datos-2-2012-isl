@@ -46,10 +46,10 @@ void Ponderer::calcularEntropia(){
 		std::list<TregistroArchivo*>::iterator b = columna->begin();
 		std::list<TregistroArchivo*>::iterator e = columna->end();
 
-        while(b!=e){
+        while(b != e){
 			TregistroArchivo* auxReg = *b; //uso el id como indice del vector que contiene las entropias parciales
 
-			TacumEntropia* auxEntropia = this->contenedorParcialEntropia->at(auxReg->fil -1);
+			TacumEntropia* auxEntropia = this->contenedorParcialEntropia->at(auxReg->fil-1);
 
 			double localDivGlobal = ((double)auxReg->freq)/((double)auxEntropia->infoTerm->ocurrenciasEnLaColeccion);
 
