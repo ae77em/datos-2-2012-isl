@@ -41,6 +41,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 		// vuelvo los datos obtenidos del documento parseado a disco
 		persistidor->persistirDatos(parser->obtenerContenedorLexico()->buscarPalabrasDelDocParseado_INI(), parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados());
 
+
 		//preparo el trie para una nueva parseada
 		parser->obtenerContenedorLexico()->inicializarFrecuenciasLocales();
 		parser->obtenerContenedorLexico()->vaciarContenedorParcial();
@@ -48,8 +49,10 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 	}
 
 	persistidor->cerrar();
-	//ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor);
+	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor);
     parser->persistirLexico();
+
+	std::cout << "IDs: " << parser->obtenerContenedorLexico()->obtenerContadorId()<< std::endl;
 
     calculador->calcularLSI(cantTopicos);
 
