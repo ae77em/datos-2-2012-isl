@@ -137,7 +137,6 @@ void Persister::parserLSI(int cantidadDeDocumetos){
     matriz.open("salidaGensim.txt");
 
     char letra;
-    bool armarNro = false;
     int col=0;
     std:: string nro="";
     int cantidadDeDocumentos=3;
@@ -175,7 +174,7 @@ void Persister::parserLSI(int cantidadDeDocumetos){
     std::ofstream matrizSinComasNiCorchetes;
     matrizSinComasNiCorchetes.open("matrizFinal.txt");
 
-    for(int i=0;i<bufferMatriz->size();i++){
+    for(int unsigned i=0;i<bufferMatriz->size();i++){
         for(int j=0; j<cantidadDeDocumentos;j++){
             matrizSinComasNiCorchetes<<bufferMatriz->at(i)->at(j)<<" ";
         }
