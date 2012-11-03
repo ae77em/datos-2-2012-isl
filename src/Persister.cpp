@@ -25,7 +25,6 @@ Persister::~Persister(void){
 
    // archivo.close();
     delete contenedor;
-    std::cout<<"PERSISTER DESTRUIDO"<<std::endl;
     //vaciar contenedor
 
 	if (regAux != NULL) {
@@ -37,8 +36,6 @@ void Persister::cerrar(){
 
     regAux=NULL;
 	archivo.close();
-	std::cout<<"PERSISTER CERRADO"<<std::endl;
-
 }
 
 void Persister::abrir(){
@@ -127,19 +124,18 @@ std::vector<std::vector<double>*>* generadorContenedorMatriz(int cantCol){
     return matriz;
 }
 
-void Persister::parserLSI(int cantidadDeDocumetos){
+void Persister::parserLSI(int topicos){
 
-    int cantCol=cantidadDeDocumetos;
+    int cantCol=topicos;
 
     std::vector<std::vector<double>*>* bufferMatriz = generadorContenedorMatriz(cantCol);
 
     std::ifstream matriz;
-    matriz.open("salidaGensim.txt");
+    matriz.open("fichero.log");
 
     char letra;
     int col=0;
     std:: string nro="";
-    int cantidadDeDocumentos=3;
 
     double valor=0;
 
@@ -156,7 +152,7 @@ void Persister::parserLSI(int cantidadDeDocumetos){
             bufferMatriz->at(col)->push_back(valor);
 
             col++;
-            if(col == cantidadDeDocumentos){
+            if(col == cantCol){
                 col=0;
             }
             nro="";
@@ -165,17 +161,49 @@ void Persister::parserLSI(int cantidadDeDocumetos){
 
     /*cout<<"PROBANDO VALORES: "<<endl;
     for(int i=0;i<bufferMatriz->size();i++){
-        for(int j=0; j<cantidadDeDocumentos;j++){
+        for(int j=0; j<cantCol;j++){
             cout<<"D"<<j<<": "<<bufferMatriz->at(i)->at(j)<<" ";
         }
         cout<<endl;
     }*/
 
+    //bajando valores a matriz formato binario
+
+    //registro que contendra los datos de cada fila que se bajara a disco
+    double* registro = new double[cantCol];
+
+      std::ofstream matrizSinComasNiCorchetesB;
+      matrizSinComasNiCorchetesB.open("matrizFinalB.bin",std::fstream::binary);
+
+      for(int unsigned i=0;i<bufferMatriz->size();i++){
+          for(int j=0; j<cantCol;j++){
+              registro[j]=bufferMatriz->at(i)->at(j);
+          }
+          matrizSinComasNiCorchetesB.write((char*)registro,sizeof(double)*cantCol);
+      }
+
+      matrizSinComasNiCorchetesB.close();
+
+     /* std::ifstream matrizSinComasNiCorchetesBin;
+      matrizSinComasNiCorchetesBin.open("matrizFinalB.bin",std::fstream::binary);
+
+      for(int unsigned i=0;i<bufferMatriz->size();i++){
+           matrizSinComasNiCorchetesBin.read((char*)registro,sizeof(double)*cantCol);
+           for(int j=0; j<cantCol;j++){
+        	   std::cout<<registro[j]<<" ";
+           }
+           std::cout<<std::endl;
+      }
+
+      matrizSinComasNiCorchetesBin.close();*/
+
+
+
     std::ofstream matrizSinComasNiCorchetes;
     matrizSinComasNiCorchetes.open("matrizFinal.txt");
 
     for(int unsigned i=0;i<bufferMatriz->size();i++){
-        for(int j=0; j<cantidadDeDocumentos;j++){
+        for(int j=0; j<cantCol;j++){
             matrizSinComasNiCorchetes<<bufferMatriz->at(i)->at(j)<<" ";
         }
         matrizSinComasNiCorchetes<<std::endl;
@@ -183,6 +211,8 @@ void Persister::parserLSI(int cantidadDeDocumetos){
 
     matriz.close();
     matrizSinComasNiCorchetes.close();
+
+    delete [] registro;
 
 }
 std::vector<std::vector<double>*>* Persister::generadorContenedorMatriz(int cantCol){
