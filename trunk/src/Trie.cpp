@@ -40,7 +40,6 @@ Trie::Trie (){
 
 Trie::~Trie(void){
 
-	std::cout<<"DESTRUCTOR TRIE"<<std::endl;
 
     this->vaciarContenedores();
 
