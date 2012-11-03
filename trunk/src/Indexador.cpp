@@ -49,7 +49,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 	}
 
 	persistidor->cerrar();
-	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor);
+	//ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor);
     parser->persistirLexico();
 
 	std::cout << "IDs: " << parser->obtenerContenedorLexico()->obtenerContadorId()<< std::endl;
