@@ -24,7 +24,6 @@ void CalculadorLSI::calcularLSI(int cantTopicos){
 	char strCol[10];
 	std::string comandoScript= "./CalcularLSI.py matrizPonderada.mm ";
 
-
 	sprintf(strTop, "%d", cantTopicos);
 	sprintf(strCol, "%d", CANT_COLUMNAS_A_LEVANTAR);
 
