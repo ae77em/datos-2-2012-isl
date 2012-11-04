@@ -78,17 +78,17 @@ int Stemmer::m(){
 			if (esConsonante(i))
 				break;
 			i++;
-	  }
-	  i++;
-	  n++;
-	  while(true){
+		}
+		i++;
+		n++;
+		while(true){
 		  if (i > posUltimaLetra)
 			  return n;
 		  if ( not esConsonante(i))
 			  break;
 		  i++;
-	  }
-	  i++;
+		}
+		i++;
 	}
 }
 
