@@ -30,9 +30,10 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	termino = lector->obtenerToken(archivo);
 	while (!archivo.eof()) {
 		terminoSiguiente = lector->obtenerToken(archivo);
-		cantTerm++;
 
 		if (termino.length() > 0) {
+			cantTerm++;
+
 			if (validador->esPalabraCompuesta(termino, terminoSiguiente)) {
 				if (terminoSiguiente.length() > 0) {
 					termino += " " + terminoSiguiente;
@@ -56,6 +57,8 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 
 				termino = terminoSiguiente;
 			}
+		}else {
+			termino = terminoSiguiente;
 		}
 	}
 
