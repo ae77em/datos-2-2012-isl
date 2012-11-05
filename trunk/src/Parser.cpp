@@ -53,7 +53,7 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 
 				if (contadorBuffer == PALABRAS_FRASE) {
 					std::string oracionStemada = stemmer->stemPalabra(bufferOracion);
-					contenedorLexico->insertarPalabraEnRaiz(oracionStemada, NULL); // TODO eliminar segundo parametro
+					contenedorOraciones->insertarPalabraEnRaiz(oracionStemada, NULL); // TODO eliminar segundo parametro
 
 					// TODO Mantener 3 terminos anteriores
 					bufferOracion.clear();
@@ -79,12 +79,17 @@ Trie* Parser::obtenerContenedorOraciones() {
 	return contenedorOraciones;
 }
 
-void Parser::persistirLexico() {
+void Parser::persistirLexico(std::string nombreIndice) {
+
     std::ofstream lexico;
     std::ofstream offsetLexico;
 
-    lexico.open("diccionario.txt");
-    offsetLexico.open("offsetLexico.txt");
+    std::string carpetaDiccionario("diccionarios/diccionarioTerminos");
+
+    carpetaDiccionario += nombreIndice;
+
+    lexico.open(carpetaDiccionario.c_str());
+    offsetLexico.open(carpetaDiccionario.c_str());
 
     contenedorLexico->persistirPalabras_INI(&lexico, &offsetLexico);
 
@@ -92,14 +97,18 @@ void Parser::persistirLexico() {
     offsetLexico.close();
 }
 
-void Parser::persistirOraciones() {
+void Parser::persistirOraciones(std::string nombreIndice) {
+
     std::ofstream oraciones;
     std::ofstream offsetOraciones;
 
-    oraciones.open("diccionario.txt");
-    offsetOraciones.open("offsetLexico.txt");
+    std::string carpetaDiccionario("diccionarios/diccionarioOraciones");
+    carpetaDiccionario += nombreIndice;
 
-    contenedorLexico->persistirPalabras_INI(&oraciones, &offsetOraciones);
+    oraciones.open(carpetaDiccionario.c_str());
+    offsetOraciones.open(carpetaDiccionario.c_str());
+
+    contenedorOraciones->persistirPalabras_INI(&oraciones, &offsetOraciones);
 
     oraciones.close();
     offsetOraciones.close();

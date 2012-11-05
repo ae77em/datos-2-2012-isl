@@ -11,6 +11,7 @@ Ponderer::Ponderer() {
 	this->matrizFreqLoc=NULL;
 	this->trie=NULL;
 	this->matrizPonderada=NULL;
+	this->nombreIndice="";
 
 }
 
@@ -19,12 +20,12 @@ Ponderer::~Ponderer() {
 }
 
 
-void Ponderer::ponderar(Trie* unTrie,Persister* unP){
-
-	std::cout<<"PONDERANDO"<<std::endl;
+void Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string nombreIndice){
 
 	trie = unTrie;
 	matrizFreqLoc = unP;
+	this->nombreIndice = nombreIndice;
+
 
 	matrizFreqLoc->abrir();
 
@@ -37,10 +38,6 @@ void Ponderer::ponderar(Trie* unTrie,Persister* unP){
 void Ponderer::calcularEntropia(){
 
 	this->contenedorParcialEntropia = trie->exportarDatosParaEntropia_INI();
-
-	/*for(int i=0;i<contenedorParcialEntropia->size();i++){
-        std::cout<<"ID: "<<contenedorParcialEntropia->at(i)->infoTerm->id<<" local: "<<contenedorParcialEntropia->at(i)->infoTerm->ocurrenciasEnLaColeccion<<std::endl;
-	}*/
 
 	this->cantidadDocumentosEnLaColeccion = trie->obtenerCantidadDeDocumentosParseados();
 
@@ -62,7 +59,9 @@ void Ponderer::calcularEntropia(){
 
 			b++;
 		}
-		matrizFreqLoc->vaciar(columna);
+        //vacia la lista que contenai los datos de la comluna leida
+		matrizFreqLoc->vaciar();
+
     }
 
     this->dividirTodoPorLog();
@@ -80,8 +79,14 @@ void Ponderer::dividirTodoPorLog(){
 
 void Ponderer::ponderarLocarPorGlobal(){
 
+	std::cout<<"PERSISTIENDO MATRIZ CON LA ENTROPIA CALCULADA"<<std::endl;
+
 	std::ofstream matrizPonderada;
-	matrizPonderada.open("matrizPonderada.mm");
+
+	std::string nombreMatrizFinal("indices/");
+	nombreMatrizFinal += this->nombreIndice;
+
+	matrizPonderada.open(nombreMatrizFinal.c_str());
 	//inicializo cabecera de matriz MM
 	matrizPonderada<<"%%MatrixMarket matrix coordinate real general"<<std::endl;
 	matrizPonderada<<trie->obtenerCantidadDeDocumentosParseados()<<" "<<trie->obtenerContadorId()<<" "<<trie->obtenerCantidadDePalabrasIngresadas()<<std::endl;
@@ -112,7 +117,20 @@ void Ponderer::ponderarLocarPorGlobal(){
 	}
 
 	matrizPonderada.close();
-
 	matrizFreqLoc->cerrar();
+//lo dejo listo para calcular la data de la matriz por oraciones
+	inicializarPonderer();
 }
 
+
+void Ponderer::inicializarPonderer(){
+
+	//lo hice asi no mas, despues veo donde hay que aplicar algun delete
+
+	contenedorParcialEntropia = NULL;
+	cantidadDocumentosEnLaColeccion = 0;
+	this->matrizFreqLoc=NULL;
+	this->trie=NULL;
+	this->matrizPonderada=NULL;
+	this->nombreIndice="";
+}

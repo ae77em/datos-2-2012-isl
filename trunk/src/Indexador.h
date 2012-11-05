@@ -16,13 +16,20 @@ class Indexador {
 		Parser* parser;
 		Ponderer* ponderador;
 		Persister* persistidor;
+		Persister* persistidorOraciones;
 		CalculadorLSI* calculador;
 
+		std::string nombreIndice;
+		unsigned int cantTopicos;
+
 	public:
-		Indexador();
+		Indexador(std::string nombreIndice, unsigned int cantTopicos);
 		~Indexador();
 
 		bool crearIndice(std::string nombreRepositorio, int cantTopicos, std::string directorio);
+
+		std::string obtenerNombreIndice();
+		unsigned int obtenerCanTopicos();
 
 
 	private:

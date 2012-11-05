@@ -523,7 +523,7 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
 
                 char buffer [33];
 				char tamanio = sprintf(buffer,"%d",NODO->infoArchivo->id);
-                *salida<<palabra<<" "<<buffer<<" ";
+                *salida<<palabra<<" "<<buffer<<std::endl;
                 *offsetLexico<<*offset<<std::endl;
 
 				//actualizo offset

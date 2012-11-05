@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
 
 	
 	// Creo el indice
-	indexador = new Indexador();
+	indexador = new Indexador(nombreRepositorio,cantTopicos);
 	if (!indexador->crearIndice(nombreRepositorio, cantTopicos, ruta)) {
 		std::cerr << "El indice no pudo ser creado." << std::endl;
 

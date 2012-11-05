@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #include "LectorArchivo.h"
 #include "Stemmer.h"
@@ -23,8 +24,10 @@ class Parser {
 		~Parser();
 		
 		bool parsearArchivo(std::string nombreArchivo);
-		void persistirLexico();
-		void persistirOraciones();
+
+		void persistirLexico(std::string nombreIndice);
+		void persistirOraciones(std::string nombreIndice);
+
 		Trie* obtenerContenedorLexico();
 		Trie* obtenerContenedorOraciones();
 };
