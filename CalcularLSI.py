@@ -40,6 +40,20 @@ try:
 	
 	except Exception:
 		print "Error al intentar guardar los autovalores"
+
+	try:
+		# Guarda Matriz U
+		log=open('ArchConfig/MatrizU.txt', 'w')
+		sys.stdout=log		
+		# Calculo y los autovalores
+		S =  lsi.projection.u
+		# lo imprimo con 4 decimales
+		print S
+		
+	
+	except Exception:
+		print "Error al intentar guardar los autovalores"
+
 			 
 except Exception:
 	print "Los argumentos son inválidos o insuficientes."
