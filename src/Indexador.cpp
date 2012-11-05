@@ -53,7 +53,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
     parser->persistirOraciones();
 
     calculador->calcularLSI(cantTopicos);
-    persistidor->parserLSI(3);
+    persistidor->parserLSI(cantTopicos);
     persistidor->cerrar();
 
     // TODO para las oraciones, no se como se hace
