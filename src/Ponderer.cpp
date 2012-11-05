@@ -20,7 +20,7 @@ Ponderer::~Ponderer() {
 }
 
 
-void Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string nombreIndice){
+std::string Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string nombreIndice){
 
 	trie = unTrie;
 	matrizFreqLoc = unP;
@@ -31,7 +31,7 @@ void Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string nombreIndice){
 	matrizFreqLoc->abrir();
 
     this->calcularEntropia();
-    this->ponderarLocarPorGlobal(); //tambien persiste, despues hay que cambiarlo
+    return this->ponderarLocarPorGlobal(); //tambien persiste, despues hay que cambiarlo
 
 }
 
@@ -78,7 +78,7 @@ void Ponderer::dividirTodoPorLog(){
 	}
 }
 
-void Ponderer::ponderarLocarPorGlobal(){
+std::string Ponderer::ponderarLocarPorGlobal(){
 
 	std::cout<<"PERSISTIENDO MATRIZ CON LA ENTROPIA CALCULADA"<<std::endl;
 
@@ -119,8 +119,13 @@ void Ponderer::ponderarLocarPorGlobal(){
 
 	matrizPonderada.close();
 	matrizFreqLoc->cerrar();
-//lo dejo listo para calcular la data de la matriz por oraciones
+
+	std::string path = this->nombreMatrizFinal;
+
+	//lo dejo listo para calcular la data de la matriz por oraciones
 	inicializarPonderer();
+
+	return path;
 }
 
 
