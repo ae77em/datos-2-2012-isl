@@ -15,6 +15,7 @@ class Indexador {
 		ListadorDeArchivos* listador;
 		Parser* parser;
 		Ponderer* ponderador;
+		Ponderer* ponderadorOraciones;
 		Persister* persistidor;
 		Persister* persistidorOraciones;
 		CalculadorLSI* calculador;
@@ -33,7 +34,7 @@ class Indexador {
 
 
 	private:
-		void calcularLSI(int);
+		void calcularLSI(int,std::string);
 };
 
 #endif

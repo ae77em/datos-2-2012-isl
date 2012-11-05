@@ -11,7 +11,7 @@ Ponderer::Ponderer() {
 	this->matrizFreqLoc=NULL;
 	this->trie=NULL;
 	this->matrizPonderada=NULL;
-	this->nombreIndice="";
+	this->nombreMatrizFinal="";
 
 }
 
@@ -24,8 +24,9 @@ void Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string nombreIndice){
 
 	trie = unTrie;
 	matrizFreqLoc = unP;
-	this->nombreIndice = nombreIndice;
 
+	//parseo nombre indice
+	this->nombreMatrizFinal = nombreIndice.substr(nombreIndice.find_last_of(47));
 
 	matrizFreqLoc->abrir();
 
@@ -84,7 +85,7 @@ void Ponderer::ponderarLocarPorGlobal(){
 	std::ofstream matrizPonderada;
 
 	std::string nombreMatrizFinal("indices/");
-	nombreMatrizFinal += this->nombreIndice;
+	nombreMatrizFinal += this->nombreMatrizFinal;
 
 	matrizPonderada.open(nombreMatrizFinal.c_str());
 	//inicializo cabecera de matriz MM
@@ -132,5 +133,5 @@ void Ponderer::inicializarPonderer(){
 	this->matrizFreqLoc=NULL;
 	this->trie=NULL;
 	this->matrizPonderada=NULL;
-	this->nombreIndice="";
+	this->nombreMatrizFinal="";
 }

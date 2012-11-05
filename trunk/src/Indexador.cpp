@@ -10,13 +10,14 @@ Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
 
 	nombreIndiceTerminos += nombreIndice;
 
-	persistidor = new Persister(nombreIndice);
+	persistidor = new Persister(nombreIndiceTerminos);
 
 	std::string nombreIndiceOraciones("termXdoc_oraciones_");
 
 	nombreIndiceOraciones += nombreIndice;
 
 	persistidorOraciones = new Persister(nombreIndiceOraciones);
+
 	ponderador = new Ponderer();
 	calculador = new CalculadorLSI();
 
@@ -72,22 +73,20 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
 
-	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, this->obtenerNombreIndice());
+	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, persistidor->obtenerPath());
 
 	std::cout<<"COMIENZA PONDERACION MATRIZ POR ORACIONES"<<std::endl;
 
-	//despues ver como aprolijar esta parte
-	std::string nombreMatrizOraciones(this->obtenerNombreIndice());
-	nombreMatrizOraciones += "oraciones";
-
-	ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones, nombreMatrizOraciones);
+	ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones, persistidorOraciones->obtenerPath());
 
 	std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
     parser->persistirLexico(this->obtenerNombreIndice());
     parser->persistirOraciones(this->obtenerNombreIndice());
 
-   /*
+//aca  deberian de ir los destructoures de los trie,
+
+    /*
     * std::cout<<"CALCULANDO SVD"<<std::endl;
     * calculador->calcularLSI(this->obtenerCantTopicos());
     persistidor->parserLSI(this->obtenerCantTopicos());*/
