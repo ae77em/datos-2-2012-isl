@@ -7,7 +7,12 @@
 
 Persister::Persister(std::string path){
 
-	this->path = path;
+	std::string iniPath("matricesParciales/");
+
+	iniPath += path;
+
+	this->path = iniPath;
+
     archivo.open(this->path.c_str(),std::fstream::out);
     contenedor = new std::list<TregistroArchivo*>;
     regAux=NULL;
@@ -41,35 +46,36 @@ void Persister::cerrar(){
 void Persister::abrir(){
     archivo.open(this->path.c_str(),std::fstream::in);
 }
+
 //POR EL MOMENTO SE VA A HACER SECUENCIAL, MAS ADELANTE, SI ES NECESERAIO
 //AGREGARE FUNCIONALIDAD PARA PODER LEER DE A COLUMNA
 std::list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 
 	if(regAux==NULL){//solo en la primer lectura pasa esto
-		regAux = new TregistroArchivo;
-		archivo >> regAux->col;
-		archivo >> regAux->fil;
-		archivo >> regAux->freq;
-
-	}else{
-       // cout<<endl<<"ENTRE con col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
-	}
-
-    int columna=regAux->col;
-
-	while( ( regAux->col==columna ) && (!archivo.eof() )){
-        this->contenedor->push_back(regAux);//
-
-		if(!archivo.eof() && columna==regAux->col){
-
-            regAux = new TregistroArchivo;
+			regAux = new TregistroArchivo;
 			archivo >> regAux->col;
 			archivo >> regAux->fil;
 			archivo >> regAux->freq;
-        }
-	}
 
-	return this->contenedor;
+		}else{
+	       // cout<<endl<<"ENTRE con col: "<<regAux->col<<" fil "<<regAux->fil<<"freq "<<regAux->freq<<endl;
+		}
+
+	    int columna=regAux->col;
+
+		while( ( regAux->col==columna ) && (!archivo.eof() )){
+	        this->contenedor->push_back(regAux);//
+
+			if(!archivo.eof() && columna==regAux->col){
+
+	            regAux = new TregistroArchivo;
+				archivo >> regAux->col;
+				archivo >> regAux->fil;
+				archivo >> regAux->freq;
+	        }
+		}
+		return this->contenedor;
+
 }
 
 
@@ -78,7 +84,7 @@ void Persister::persistirDatos(std::vector<TnodoData*>* data, unsigned int colum
 	for(register unsigned int i=0; i< data->size() ; i++){
 	    if(data->at(i)){
             archivo<<columna<<" "<<(data->at(i)->id + 1)<<" "<<data->at(i)->ocurrenciasEnElDocActual<<std::endl;
-	    }
+        }
     }
 }
 
@@ -106,6 +112,18 @@ void Persister::vaciar(std::list<TregistroArchivo*>* l){
     }*/
     l->clear();
 }
+
+void Persister::vaciar(){
+
+    //por algun motivo cuando libero lo que pedi altera los resultados, queda provisorio l->clear()
+    /*while(l->empty()){
+        TregistroArchivo* aux = l->back();
+        delete aux;
+        l->pop_back();
+    }*/
+    contenedor->clear();
+}
+
 
 void Persister::irAlComienzo(){
 
@@ -224,4 +242,10 @@ std::vector<std::vector<double>*>* Persister::generadorContenedorMatriz(int cant
     }
 
     return matriz;
+}
+
+std::string Persister::obtenerPath(){
+
+	return path;
+
 }
