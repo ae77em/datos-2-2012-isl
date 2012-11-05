@@ -25,7 +25,7 @@ private:
 	Persister* matrizPonderada;
 	Trie* trie;
 
-	std::string nombreIndice;
+	std::string nombreMatrizFinal;
 };
 
 #endif /* PONDERER_H_ */
