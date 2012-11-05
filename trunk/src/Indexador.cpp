@@ -73,34 +73,35 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
 
-	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, persistidor->obtenerPath());
+	std::string pathMatrizTerminos = ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, persistidor->obtenerPath());
 
 	std::cout<<"COMIENZA PONDERACION MATRIZ POR ORACIONES"<<std::endl;
 
-	ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones, persistidorOraciones->obtenerPath());
+	std::string pathMatrizOraciones = ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones, persistidorOraciones->obtenerPath());
 
 	std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
     parser->persistirLexico(this->obtenerNombreIndice());
     parser->persistirOraciones(this->obtenerNombreIndice());
 
-//aca  deberian de ir los destructoures de los trie,
+    //aca  deberian de ir los destructoures de los trie,
 
-    /*
-    * std::cout<<"CALCULANDO SVD"<<std::endl;
-    * calculador->calcularLSI(this->obtenerCantTopicos());
-    persistidor->parserLSI(this->obtenerCantTopicos());*/
+    std::cout<<"CALCULANDO SVD TERMINOS"<<std::endl;
+    calculador->calcularLSI(this->obtenerCanTopicos(),pathMatrizTerminos);
+    //persistidor->parserLSI(this->obtenerCantTopicos());
+
+    // TODO para las oraciones, no se como se hace
+    std::cout<<"CALCULANDO SVD ORACIONES"<<std::endl;
+
+    calculador->calcularLSI(cantTopicos,pathMatrizOraciones);
+
+    //persistidor->parserLSI(cantTopicos);
 
     persistidor->cerrar();
     persistidorOraciones->cerrar();
 
 
-    // TODO para las oraciones, no se como se hace
-    /*
-    calculador->calcularLSI(cantTopicos);
-	persistidor->parserLSI(cantTopicos);
-	persistidor->cerrar();
-    */
+
     delete archivos;
 
     std::cout<<"FIN"<<std::endl;

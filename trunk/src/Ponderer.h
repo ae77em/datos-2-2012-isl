@@ -11,12 +11,12 @@ class Ponderer {
 public:
 	Ponderer();
 	virtual ~Ponderer();
-	void ponderar(Trie*,Persister*,std::string);
+	std::string ponderar(Trie*,Persister*,std::string);
 
 private:
 	void dividirTodoPorLog();
 	void calcularEntropia();
-	void ponderarLocarPorGlobal();
+	std::string ponderarLocarPorGlobal();
 	void inicializarPonderer();
 
 	std::vector<TacumEntropia*>* contenedorParcialEntropia;
