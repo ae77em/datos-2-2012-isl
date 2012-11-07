@@ -22,10 +22,8 @@ Parser::~Parser() {
 }
 
 bool Parser::parsearArchivo(std::string nombreArchivo) {
-	std::string termino, terminoSiguiente, bufferOracion;
+	std::string termino, terminoSiguiente;
 	std::ifstream archivo(nombreArchivo.c_str());
-
-	int contadorBuffer = 0;
 
 	if (!archivo.good()) {
 		return false;
@@ -35,10 +33,10 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	while (!archivo.eof()) {
 		terminoSiguiente = lector->obtenerToken(archivo);
 
-		if (termino.length() > 0) {
+		if (termino.length() > 0 && validador->validarTermino(termino)) {
 			if (validador->esPalabraCompuesta(termino, terminoSiguiente)) {
 				if (terminoSiguiente.length() > 0) {
-					termino += terminoSiguiente + " ";
+					termino += " " + terminoSiguiente;
 				}
 			}else {
 				std::string terminoStemado = stemmer->stemPalabra(termino);
@@ -48,16 +46,18 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 					contenedorLexico->insertarPalabraEnRaiz(terminoStemado, NULL); // TODO eliminar segundo parametro
 				}
 
-				bufferOracion += termino + " ";
-				contadorBuffer++;
+				terminosOraciones.push_back(termino);
+				if (terminosOraciones.size() == PALABRAS_FRASE) {
+					std::string bufferOracion;
+					std::list<std::string>::iterator it;
+					for (it = terminosOraciones.begin(); it != terminosOraciones.end(); ++it) {
+						bufferOracion += (*it) + " ";
+					}
 
-				if (contadorBuffer == PALABRAS_FRASE) {
-					std::string oracionStemada = stemmer->stemPalabra(bufferOracion);
-					contenedorOraciones->insertarPalabraEnRaiz(oracionStemada, NULL); // TODO eliminar segundo parametro
+					contenedorOraciones->insertarPalabraEnRaiz(bufferOracion, NULL); // TODO eliminar segundo parametro
 
 					// TODO Mantener 3 terminos anteriores
-					bufferOracion.clear();
-					contadorBuffer = 0;
+					terminosOraciones.pop_front();
 				}
 
 				termino = terminoSiguiente;

@@ -15,7 +15,6 @@ class Indexador {
 		ListadorDeArchivos* listador;
 		Parser* parser;
 		Ponderer* ponderador;
-		Ponderer* ponderadorOraciones;
 		Persister* persistidor;
 		Persister* persistidorOraciones;
 		CalculadorLSI* calculador;
