@@ -365,44 +365,6 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,std::vector<TnodoData*>*
 
 
 
-//se usa al final de la indexacion, vuelca todo en un vector, para facilitar la actualizacion de los id�s
-// luego de la eliminaicon de las stopwords
-std::vector<TnodoTerminoId*>* Trie::exportarPalabrasContenedor_INI(){
-
-    RAIZ->contenedor->resize(this->obtenerContadorId()); //el id arranca desde cero
-
-    std::string palabraAux = "";
-
-    this->exportarPalabrasContenedor(this->RAIZ->hijo,RAIZ->contenedor,palabraAux);
-
-    return RAIZ->contenedor;
-
-}
-
-//SE USA para volvar la data ID,TERM a un vector,
-void Trie::exportarPalabrasContenedor(TnodoTrie* NODO ,std::vector<TnodoTerminoId*>*contenedor, std::string palabra){
-
-    if(NODO){
-            palabra= palabra + NODO->letra;
-
-            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
-
-                TnodoTerminoId* terminoId = new TnodoTerminoId;
-
-                terminoId->id = &NODO->infoArchivo->id;
-                terminoId->palabra = palabra;
-
-                contenedor->at(*terminoId->id)=terminoId;
-
-            }
-
-            exportarPalabrasContenedor(NODO->hijo,contenedor,palabra);
-            palabra.resize(palabra.size()-1);
-
-            exportarPalabrasContenedor(NODO->hermano,contenedor,palabra);
-        }
-}
-
 
 
 void Trie::vaciarContenedorParcial(){
@@ -521,8 +483,7 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
             palabra= palabra+NODO->letra;
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
-                char buffer [33];
-				char tamanio = sprintf(buffer,"%d",NODO->infoArchivo->id);
+                char tamanio = sprintf(buffer,"%d",NODO->infoArchivo->id);
                 *salida<<palabra<<" "<<buffer<<std::endl;
                 *offsetLexico<<*offset<<std::endl;
 
