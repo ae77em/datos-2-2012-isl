@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <string>
 
 #include "LectorArchivo.h"
@@ -14,6 +15,8 @@
 
 class Parser {
 	private:
+		std::list<std::string> terminosOraciones;
+
 		LectorArchivo* lector;
 		Stemmer* stemmer;
 		Trie* contenedorLexico;
