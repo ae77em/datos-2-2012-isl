@@ -178,13 +178,13 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,std::vector<TnodoData*>*
 
     if(NODO){
         if(NODO->flagParser){
-
             //pongo en cero para que posteriores parseadas no lo reconozcan salvo que forme parte de palabras de la
             //correspondinete parseada
             NODO->flagParser=0;
-
             if ((NODO->infoArchivo!=NULL) && (NODO->infoArchivo->ocurrenciasEnElDocActual > 0) ){
                 contenedorIdFreq->at(NODO->infoArchivo->id) = NODO->infoArchivo ;
+                std::cout<<"ID: "<<NODO->infoArchivo->id<<std::endl;
+
             }
 
             buscarPalabrasDelDocParseado(NODO->hijo,contenedorIdFreq);
@@ -197,9 +197,6 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,std::vector<TnodoData*>*
         }
     }
 }
-
-
-
 
 
 void Trie::vaciarContenedorParcial(){
@@ -353,7 +350,6 @@ void Trie::insertarPalabra(std::string palabra,TnodoTrie* padre){
 
 		    this->incrementarContadorId();
 		}
-
 		padre->infoArchivo->ocurrenciasEnElDocActual++;
 		padre->infoArchivo->ocurrenciasEnLaColeccion++;
 
@@ -411,6 +407,7 @@ void Trie::insertarPalabra(std::string palabra,TnodoTrie* padre){
 					if(actual->letra == palabra.at(0)){ //si encunetro una letra igual a la que quiero ingresar, en el medio de la lista paso derecho
 						//std::cout<<"encontre letra igual que la mia, paso no mas : "<<actual->letra<<" igual a: "<<palabra[0]<<std::endl;
 						insertarAlFinal = false;
+						actual->flagParser=1;
 						insertarPalabra(palabra.substr(1),actual);
 					}
 //4909423
@@ -473,13 +470,13 @@ void Trie::recorrer(TnodoTrie* NODO,std::string palabra){
 
 	if(NODO){
 
-	            palabra= palabra+NODO->letra;
-	            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
-	            	std::cout<<palabra<<std::endl;
-	            }
-	            recorrer(NODO->hijo,palabra);
-	            palabra.resize(palabra.size()-1);
-	            recorrer(NODO->hermano,palabra);
+            palabra= palabra+NODO->letra;
+            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
+            	std::cout<<palabra<<" ID: "<<NODO->infoArchivo->id<<" global: "<<NODO->infoArchivo->ocurrenciasEnElDocActual<<" FLAG: "<<(int)NODO->flagParser<<std::endl;
+            }
+            recorrer(NODO->hijo,palabra);
+            palabra.resize(palabra.size()-1);
+            recorrer(NODO->hermano,palabra);
 	}
 
 }
