@@ -43,7 +43,7 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 
 				// Por si justo la palabra que entra es un stemm y luego de procesar queda vacia
 				if (terminoStemado.size() > 0) {
-					contenedorLexico->insertarPalabraEnRaiz(terminoStemado, NULL); // TODO eliminar segundo parametro
+					contenedorLexico->insertarPalabra(terminoStemado); // TODO eliminar segundo parametro
 				}
 
 				terminosOraciones.push_back(termino);
@@ -54,7 +54,7 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 						bufferOracion += (*it) + " ";
 					}
 
-					contenedorOraciones->insertarPalabraEnRaiz(bufferOracion, NULL); // TODO eliminar segundo parametro
+					//contenedorOraciones->insertarPalabra(bufferOracion); // TODO eliminar segundo parametro
 
 					// TODO Mantener 3 terminos anteriores
 					terminosOraciones.pop_front();
