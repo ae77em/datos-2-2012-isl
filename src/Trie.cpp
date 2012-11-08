@@ -6,14 +6,14 @@
 
 void Trie::inicializarRaiz(){
 
-    this->RAIZ=new TnodoPrincipalTrie;
+    this->RAIZ=new TnodoPrincipalTrie();
     this->RAIZ->cantidadTotalDePalabrasEnLaColeccion=0;
     this->RAIZ->contadorDeId_s=0;
     this->RAIZ->cantidadDeDocumentoParseados=0;
     this->RAIZ->contenedor = new std::vector<TnodoTerminoId*>;
     this->RAIZ->contenedorParcial = new std::vector<TnodoData*>;
     this->RAIZ->contenedorEntropia = new std::vector<TacumEntropia*>;
-
+    this->RAIZ->padreSupremo = NULL;
 }
 
 void Trie::inicializarNodo(TnodoTrie* NODO){
@@ -30,11 +30,11 @@ Trie::Trie (){
 
     this->inicializarRaiz();
 
-    TnodoTrie* HIJO=new TnodoTrie;
+    TnodoTrie* padreSupremo=new TnodoTrie();
 
-    inicializarNodo(HIJO);
+    inicializarNodo(padreSupremo);
 
-    RAIZ->hijo=HIJO;
+    RAIZ->padreSupremo=padreSupremo;
 
 }
 
@@ -91,173 +91,9 @@ void Trie::aumentarCantidadDeDocParseados(){
 
 }
 
-void Trie::insertarPalabraEnRaiz(std::string palabra,int* direccion){
-
-
-    TnodoTrie* nodoAux=insertarPalabra(palabra, RAIZ->hijo,direccion);
-
-    if(nodoAux){
-        RAIZ->hijo=nodoAux;
-    }
-    //cada vez que ingreso una palabra aumento el contador
-    this->aumentarCantidadDePalabrasEnLaColeccion();
-}
-
-
-TnodoTrie* Trie::insertarPalabra(std::string palabra, TnodoTrie* NODO,int* direccion){
-
-    //flga que indica al salir al volver si hay que modificar principio de la lista
-    short int modificoPrincipioDeLista=0;
-
-    TnodoTrie* HijoACambiar=buscarLugar(palabra[0],NODO,&modificoPrincipioDeLista);
-
-    if(palabra.size()==1){
-        //si es la primera vez que se inserta la letra se inicializai el nodo
-        if(HijoACambiar->infoArchivo==NULL){
-
-            HijoACambiar->infoArchivo= new TnodoData;
-            HijoACambiar->infoArchivo->ocurrenciasEnElDocActual=0;
-            HijoACambiar->infoArchivo->ocurrenciasEnLaColeccion=0;
-            HijoACambiar->infoArchivo->id = this->obtenerContadorId();
-
-            this->incrementarContadorId();
-
-        }
-
-        HijoACambiar->infoArchivo->ocurrenciasEnElDocActual++;
-        HijoACambiar->infoArchivo->ocurrenciasEnLaColeccion++;
-    }
-
-    std::string palabraAux= palabra.substr(1,palabra.size()-1);
-
-    TnodoTrie* NodoAInsertarPorLasDudas=NULL;
-    //condicion de corte
-    if(palabraAux.size()>0){
-            NodoAInsertarPorLasDudas= insertarPalabra(palabraAux,HijoACambiar->hijo,direccion);
-    }
-    //si se modifico el comienzo de la lista lo actualizo el puntero al comienzo de la misma
-    if(NodoAInsertarPorLasDudas){
-        HijoACambiar->hijo=NodoAInsertarPorLasDudas;
-    }
-
-    if(modificoPrincipioDeLista){
-        return HijoACambiar;
-    }
-    else{
-        return NULL;
-    }
-
-}
-
-TnodoTrie* Trie::buscarLugar(char letraEntrante, TnodoTrie* primerNodo,short int* FLAG){
-
-
-    if(primerNodo->letra==FINAL_DE_PALABRA){
-        TnodoTrie* nodoHijo= new TnodoTrie;
-
-        inicializarNodo(nodoHijo);
-
-        primerNodo->hijo=nodoHijo;
-        primerNodo->letra=letraEntrante;
-        primerNodo->flagParser=1;
-        return primerNodo;
-    }
-
-
-    if (primerNodo->letra==letraEntrante){
-        primerNodo->flagParser=1;
-        return primerNodo;
-    }
-
-    //si la letra que entra es mas chica que las que ya estan
-    if (primerNodo->letra>letraEntrante){
-
-        *FLAG=1;
-
-        TnodoTrie* nodoEntrante= new TnodoTrie ;
-        TnodoTrie* nuevoNodoHijo= new TnodoTrie;
-
-        inicializarNodo(nuevoNodoHijo);
-        inicializarNodo(nodoEntrante);
-
-        nodoEntrante->letra=letraEntrante;
-        nodoEntrante->flagParser=1;
-        nodoEntrante->hijo=nuevoNodoHijo;
-        nodoEntrante->hermano=primerNodo;
-
-        return nodoEntrante;
-    }
-
-    if (primerNodo->letra<letraEntrante){
-
-        TnodoTrie* nodoEntrante= new TnodoTrie;
-        TnodoTrie* nuevoNodoHijo= new TnodoTrie;
-
-        inicializarNodo(nuevoNodoHijo);
-        inicializarNodo(nodoEntrante);
-
-        if(primerNodo->hermano==NULL){
-
-            nodoEntrante->letra=letraEntrante;
-            nodoEntrante->flagParser=1;
-            nodoEntrante->hijo=nuevoNodoHijo;
-
-            primerNodo->hermano=nodoEntrante;
-
-            return nodoEntrante;
-
-        }
-
-        else {
-
-            TnodoTrie* nodoActual= primerNodo->hermano;
-
-            TnodoTrie* nodoAnterior=primerNodo;
-
-            while(nodoActual){
-
-                if(nodoActual->letra==letraEntrante){
-
-                    nodoActual->flagParser=1;
-
-                    return nodoActual;
-
-                }
-                if(nodoActual->letra>letraEntrante){
-
-                    nodoEntrante->letra=letraEntrante;
-                    nodoEntrante->hijo=nuevoNodoHijo;
-                    nodoEntrante->flagParser=1;
-                    nodoEntrante->hermano=nodoActual;
-                    nodoAnterior->hermano=nodoEntrante;
-                    return nodoEntrante;
-                }
-                //si el que sgue es el ultimo
-                nodoAnterior=nodoActual;
-                nodoActual=nodoActual->hermano;
-
-            }
-            //si salgo del while quiere decir que la letra que quiero ingresar a mayor a todas
-
-            nodoAnterior->hermano=nodoEntrante;
-
-            nodoEntrante->letra=letraEntrante;
-            nodoEntrante->flagParser=1;
-            nodoEntrante->hijo=nuevoNodoHijo;
-
-            return nodoEntrante;
-        }
-
-
-    }
-
-    return NULL;
-}
-
-//////////************************************
 bool Trie::buscarPalabra(std::string palabra){
 
-   return buscarPalabra(palabra,RAIZ->hijo);
+	return buscarPalabra(palabra,RAIZ->padreSupremo->hijo);
 
 }
 
@@ -333,7 +169,7 @@ std::vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 	//despues controlar con un if si es NECESARIO O NO EL RESIZE, PROVISIRIO
 	RAIZ->contenedorParcial->resize(this->obtenerContadorId());
 
-    buscarPalabrasDelDocParseado(RAIZ->hijo,RAIZ->contenedorParcial);
+    buscarPalabrasDelDocParseado(RAIZ->padreSupremo,RAIZ->contenedorParcial);
 
     return RAIZ->contenedorParcial;
 
@@ -388,7 +224,7 @@ std::vector<TacumEntropia*>* Trie::exportarDatosParaEntropia_INI(){
 
 	this->RAIZ->contenedorEntropia->resize(this->obtenerContadorId());
 
-	this->exportarDatosParaEntropia(this->RAIZ->contenedorEntropia, this->RAIZ->hijo);
+	this->exportarDatosParaEntropia(this->RAIZ->contenedorEntropia, this->RAIZ->padreSupremo);
 
 	return this->RAIZ->contenedorEntropia;
 
@@ -399,7 +235,7 @@ void Trie::exportarDatosParaEntropia(std::vector<TacumEntropia*>* contenedorEntr
 	if(NODO){
 	            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
-	            	TacumEntropia* acumEntropia = new TacumEntropia;
+	            	TacumEntropia* acumEntropia = new TacumEntropia();
 
 	            	acumEntropia->infoTerm = NODO->infoArchivo;
 	                acumEntropia->acumEntropia = 0;
@@ -417,7 +253,7 @@ void Trie::destruirArbol_INI(){
 
     int cantidadDeNodos=0;
 
-    destruirArbol(RAIZ->hijo,&cantidadDeNodos);
+    destruirArbol(RAIZ->padreSupremo,&cantidadDeNodos);
 
 }
 
@@ -471,7 +307,7 @@ void Trie::persistirPalabras_INI(std::ofstream* salida, std::ofstream* offsetLex
 
     int offsetL=0;
 
-    persistirPalabras(RAIZ->hijo,salida,offsetLexico,&offsetL,cadenaParcialDePalabras);
+    persistirPalabras(RAIZ->padreSupremo,salida,offsetLexico,&offsetL,cadenaParcialDePalabras);
 
 
 }
@@ -488,7 +324,7 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
                 *offsetLexico<<*offset<<std::endl;
 
 				//actualizo offset
-                *offset += palabra.size() + 1 + (int)tamanio + 1; //el offset contiene el tamaño del string, del string id ,y dos \b
+               *offset += palabra.size() + 1 + (int)tamanio + 1; //el offset contiene el tamaño del string, del string id ,y dos \b
 
                 //std::cout<<palabra<<std::endl;
 
@@ -498,4 +334,159 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
             persistirPalabras(NODO->hermano,salida,offsetLexico,offset,palabra);
         }
 }
+
+
+void Trie::insertarPalabra(std::string palabra){
+
+    //std::cout<<"entrando: "<<palabra<<std::endl;
+	insertarPalabra(palabra,this->RAIZ->padreSupremo);
+
+    this->aumentarCantidadDePalabrasEnLaColeccion();
+
+}
+
+void Trie::insertarPalabra(std::string palabra,TnodoTrie* padre){
+
+	//condicion de corte
+	if(palabra.size()==0){
+		//si se inserto toda la palabra y no esta marcado el fin de palabra. inicializo nodo data, acutaliza contadores
+		if(padre->infoArchivo==NULL){
+			padre->infoArchivo= new TnodoData();
+			padre->infoArchivo->ocurrenciasEnElDocActual=0;
+			padre->infoArchivo->ocurrenciasEnLaColeccion=0;
+			padre->infoArchivo->id = this->obtenerContadorId();
+
+		    this->incrementarContadorId();
+		}
+
+		padre->infoArchivo->ocurrenciasEnElDocActual++;
+		padre->infoArchivo->ocurrenciasEnLaColeccion++;
+
+	}else{//sepan disculpar esta parte va a seguir siendo un quilombo, estoy manipulando una lista a mano
+
+		//si el hijo esta vacio entra letra nomas
+		if(padre->hijo==NULL){
+
+		//	std::cout<<"entrando en nodo vacio, se inserto letra: "<<palabra[0]<<std::endl;
+
+			padre->hijo = new TnodoTrie();
+			this->inicializarNodo(padre->hijo);
+			padre->hijo->letra = palabra.at(0);
+			padre->hijo->flagParser = 1;
+
+			insertarPalabra(palabra.substr(1),padre->hijo);
+
+
+		}else if ( padre->hijo->letra == palabra.at(0) ){//si la letra que va a entrar ya esta
+
+			//std::cout<<"entrando en nodo existentes"<<std::endl;
+			//std::cout<<""<<padre->hijo->letra<<" igual a: "<<palabra[0]<<std::endl;
+
+			padre->hijo->flagParser = 1;
+			insertarPalabra(palabra.substr(1),padre->hijo);
+
+		}else if (padre->hijo->letra > palabra.at(0)){ //si debo cambiar el comienzo de la lista
+
+			//std::cout<<"cambiando principio de la,letra: "<<padre->hijo->letra<<" mayor a: "<<palabra[0]<<std::endl;
+
+			TnodoTrie* aux = padre->hijo;
+
+			padre->hijo = new TnodoTrie();
+			this->inicializarNodo(padre->hijo);
+			padre->hijo->letra = palabra.at(0);
+			padre->hijo->flagParser = 1;
+
+			padre->hijo->hermano = aux;
+			insertarPalabra(palabra.substr(1),padre->hijo);
+
+		}else { //si no esta vacio, o no es la misma letra, o no va antes del principio de la lista, debo buscar lugar dentro
+				//de la misma
+			//std::cout<<"buscando lugar en la lista"<<std::endl;
+
+			//si la lista tiene mas de un elemento
+			if(padre->hijo->hermano){
+				bool insertarAlFinal = true;
+
+				TnodoTrie* actual = padre->hijo->hermano;
+				TnodoTrie* anterior = padre->hijo;
+				//std::cout<<"analizando anterior "<<anterior->letra<<" entrando: "<<palabra.at(0)<<" posterior"<< actual->letra<<std::endl;
+
+				while(actual && insertarAlFinal){
+
+					if(actual->letra == palabra.at(0)){ //si encunetro una letra igual a la que quiero ingresar, en el medio de la lista paso derecho
+						//std::cout<<"encontre letra igual que la mia, paso no mas : "<<actual->letra<<" igual a: "<<palabra[0]<<std::endl;
+						insertarAlFinal = false;
+						insertarPalabra(palabra.substr(1),actual);
+					}
+//4909423
+					else if( actual->letra > palabra.at(0) ){
+						//std::cout<<"insertando en el medio de : "<<anterior->letra<<"  "<<palabra.at(0)<<" y "<<actual->letra<<std::endl;
+
+						TnodoTrie* aux = actual;
+
+						anterior->hermano = new TnodoTrie();
+
+						this->inicializarNodo(anterior->hermano);
+
+						anterior->hermano->letra = palabra.at(0);
+						anterior->hermano->flagParser = 1;
+						anterior->hermano->hermano = aux;
+
+						insertarAlFinal = false;
+						insertarPalabra(palabra.substr(1),anterior->hermano);
+					}
+					else{
+						anterior = actual;
+						actual = actual->hermano;
+					}
+				}
+
+                //si se llega a este if, anterior queda con el valor del ultimo elemento de la lista
+				if(insertarAlFinal==true){
+					//std::cout<<"inserte al final porque soy la mayor de todas en la lista "<<palabra.at(0)<<std::endl;
+					anterior->hermano = new TnodoTrie();
+					this->inicializarNodo(anterior->hermano);
+					anterior->hermano->letra = palabra.at(0);
+					anterior->hermano->flagParser=1;
+
+					insertarPalabra(palabra.substr(1),anterior->hermano);
+				}
+
+			}else{ //si la lista solo tiene un elemento, inserto al lado del mismo la letra entrante
+				//std::cout<<"la lista tiene una sola letra "<<padre->hijo->letra<<" menor a: "<<palabra[0]<<std::endl;
+
+				padre->hijo->hermano = new TnodoTrie();
+				this->inicializarNodo(padre->hijo->hermano);
+
+				padre->hijo->hermano->letra = palabra.at(0);
+				padre->hijo->hermano->flagParser = 1;
+
+				insertarPalabra(palabra.substr(1),padre->hijo->hermano);
+			}
+		}
+	}
+}
+
+void Trie::recorrer(){
+	std::string palabra="";
+	std::cout<<std::endl;
+	recorrer(RAIZ->padreSupremo->hijo,palabra);
+
+}
+
+void Trie::recorrer(TnodoTrie* NODO,std::string palabra){
+
+	if(NODO){
+
+	            palabra= palabra+NODO->letra;
+	            if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
+	            	std::cout<<palabra<<std::endl;
+	            }
+	            recorrer(NODO->hijo,palabra);
+	            palabra.resize(palabra.size()-1);
+	            recorrer(NODO->hermano,palabra);
+	}
+
+}
+
 

@@ -30,14 +30,14 @@ struct TnodoTrie {
     TnodoTrie* hermano;
     TnodoTrie* hijo;
     TnodoData* infoArchivo;
-    int flagParser;
+    char flagParser;
 };
 
 struct TnodoPrincipalTrie {
     int cantidadTotalDePalabrasEnLaColeccion;//lleva la cuenta de las palabras ingresadas
     int contadorDeId_s; //lleva la cuenta de palabras diferentes ingresadas
     int cantidadDeDocumentoParseados;
-    TnodoTrie* hijo;
+    TnodoTrie* padreSupremo;
     std::vector<TnodoTerminoId*>* contenedor; // se usa en la persistencia del lexico
     std::vector<TnodoData*>* contenedorParcial;
     std::vector<TacumEntropia*>* contenedorEntropia;
@@ -46,6 +46,7 @@ struct TnodoPrincipalTrie {
 class Trie {
 	private:
 		TnodoPrincipalTrie* RAIZ ;
+		char buffer [33];
 
 	public:
 		Trie ();
@@ -53,9 +54,12 @@ class Trie {
 		void inicializarRaiz();
 		void inicializarNodo(TnodoTrie*);
 
-		void insertarPalabraEnRaiz(std::string,int*);
-		TnodoTrie* insertarPalabra(std::string,TnodoTrie*,int*);
-		TnodoTrie* buscarLugar(char,TnodoTrie*,short int*);
+		void insertarPalabra(std::string,TnodoTrie*);
+
+		void insertarPalabra(std::string);
+		void recorrer();
+		void recorrer(TnodoTrie*,std::string);
+
 
 		void aumentarCantidadDePalabrasEnLaColeccion(void);
 		void aumentarCantidadDeDocParseados(void);
