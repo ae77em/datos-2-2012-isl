@@ -183,7 +183,6 @@ void Trie::buscarPalabrasDelDocParseado(TnodoTrie* NODO,std::vector<TnodoData*>*
             NODO->flagParser=0;
             if ((NODO->infoArchivo!=NULL) && (NODO->infoArchivo->ocurrenciasEnElDocActual > 0) ){
                 contenedorIdFreq->at(NODO->infoArchivo->id) = NODO->infoArchivo ;
-                std::cout<<"ID: "<<NODO->infoArchivo->id<<std::endl;
 
             }
 
