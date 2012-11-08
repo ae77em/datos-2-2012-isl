@@ -40,7 +40,6 @@ Trie::Trie (){
 
 Trie::~Trie(void){
 
-
     this->vaciarContenedores();
 
     //los clear sgtes, son necesarios???
@@ -169,7 +168,7 @@ std::vector<TnodoData*>* Trie::buscarPalabrasDelDocParseado_INI(){
 	//despues controlar con un if si es NECESARIO O NO EL RESIZE, PROVISIRIO
 	RAIZ->contenedorParcial->resize(this->obtenerContadorId());
 
-    buscarPalabrasDelDocParseado(RAIZ->padreSupremo,RAIZ->contenedorParcial);
+    buscarPalabrasDelDocParseado(RAIZ->padreSupremo->hijo,RAIZ->contenedorParcial);
 
     return RAIZ->contenedorParcial;
 
@@ -224,7 +223,7 @@ std::vector<TacumEntropia*>* Trie::exportarDatosParaEntropia_INI(){
 
 	this->RAIZ->contenedorEntropia->resize(this->obtenerContadorId());
 
-	this->exportarDatosParaEntropia(this->RAIZ->contenedorEntropia, this->RAIZ->padreSupremo);
+	this->exportarDatosParaEntropia(this->RAIZ->contenedorEntropia, this->RAIZ->padreSupremo->hijo);
 
 	return this->RAIZ->contenedorEntropia;
 
@@ -253,7 +252,7 @@ void Trie::destruirArbol_INI(){
 
     int cantidadDeNodos=0;
 
-    destruirArbol(RAIZ->padreSupremo,&cantidadDeNodos);
+    destruirArbol(RAIZ->padreSupremo->hijo,&cantidadDeNodos);
 
 }
 
@@ -307,9 +306,7 @@ void Trie::persistirPalabras_INI(std::ofstream* salida, std::ofstream* offsetLex
 
     int offsetL=0;
 
-    persistirPalabras(RAIZ->padreSupremo,salida,offsetLexico,&offsetL,cadenaParcialDePalabras);
-
-
+    persistirPalabras(RAIZ->padreSupremo->hijo,salida,offsetLexico,&offsetL,cadenaParcialDePalabras);
 }
 
 void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstream* offsetLexico,int* offset,std::string palabra){
@@ -325,8 +322,6 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
 
 				//actualizo offset
                *offset += palabra.size() + 1 + (int)tamanio + 1; //el offset contiene el tamaño del string, del string id ,y dos \b
-
-                //std::cout<<palabra<<std::endl;
 
             }
             persistirPalabras(NODO->hijo,salida,offsetLexico,offset,palabra);
