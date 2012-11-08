@@ -410,7 +410,7 @@ void Trie::insertarPalabra(std::string palabra,TnodoTrie* padre){
 						actual->flagParser=1;
 						insertarPalabra(palabra.substr(1),actual);
 					}
-//4909423
+
 					else if( actual->letra > palabra.at(0) ){
 						//std::cout<<"insertando en el medio de : "<<anterior->letra<<"  "<<palabra.at(0)<<" y "<<actual->letra<<std::endl;
 
