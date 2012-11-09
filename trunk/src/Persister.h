@@ -60,10 +60,6 @@ class Persister {
         std::list<TregistroArchivo*>* contenedor;
         std::string path;
 
-
-
-
-
 };
 
 #endif

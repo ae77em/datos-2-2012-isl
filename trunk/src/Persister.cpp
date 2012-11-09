@@ -116,11 +116,11 @@ void Persister::vaciar(std::list<TregistroArchivo*>* l){
 void Persister::vaciar(){
 
     //por algun motivo cuando libero lo que pedi altera los resultados, queda provisorio l->clear()
-    /*while(l->empty()){
-        TregistroArchivo* aux = l->back();
+    while(!contenedor->empty()){
+        TregistroArchivo* aux = contenedor->back();
         delete aux;
-        l->pop_back();
-    }*/
+        contenedor->pop_back();
+    }
     contenedor->clear();
 }
 
