@@ -127,4 +127,34 @@ unsigned int Indexador::obtenerCanTopicos(){
 
 void Indexador::generarPaths(){
 
+		pathMatrizTermXDoc("matricesTermDoc/termXDoc__");
+		pathMatrizTermXDoc += nombreIndice;
+
+		pathMatrizOracionesXDoc("matricesTermDoc/oracionesXDoc_");
+		pathMatrizOracionesXDoc += nombreIndice;
+
+		pathMatrizTermXDocPrePonderada("matricesPrePonderadas/termXDoc_PrePonderada_");
+		pathMatrizTermXDocPrePonderada += nombreIndice;
+
+		pathMatrizOracionesXDocPrePonderada("matricesPrePonderadas/oracionesXDoc_PrePonderada_");
+		pathMatrizOracionesXDocPrePonderada += nombreIndice;
+
+		pathMatrizTermXDocPonderada("matricesPonderadas/termXDoc_Ponderada_");
+		pathMatrizTermXDocPonderada += nombreIndice;
+
+		pathMatrizOracionesXDocPonderada("matricesPonderadas/oracionesXDoc_Ponderada_");
+		pathMatrizOracionesXDocPonderada += nombreIndice;
+
+		pathSVDTerminos("indices/indiceSVDTerminos_");
+		pathSVDTerminos += nombreIndice;
+
+		pathSVDOraciones("indices/indiceSVDOraciones_");
+		pathSVDOraciones += nombreIndice;
+
+		pathDiccionarioTerminos("diccionarios/diccionarioTerminos");
+		pathDiccionarioTerminos += nombreIndice;
+
+		pathDiccionarioOraciones("diccionarios/diccionarioOraciones");
+		pathDiccionarioOraciones+= nombreIndice;
+
 }

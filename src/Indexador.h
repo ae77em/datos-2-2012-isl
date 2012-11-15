@@ -48,6 +48,8 @@ class Indexador {
 		std::string pathSVDTerminos;
 		std::string pathSVDOraciones;
 
+		std::string pathDiccionarioTerminos;
+		std::string pathDiccionarioOraciones;
 
 };
 
