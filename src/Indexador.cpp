@@ -3,6 +3,10 @@
 #include <iostream>
 
 Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
+
+	this->nombreIndice = nombreIndice;
+	this->cantTopicos = cantTopicos;
+
 	listador = new ListadorDeArchivos();
 	parser = new Parser();
 
@@ -21,8 +25,6 @@ Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
 	ponderador = new Ponderer();
 	calculador = new CalculadorLSI();
 
-	this->nombreIndice = nombreIndice;
-	this->cantTopicos = cantTopicos;
 }
 
 Indexador::~Indexador() {
@@ -120,5 +122,9 @@ std::string Indexador::obtenerNombreIndice(){
 unsigned int Indexador::obtenerCanTopicos(){
 
 	return cantTopicos;
+
+}
+
+void Indexador::generarPaths(){
 
 }
