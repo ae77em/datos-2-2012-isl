@@ -38,16 +38,11 @@ class Persister {
 
         void abrir();
         void cerrar();
-
         bool hayData();
         void vaciar(std::list<TregistroArchivo*>*);
         void vaciar();
-
-
         void irAlComienzo();
-
         void parserLSI(int);
-
         std::string obtenerPath();
 
 

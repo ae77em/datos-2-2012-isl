@@ -7,20 +7,13 @@ Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
 	this->nombreIndice = nombreIndice;
 	this->cantTopicos = cantTopicos;
 
+	this->generarPaths();
+
 	listador = new ListadorDeArchivos();
 	parser = new Parser();
 
-	std::string nombreIndiceTerminos("termXdoc_terminos_");
-
-	nombreIndiceTerminos += nombreIndice;
-
-	persistidor = new Persister(nombreIndiceTerminos);
-
-	std::string nombreIndiceOraciones("termXdoc_oraciones_");
-
-	nombreIndiceOraciones += nombreIndice;
-
-	persistidorOraciones = new Persister(nombreIndiceOraciones);
+	persistidor = new Persister(pathMatrizTermXDoc);
+	persistidorOraciones = new Persister(pathMatrizOracionesXDoc);
 
 	ponderador = new Ponderer();
 	calculador = new CalculadorLSI();
@@ -73,7 +66,12 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 	persistidor->cerrar();
     persistidorOraciones->cerrar();
 
-	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
+    std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
+
+    parser->persistirLexico(this->obtenerPathDiccionarioLexico());
+    parser->persistirOraciones(this->obtenerPathDiccionarioOraciones());
+
+/*	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
 
 	std::string pathMatrizTerminos = ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, persistidor->obtenerPath());
 
@@ -83,8 +81,8 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 	std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
-    parser->persistirLexico(this->obtenerNombreIndice());
-    parser->persistirOraciones(this->obtenerNombreIndice());
+    parser->persistirLexico(this->obtenerPathDiccionarioLexico());
+    parser->persistirOraciones(this->obtenerPathDiccionarioOraciones());
 
     //aca  deberian de ir los destructoures de los trie,
 
@@ -107,14 +105,20 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
     delete archivos;
 
     std::cout<<"FIN"<<std::endl;
-
+*/
 	return true;
 
 }
 
-std::string Indexador::obtenerNombreIndice(){
+std::string Indexador::obtenerPathDiccionarioLexico(){
 
-	return nombreIndice;
+	return pathDiccionarioTerminos;
+
+}
+
+std::string Indexador::obtenerPathDiccionarioOraciones(){
+
+	return pathDiccionarioOraciones;
 
 }
 
@@ -127,34 +131,37 @@ unsigned int Indexador::obtenerCanTopicos(){
 
 void Indexador::generarPaths(){
 
-		pathMatrizTermXDoc("matricesTermDoc/termXDoc__");
+		pathMatrizTermXDoc="matricesTermDoc/termXDoc__";
 		pathMatrizTermXDoc += nombreIndice;
 
-		pathMatrizOracionesXDoc("matricesTermDoc/oracionesXDoc_");
+		pathMatrizOracionesXDoc="matricesTermDoc/oracionesXDoc_";
 		pathMatrizOracionesXDoc += nombreIndice;
 
-		pathMatrizTermXDocPrePonderada("matricesPrePonderadas/termXDoc_PrePonderada_");
+		pathMatrizTermXDocPrePonderada="matricesPrePonderadas/termXDoc_PrePonderada_";
 		pathMatrizTermXDocPrePonderada += nombreIndice;
 
-		pathMatrizOracionesXDocPrePonderada("matricesPrePonderadas/oracionesXDoc_PrePonderada_");
+		pathMatrizOracionesXDocPrePonderada="matricesPrePonderadas/oracionesXDoc_PrePonderada_";
 		pathMatrizOracionesXDocPrePonderada += nombreIndice;
 
-		pathMatrizTermXDocPonderada("matricesPonderadas/termXDoc_Ponderada_");
+		pathMatrizTermXDocPonderada="matricesPonderadas/termXDoc_Ponderada_";
 		pathMatrizTermXDocPonderada += nombreIndice;
 
-		pathMatrizOracionesXDocPonderada("matricesPonderadas/oracionesXDoc_Ponderada_");
+		pathMatrizOracionesXDocPonderada="matricesPonderadas/oracionesXDoc_Ponderada_";
 		pathMatrizOracionesXDocPonderada += nombreIndice;
 
-		pathSVDTerminos("indices/indiceSVDTerminos_");
+		pathSVDTerminos="indices/indiceSVDTerminos_";
 		pathSVDTerminos += nombreIndice;
 
-		pathSVDOraciones("indices/indiceSVDOraciones_");
+		pathSVDOraciones="indices/indiceSVDOraciones_";
 		pathSVDOraciones += nombreIndice;
 
-		pathDiccionarioTerminos("diccionarios/diccionarioTerminos");
+		pathDiccionarioTerminos="diccionarios/diccionarioTerminos";
 		pathDiccionarioTerminos += nombreIndice;
 
-		pathDiccionarioOraciones("diccionarios/diccionarioOraciones");
+		pathDiccionarioOraciones="diccionarios/diccionarioOraciones";
 		pathDiccionarioOraciones+= nombreIndice;
 
+		/*std::cout<<pathMatrizTermXDoc<<std::endl;
+		std::cout<<pathMatrizOracionesXDoc<<std::endl;
+		 */
 }

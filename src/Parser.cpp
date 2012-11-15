@@ -79,17 +79,16 @@ Trie* Parser::obtenerContenedorOraciones() {
 	return contenedorOraciones;
 }
 
-void Parser::persistirLexico(std::string nombreIndice) {
+void Parser::persistirLexico(std::string path) {
 
     std::ofstream lexico;
     std::ofstream offsetLexico;
 
-    std::string carpetaDiccionario("diccionarios/diccionarioTerminos");
+    std::string pathOffsetLexico = path;
+    pathOffsetLexico += "_offset";
 
-    carpetaDiccionario += nombreIndice;
-
-    lexico.open(carpetaDiccionario.c_str());
-    offsetLexico.open(carpetaDiccionario.c_str());
+    lexico.open(path.c_str());
+    offsetLexico.open(pathOffsetLexico.c_str());
 
     contenedorLexico->persistirPalabras_INI(&lexico, &offsetLexico);
 
@@ -97,16 +96,16 @@ void Parser::persistirLexico(std::string nombreIndice) {
     offsetLexico.close();
 }
 
-void Parser::persistirOraciones(std::string nombreIndice) {
+void Parser::persistirOraciones(std::string path) {
 
     std::ofstream oraciones;
     std::ofstream offsetOraciones;
 
-    std::string carpetaDiccionario("diccionarios/diccionarioOraciones");
-    carpetaDiccionario += nombreIndice;
+    std::string pathOffsetOracion = path;
+    pathOffsetOracion += "_offset";
 
-    oraciones.open(carpetaDiccionario.c_str());
-    offsetOraciones.open(carpetaDiccionario.c_str());
+    oraciones.open(path.c_str());
+    offsetOraciones.open(pathOffsetOracion.c_str());
 
     contenedorOraciones->persistirPalabras_INI(&oraciones, &offsetOraciones);
 

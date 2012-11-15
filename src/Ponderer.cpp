@@ -95,6 +95,9 @@ std::string Ponderer::ponderarLocarPorGlobal(){
     //abriendo matriz de ponderacion locales
 	matrizFreqLoc->abrir();
 
+	Persister PonderadaMatriz();
+
+
 	//recorro toda la matriz
 	while(!matrizFreqLoc->hayData()){
 		std::list<TregistroArchivo*>* dataCol = matrizFreqLoc->obtenerColumnaMatriz();
@@ -107,7 +110,7 @@ std::string Ponderer::ponderarLocarPorGlobal(){
 
 			double entropia = this->contenedorParcialEntropia->at(aux->fil - 1)->acumEntropia;
 			double pesoLocal = log10(aux->freq + 1);
-			double localPorGlobal = (entropia*pesoLocal);
+			double localPorGlobal = (pesoLocal*entropia);
 
 			//persistiendo
 			matrizPonderada<<aux->col<<" "<<aux->fil<<" "<<localPorGlobal<<std::endl;

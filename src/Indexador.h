@@ -28,7 +28,9 @@ class Indexador {
 
 		bool crearIndice(std::string nombreRepositorio, int cantTopicos, std::string directorio);
 
-		std::string obtenerNombreIndice();
+		std::string obtenerPathDiccionarioLexico();
+		std::string obtenerPathDiccionarioOraciones();
+
 		unsigned int obtenerCanTopicos();
 
 
