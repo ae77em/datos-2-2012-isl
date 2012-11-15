@@ -115,7 +115,6 @@ void Persister::vaciar(std::list<TregistroArchivo*>* l){
 
 void Persister::vaciar(){
 
-    //por algun motivo cuando libero lo que pedi altera los resultados, queda provisorio l->clear()
     while(!contenedor->empty()){
         TregistroArchivo* aux = contenedor->back();
         delete aux;
@@ -126,9 +125,7 @@ void Persister::vaciar(){
 
 
 void Persister::irAlComienzo(){
-
     archivo.seekp(std::ios_base::beg);
-
 }
 
 std::vector<std::vector<double>*>* generadorContenedorMatriz(int cantCol){
