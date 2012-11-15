@@ -34,6 +34,21 @@ class Indexador {
 
 	private:
 		void calcularLSI(int,std::string);
+		void generarPaths();
+
+		std::string pathMatrizTermXDoc;
+		std::string pathMatrizOracionesXDoc;
+
+		std::string pathMatrizTermXDocPrePonderada;
+		std::string pathMatrizOracionesXDocPrePonderada;
+
+		std::string pathMatrizTermXDocPonderada;
+		std::string pathMatrizOracionesXDocPonderada;
+
+		std::string pathSVDTerminos;
+		std::string pathSVDOraciones;
+
+
 };
 
 #endif
