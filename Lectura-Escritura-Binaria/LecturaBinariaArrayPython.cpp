@@ -13,14 +13,10 @@ int main(int argc, char* argv[]) {
 	archivoBinarioPython.read(reinterpret_cast<char*>(&cantFilas), sizeof(int));
 	archivoBinarioPython.read(reinterpret_cast<char*>(&cantColumnas), sizeof(int));
 
-	std::cout << cantFilas << std::endl;
-	std::cout << cantColumnas << std::endl;
-
 	// Leo la matriz
 	archivoBinarioPython.read(reinterpret_cast<char*>(&valor), sizeof(double));
 
 	while (archivoBinarioPython.good()) {
-		std::cout << valor << std::endl;
 		archivoBinarioPython.read(reinterpret_cast<char*>(&valor), sizeof(double));
 	}
 
