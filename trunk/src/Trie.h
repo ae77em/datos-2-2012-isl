@@ -90,8 +90,13 @@ class Trie {
 		void exportarDatosParaEntropia(std::vector<TacumEntropia*>*,TnodoTrie*);
 		void vaciarContenedorParcial(); //no se hacen delete, solo se limpia el contenedor
 		void inicializarFrecuenciasLocales();
-
         void vaciarContenedores();
+
+        //////NUEVOS al 14/11 eliminacion de palabras en el trie
+        void eliminarPalabra_INI(std::string);
+        void eliminarPalabra(std::string,TnodoTrie);
+
+        void actualizarIdsLuegoDeFiltradoDeTerminos();
 
 };
 #endif
