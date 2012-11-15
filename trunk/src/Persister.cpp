@@ -7,11 +7,7 @@
 
 Persister::Persister(std::string path){
 
-	std::string iniPath("matricesParciales/");
-
-	iniPath += path;
-
-	this->path = iniPath;
+	this->path = path;
 
     archivo.open(this->path.c_str(),std::fstream::out);
     contenedor = new std::list<TregistroArchivo*>;
@@ -105,11 +101,11 @@ bool Persister::hayData(){
 void Persister::vaciar(std::list<TregistroArchivo*>* l){
 
     //por algun motivo cuando libero lo que pedi altera los resultados, queda provisorio l->clear()
-    /*while(l->empty()){
+    while(l->empty()){
         TregistroArchivo* aux = l->back();
         delete aux;
         l->pop_back();
-    }*/
+    }
     l->clear();
 }
 
