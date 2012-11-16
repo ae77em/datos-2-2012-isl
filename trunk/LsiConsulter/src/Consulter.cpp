@@ -1,15 +1,7 @@
-/*
- * Consulter.cpp
- *
- *  Created on: 16/11/2012
- *      Author: federico
- */
-
 #include "Consulter.h"
 
 Consulter::Consulter() {
-	// TODO Auto-generated constructor stub
-
+	this->parserQuery = new ParserQuery("diccionario.txt","offsetDiccionario.txt");
 }
 
 Consulter::~Consulter() {

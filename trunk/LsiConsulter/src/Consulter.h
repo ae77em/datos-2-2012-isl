@@ -21,7 +21,6 @@ public:
 	void analizarConsulta(std::string);
 
 private:
-
 	ParserQuery* parserQuery;
 };
 
