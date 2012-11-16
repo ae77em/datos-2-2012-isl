@@ -7,6 +7,8 @@ import sys, numpy
 #sys.argv[1] -> contiene el path a la matriz
 #sys.argv[2] -> contiene la cantidad de topicos (autovalores a calcular)
 #sys.argv[3] -> contiene la cantidad de columnas a levantar por vez
+#sys.argv[4] -> contiene el path donde grabar la SVD
+
 
 try:
 	corpus = corpora.MmCorpus(sys.argv[1]) 
@@ -17,7 +19,7 @@ try:
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
 		# lo imprimo con 4 decimales
 		
-		file = open("ArchConfig/V.bin", "wb")
+		file = open(sys.argv[4]+"_V.bin", "wb")
 		file.write(pack('ii', V.shape[0], V.shape[1]))
 		file.write(V)
 		file.close()
@@ -31,7 +33,8 @@ try:
 		S =  lsi.projection.s
 		# lo imprimo con 4 decimales
 		
-		file = open("ArchConfig/S.bin", "wb")
+#		file = open("ArchConfig/S.bin", "wb")
+		file = open(sys.argv[4]+"_S.bin", "wb")
 		file.write(pack('i', S.shape[0]))
 		file.write(S)
 		file.close()
@@ -44,7 +47,7 @@ try:
 		# Calculo y los autovalores
 		U =  lsi.projection.u
 		
-		file = open("ArchConfig/U.bin", "wb")
+		file = open(sys.argv[4]+"_U.bin", "wb")
 		file.write(pack('ii', U.shape[0], U.shape[1]))
 		file.write(U)
 		file.close()

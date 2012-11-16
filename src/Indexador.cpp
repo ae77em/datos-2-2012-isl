@@ -69,18 +69,13 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 	persistidor->cerrar();
 	persistidorOraciones->cerrar();
 
-    std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
-
-    parser->persistirLexico(this->obtenerPathDiccionarioLexico());
-    parser->persistirOraciones(this->obtenerPathDiccionarioOraciones());
-
 	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
 
 	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, this->pathMatrizTermXDocPonderada);
 
-/*	std::cout<<"COMIENZA PONDERACION MATRIZ POR ORACIONES"<<std::endl;
+//	std::cout<<"COMIENZA PONDERACION MATRIZ POR ORACIONES"<<std::endl;
 
-	ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones, persistidorOraciones->obtenerPath());
+	//ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones,this->pathMatrizOracionesXDocPonderada);
 
 	std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
@@ -90,25 +85,23 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
     //aca  deberian de ir los destructoures de los trie,
 
     std::cout<<"CALCULANDO SVD TERMINOS"<<std::endl;
-    calculador->calcularLSI(this->obtenerCanTopicos(),pathMatrizTerminos);
+    calculador->calcularLSI(this->obtenerCanTopicos(),this->pathMatrizTermXDocPonderada,this->pathSVDTerminos);
     //persistidor->parserLSI(this->obtenerCantTopicos());
 
     // TODO para las oraciones, no se como se hace
-    std::cout<<"CALCULANDO SVD ORACIONES"<<std::endl;
+    //std::cout<<"CALCULANDO SVD ORACIONES"<<std::endl;
 
-    calculador->calcularLSI(cantTopicos,pathMatrizOraciones);
+    //calculador->calcularLSI(cantTopicos,this->pathMatrizOracionesXDocPonderada);
 
     //persistidor->parserLSI(cantTopicos);
 
     persistidor->cerrar();
     persistidorOraciones->cerrar();
 
-
-
     delete archivos;
 
     std::cout<<"FIN"<<std::endl;
-*/
+
 	return true;
 
 }
@@ -143,28 +136,22 @@ void Indexador::generarPaths(){
 
 		pathCarpetaRepo =  nombreIndice;
 
-		pathMatrizTermXDoc= pathCarpetaRepo + "/termXDoc__";
+		pathMatrizTermXDoc= pathCarpetaRepo + "/MatriztermXDoc__";
 		pathMatrizTermXDoc += nombreIndice;
 
-		pathMatrizOracionesXDoc=pathCarpetaRepo + "/oracionesXDoc_";
+		pathMatrizOracionesXDoc=pathCarpetaRepo + "/MatrizoracionesXDoc_";
 		pathMatrizOracionesXDoc += nombreIndice;
 
-		pathMatrizTermXDocPrePonderada=pathCarpetaRepo + "/termXDoc_PrePonderada_";
-		pathMatrizTermXDocPrePonderada += nombreIndice;
-
-		pathMatrizOracionesXDocPrePonderada=pathCarpetaRepo + "/oracionesXDoc_PrePonderada_";
-		pathMatrizOracionesXDocPrePonderada += nombreIndice;
-
-		pathMatrizTermXDocPonderada=pathCarpetaRepo + "/termXDoc_Ponderada_";
+		pathMatrizTermXDocPonderada=pathCarpetaRepo + "/MatriztermXDoc_Ponderada_";
 		pathMatrizTermXDocPonderada += nombreIndice;
 
-		pathMatrizOracionesXDocPonderada=pathCarpetaRepo + "/oracionesXDoc_Ponderada_";
+		pathMatrizOracionesXDocPonderada=pathCarpetaRepo + "/MatrizoracionesXDoc_Ponderada_";
 		pathMatrizOracionesXDocPonderada += nombreIndice;
 
-		pathSVDTerminos=pathCarpetaRepo + "/indiceSVDTerminos_";
+		pathSVDTerminos=pathCarpetaRepo + "/SVDTerminos_";
 		pathSVDTerminos += nombreIndice;
 
-		pathSVDOraciones=pathCarpetaRepo + "/indiceSVDOraciones_";
+		pathSVDOraciones=pathCarpetaRepo + "/SVDOraciones_";
 		pathSVDOraciones += nombreIndice;
 
 		pathDiccionarioTerminos=pathCarpetaRepo + "/diccionarioTerminos";

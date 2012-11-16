@@ -11,7 +11,7 @@
 class CalculadorLSI {
 public:
 	CalculadorLSI();
-	void calcularLSI(int, std::string path);
+	void calcularLSI(int, std::string path, std::string);
 	virtual ~CalculadorLSI();
 };
 
