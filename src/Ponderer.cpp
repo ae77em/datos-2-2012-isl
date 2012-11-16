@@ -11,7 +11,7 @@ Ponderer::Ponderer() {
 	this->matrizFreqLoc=NULL;
 	this->trie=NULL;
 	this->matrizPonderada=NULL;
-	this->nombreMatrizFinal="";
+	this->pathMatrizPonderada="";
 
 }
 
@@ -20,15 +20,13 @@ Ponderer::~Ponderer() {
 }
 
 
-std::string Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string pathMatrizPrePonderada,std::string pathMatrizPonderada){
+void Ponderer::ponderar(Trie* unTrie,Persister* unP,std::string pathMatrizPonderada){
 
 	trie = unTrie;
 	matrizFreqLoc = unP;
 
-	//parseo nombre indice
-//	this->nombreMatrizFinal = nombreIndice.substr(nombreIndice.find_last_of(47));
-
-	matrizFreqLoc->abrir();
+	//guardo path de la matriz donde se va a escribir ponderada con la entropia
+	this->pathMatrizPonderada = pathMatrizPonderada;
 
     this->calcularEntropia();
     return this->ponderarLocarPorGlobal(); //tambien persiste, despues hay que cambiarlo
@@ -38,13 +36,15 @@ std::string Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string pathMatr
 
 void Ponderer::calcularEntropia(){
 
+	this->matrizFreqLoc->abrir(); //abre la matriz en modo lextura
+
 	this->contenedorParcialEntropia = trie->exportarDatosParaEntropia_INI();
 
 	this->cantidadDocumentosEnLaColeccion = trie->obtenerCantidadDeDocumentosParseados();
 
 	for(register unsigned int i=0; i<this->cantidadDocumentosEnLaColeccion; i++){
 
-		std::list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arrance desde 1
+		std::list<TregistroArchivo*>* columna = matrizFreqLoc->obtenerColumnaMatriz();//el formato de la matriz arranca desde 1
 
 		std::list<TregistroArchivo*>::iterator b = columna->begin();
 		std::list<TregistroArchivo*>::iterator e = columna->end();
@@ -78,25 +78,17 @@ void Ponderer::dividirTodoPorLog(){
 	}
 }
 
-std::string Ponderer::ponderarLocarPorGlobal(){
+void Ponderer::ponderarLocarPorGlobal(){
 
 	std::cout<<"PERSISTIENDO MATRIZ CON LA ENTROPIA CALCULADA"<<std::endl;
 
-	std::ofstream matrizPonderada;
-
-	std::string nombreMatrizFinal("indices/");
-	nombreMatrizFinal += this->nombreMatrizFinal;
-
-	matrizPonderada.open(nombreMatrizFinal.c_str());
-	//inicializo cabecera de matriz MM
-	matrizPonderada<<"%%MatrixMarket matrix coordinate real general"<<std::endl;
-	matrizPonderada<<trie->obtenerCantidadDeDocumentosParseados()<<" "<<trie->obtenerContadorId()<<" "<<trie->obtenerCantidadDePalabrasIngresadas()<<std::endl;
-
-    //abriendo matriz de ponderacion locales
+	//abriendo matriz de ponderacion locales
 	matrizFreqLoc->abrir();
 
-	Persister PonderadaMatriz();
+	matrizPonderada = new Persister(pathMatrizPonderada);
+	matrizPonderada->escribirEncabezado(trie->obtenerCantidadDeDocumentosParseados(),trie->obtenerContadorId(),trie->obtenerCantidadDePalabrasIngresadas());
 
+	std::list<TregistroArchivoF*>* registrosPonderados = new std::list<TregistroArchivoF*>;
 
 	//recorro toda la matriz
 	while(!matrizFreqLoc->hayData()){
@@ -107,28 +99,37 @@ std::string Ponderer::ponderarLocarPorGlobal(){
 		//recorriendo columnas de la matriz
 		while(b!=e){
 			TregistroArchivo* aux = *b;
+			TregistroArchivoF* auxF = new TregistroArchivoF;
 
 			double entropia = this->contenedorParcialEntropia->at(aux->fil - 1)->acumEntropia;
 			double pesoLocal = log10(aux->freq + 1);
 			double localPorGlobal = (pesoLocal*entropia);
 
-			//persistiendo
-			matrizPonderada<<aux->col<<" "<<aux->fil<<" "<<localPorGlobal<<std::endl;
+			auxF->col = aux->col;
+			auxF->fil = aux->fil;
+			auxF->peso = localPorGlobal; //este seria el registro ya ponderado con la entropia
 
+			registrosPonderados->push_back(auxF);
 			b++;
 		}
-		matrizFreqLoc->vaciar(dataCol);
+		matrizPonderada->persistirDatos(registrosPonderados);
+		matrizFreqLoc->vaciar(); //vacio los registros de la columna leida
+
+		//preparo la lista para poder ponderar una nueva columna
+		while(registrosPonderados->empty()){
+		        TregistroArchivoF* aux = registrosPonderados->back();
+		        delete aux;
+		        registrosPonderados->pop_back();
+		}
+		registrosPonderados->clear();
 	}
 
-	matrizPonderada.close();
 	matrizFreqLoc->cerrar();
-
-	std::string path = this->nombreMatrizFinal;
+	matrizPonderada->cerrar();
 
 	//lo dejo listo para calcular la data de la matriz por oraciones
 	inicializarPonderer();
 
-	return path;
 }
 
 
@@ -140,6 +141,7 @@ void Ponderer::inicializarPonderer(){
 	cantidadDocumentosEnLaColeccion = 0;
 	this->matrizFreqLoc=NULL;
 	this->trie=NULL;
+	delete this->matrizPonderada;
 	this->matrizPonderada=NULL;
-	this->nombreMatrizFinal="";
+	this->pathMatrizPonderada="";
 }

@@ -66,18 +66,21 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 		}
 	}
 
+	persistidor->cerrar();
+	persistidorOraciones->cerrar();
+
     std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
     parser->persistirLexico(this->obtenerPathDiccionarioLexico());
     parser->persistirOraciones(this->obtenerPathDiccionarioOraciones());
 
-/*	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
+	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
 
-	std::string pathMatrizTerminos = ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, persistidor->obtenerPath());
+	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, this->pathMatrizTermXDocPonderada);
 
-	std::cout<<"COMIENZA PONDERACION MATRIZ POR ORACIONES"<<std::endl;
+/*	std::cout<<"COMIENZA PONDERACION MATRIZ POR ORACIONES"<<std::endl;
 
-	std::string pathMatrizOraciones = ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones, persistidorOraciones->obtenerPath());
+	ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones, persistidorOraciones->obtenerPath());
 
 	std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
@@ -131,7 +134,6 @@ unsigned int Indexador::obtenerCanTopicos(){
 
 void Indexador::crearCarpetaRepo(){
 
-
 	if(mkdir(this->pathCarpetaRepo.c_str(), S_IRWXG| S_IRWXO| S_IRWXU)!=0){ //devuelve cero si se pudo crear el dire
 		std::cout<<"no se pudo crear carpeta de repo"<<std::endl;
 	}
@@ -139,7 +141,7 @@ void Indexador::crearCarpetaRepo(){
 
 void Indexador::generarPaths(){
 
-		pathCarpetaRepo = nombreIndice;
+		pathCarpetaRepo =  nombreIndice;
 
 		pathMatrizTermXDoc= pathCarpetaRepo + "/termXDoc__";
 		pathMatrizTermXDoc += nombreIndice;

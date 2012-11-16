@@ -11,21 +11,22 @@ class Ponderer {
 public:
 	Ponderer();
 	virtual ~Ponderer();
-	std::string ponderar(Trie*,Persister*,std::string,std::string);
+	void ponderar(Trie*,Persister*,std::string);
 
 private:
 	void dividirTodoPorLog();
 	void calcularEntropia();
-	std::string ponderarLocarPorGlobal();
+	void ponderarLocarPorGlobal();
 	void inicializarPonderer();
 
-	std::vector<TacumEntropia*>* contenedorParcialEntropia;
-	unsigned int cantidadDocumentosEnLaColeccion;
-	Persister* matrizFreqLoc;
-	Persister* matrizPonderada;
+	Persister* matrizFreqLoc; //puntero a matriz sobre la cual se calcula la entropia para luego ponderar
+	Persister* matrizPonderada; // matriz con la entropia aplicada
 	Trie* trie;
 
-	std::string nombreMatrizFinal;
+	std::string pathMatrizPonderada;
+	std::vector<TacumEntropia*>* contenedorParcialEntropia;
+	unsigned int cantidadDocumentosEnLaColeccion;
+
 };
 
 #endif /* PONDERER_H_ */
