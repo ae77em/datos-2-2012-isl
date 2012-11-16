@@ -11,7 +11,7 @@ class Ponderer {
 public:
 	Ponderer();
 	virtual ~Ponderer();
-	std::string ponderar(Trie*,Persister*,std::string);
+	std::string ponderar(Trie*,Persister*,std::string,std::string);
 
 private:
 	void dividirTodoPorLog();

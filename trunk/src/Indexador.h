@@ -33,10 +33,12 @@ class Indexador {
 
 		unsigned int obtenerCanTopicos();
 
-
 	private:
 		void calcularLSI(int,std::string);
 		void generarPaths();
+		void crearCarpetaRepo();
+
+		std::string pathCarpetaRepo;
 
 		std::string pathMatrizTermXDoc;
 		std::string pathMatrizOracionesXDoc;
