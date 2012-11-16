@@ -9,7 +9,7 @@ Persister::Persister(std::string path){
 
 	this->path = path;
 
-    archivo.open(this->path.c_str(),std::fstream::out | std::fstream::in);
+    archivo.open(this->path.c_str(),std::fstream::out);
     contenedor = new std::list<TregistroArchivo*>;
     regAux=NULL;
 
@@ -71,7 +71,6 @@ std::list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 	        }
 		}
 		return this->contenedor;
-
 }
 
 
@@ -119,123 +118,6 @@ void Persister::vaciar(){
     contenedor->clear();
 }
 
-
-void Persister::irAlComienzoL(){
-    archivo.seekg(std::ios_base::beg);
-}
-
-std::vector<std::vector<double>*>* generadorContenedorMatriz(int cantCol){
-
-    std::vector<std::vector<double>*>* matriz = new std::vector<std::vector<double>*>;
-
-    for(int i=0;i<cantCol;i++){
-        matriz->push_back(new std::vector<double>);
-    }
-
-    return matriz;
-}
-
-void Persister::parserLSI(int topicos){
-
-    int cantCol=topicos;
-
-    std::vector<std::vector<double>*>* bufferMatriz = generadorContenedorMatriz(cantCol);
-
-    std::ifstream matriz;
-    matriz.open("fichero.log");
-
-    char letra;
-    int col=0;
-    std:: string nro="";
-
-    double valor=0;
-
-    while(!matriz.eof()){
-
-        letra = matriz.get(); //si es un nro o un punto
-
-        if((letra <= 57 && letra >= 48) || (letra == 46) || (letra==45)){
-            while( (letra <= 57 && letra >= 48) || (letra == 46) || (letra==45)){
-                nro += letra;
-                letra = matriz.get(); //si es un nro o un punto
-            }
-            valor = atof(nro.c_str());
-            bufferMatriz->at(col)->push_back(valor);
-
-            col++;
-            if(col == cantCol){
-                col=0;
-            }
-            nro="";
-        }
-    }
-
-    /*cout<<"PROBANDO VALORES: "<<endl;
-    for(int i=0;i<bufferMatriz->size();i++){
-        for(int j=0; j<cantCol;j++){
-            cout<<"D"<<j<<": "<<bufferMatriz->at(i)->at(j)<<" ";
-        }
-        cout<<endl;
-    }*/
-
-    //bajando valores a matriz formato binario
-
-    //registro que contendra los datos de cada fila que se bajara a disco
-    double* registro = new double[cantCol];
-
-      std::ofstream matrizSinComasNiCorchetesB;
-      matrizSinComasNiCorchetesB.open("matrizFinalB.bin",std::fstream::binary);
-
-      for(int unsigned i=0;i<bufferMatriz->size();i++){
-          for(int j=0; j<cantCol;j++){
-              registro[j]=bufferMatriz->at(i)->at(j);
-          }
-          matrizSinComasNiCorchetesB.write((char*)registro,sizeof(double)*cantCol);
-      }
-
-      matrizSinComasNiCorchetesB.close();
-
-     /* std::ifstream matrizSinComasNiCorchetesBin;
-      matrizSinComasNiCorchetesBin.open("matrizFinalB.bin",std::fstream::binary);
-
-      for(int unsigned i=0;i<bufferMatriz->size();i++){
-           matrizSinComasNiCorchetesBin.read((char*)registro,sizeof(double)*cantCol);
-           for(int j=0; j<cantCol;j++){
-        	   std::cout<<registro[j]<<" ";
-           }
-           std::cout<<std::endl;
-      }
-
-      matrizSinComasNiCorchetesBin.close();*/
-
-
-
-    std::ofstream matrizSinComasNiCorchetes;
-    matrizSinComasNiCorchetes.open("matrizFinal.txt");
-
-    for(int unsigned i=0;i<bufferMatriz->size();i++){
-        for(int j=0; j<cantCol;j++){
-            matrizSinComasNiCorchetes<<bufferMatriz->at(i)->at(j)<<" ";
-        }
-        matrizSinComasNiCorchetes<<std::endl;
-    }
-
-    matriz.close();
-    matrizSinComasNiCorchetes.close();
-
-    delete [] registro;
-
-}
-std::vector<std::vector<double>*>* Persister::generadorContenedorMatriz(int cantCol){
-
-    std::vector<std::vector<double>*>* matriz = new std::vector<std::vector<double>*>;
-
-    for(int i=0;i<cantCol;i++){
-        matriz->push_back(new std::vector<double>);
-    }
-
-    return matriz;
-}
 
 std::string Persister::obtenerPath(){
 
