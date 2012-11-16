@@ -1,11 +1,4 @@
-/*
- * CalculadorLSI.cpp
- *
- *  Created on: 01/11/2012
- *      Author: esteban
- */
-
-#define CANT_COLUMNAS_A_LEVANTAR 10
+#define CANT_COLUMNAS_A_LEVANTAR 5000
 
 #include <cstdlib>
 #include <cstdio>
@@ -14,15 +7,12 @@
 #include "CalculadorLSI.h"
 
 CalculadorLSI::CalculadorLSI() {
-	// TODO Auto-generated constructor stub
 
 }
 
 void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz, std::string pathSVD){
-
-	char strTop[5];
-	char strCol[1000];
-	//std::string comandoScript= "./CalcularLSI.py matrizPonderada.mm ";
+	char strTop[4];
+	char strCol[4];
 
 	//le agrego el path a la matriz
 	std::string comandoScript= "./CalcularLSI.py ";
@@ -45,6 +35,6 @@ void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz, std::st
 }
 
 CalculadorLSI::~CalculadorLSI() {
-	// TODO Auto-generated destructor stub
+	
 }
 

@@ -21,7 +21,6 @@ int main (int argc, char *argv[]) {
 	nombreRepositorio = argv[1];
 	cantTopicos = atoi(argv[2]);
 	ruta = argv[3];
-
 	
 	// Creo el indice
 	indexador = new Indexador(nombreRepositorio,cantTopicos);

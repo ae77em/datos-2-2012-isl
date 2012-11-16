@@ -5,7 +5,6 @@
 #include <iostream>
 
 Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
-
 	this->nombreIndice = nombreIndice;
 	this->cantTopicos = cantTopicos;
 
@@ -20,7 +19,6 @@ Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
 
 	ponderador = new Ponderer();
 	calculador = new CalculadorLSI();
-
 }
 
 Indexador::~Indexador() {
@@ -30,7 +28,6 @@ Indexador::~Indexador() {
 	delete ponderador;
 	delete calculador;
 }
-
 
 /**
  * Realiza los procesos necesarios para la creacion del indice
@@ -49,38 +46,34 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 			std::cerr << "El archivo " << nombreArchivo << " no pudo ser parseado" << std::endl;
 		}else{
 			parser->obtenerContenedorLexico()->aumentarCantidadDeDocParseados();
-			parser->obtenerContenedorOraciones()->aumentarCantidadDeDocParseados();
+			//parser->obtenerContenedorOraciones()->aumentarCantidadDeDocParseados();
 
 			// vuelco los datos obtenidos del documento parseado a disco
 			persistidor->persistirDatos(parser->obtenerContenedorLexico()->buscarPalabrasDelDocParseado_INI(), parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados());
-			persistidorOraciones->persistirDatos(parser->obtenerContenedorOraciones()->buscarPalabrasDelDocParseado_INI(), parser->obtenerContenedorOraciones()->obtenerCantidadDeDocumentosParseados());
-
-			std::cout<<"SE PARSEO DOC: "<<parser->obtenerContenedorOraciones()->obtenerCantidadDeDocumentosParseados()<<std::endl;
+			//persistidorOraciones->persistirDatos(parser->obtenerContenedorOraciones()->buscarPalabrasDelDocParseado_INI(), parser->obtenerContenedorOraciones()->obtenerCantidadDeDocumentosParseados());
 
 			//preparo el trie para una nueva parseada
 			parser->obtenerContenedorLexico()->inicializarFrecuenciasLocales();
 			parser->obtenerContenedorLexico()->vaciarContenedorParcial();
 
-			parser->obtenerContenedorOraciones()->inicializarFrecuenciasLocales();
-			parser->obtenerContenedorOraciones()->vaciarContenedorParcial();
+			//parser->obtenerContenedorOraciones()->inicializarFrecuenciasLocales();
+			//parser->obtenerContenedorOraciones()->vaciarContenedorParcial();
 		}
 	}
 
 	persistidor->cerrar();
-	persistidorOraciones->cerrar();
+	//persistidorOraciones->cerrar();
 
 	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
 
 	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, this->pathMatrizTermXDocPonderada);
-
-//	std::cout<<"COMIENZA PONDERACION MATRIZ POR ORACIONES"<<std::endl;
 
 	//ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones,this->pathMatrizOracionesXDocPonderada);
 
 	std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
     parser->persistirLexico(this->obtenerPathDiccionarioLexico());
-    parser->persistirOraciones(this->obtenerPathDiccionarioOraciones());
+    //parser->persistirOraciones(this->obtenerPathDiccionarioOraciones());
 
     //aca  deberian de ir los destructoures de los trie,
 
@@ -96,7 +89,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
     //persistidor->parserLSI(cantTopicos);
 
     persistidor->cerrar();
-    persistidorOraciones->cerrar();
+//  persistidorOraciones->cerrar();
 
     delete archivos;
 
@@ -106,34 +99,25 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 }
 
-std::string Indexador::obtenerPathDiccionarioLexico(){
-
+std::string Indexador::obtenerPathDiccionarioLexico() {
 	return pathDiccionarioTerminos;
-
 }
 
-std::string Indexador::obtenerPathDiccionarioOraciones(){
-
+std::string Indexador::obtenerPathDiccionarioOraciones() {
 	return pathDiccionarioOraciones;
-
 }
 
-
-unsigned int Indexador::obtenerCanTopicos(){
-
+unsigned int Indexador::obtenerCanTopicos() {
 	return cantTopicos;
-
 }
 
 void Indexador::crearCarpetaRepo(){
-
 	if(mkdir(this->pathCarpetaRepo.c_str(), S_IRWXG| S_IRWXO| S_IRWXU)!=0){ //devuelve cero si se pudo crear el dire
 		std::cout<<"no se pudo crear carpeta de repo"<<std::endl;
 	}
 }
 
 void Indexador::generarPaths(){
-
 		pathCarpetaRepo =  nombreIndice;
 
 		pathMatrizTermXDoc= pathCarpetaRepo + "/MatriztermXDoc__";
@@ -159,8 +143,4 @@ void Indexador::generarPaths(){
 
 		pathDiccionarioOraciones=pathCarpetaRepo + "/diccionarioOraciones";
 		pathDiccionarioOraciones+= nombreIndice;
-
-		/*std::cout<<pathMatrizTermXDoc<<std::endl;
-		std::cout<<pathMatrizOracionesXDoc<<std::endl;
-		 */
 }
