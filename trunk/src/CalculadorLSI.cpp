@@ -18,17 +18,14 @@ CalculadorLSI::CalculadorLSI() {
 
 }
 
-void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz){
+void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz, std::string pathSVD){
 
 	char strTop[5];
-	char strCol[10];
+	char strCol[1000];
 	//std::string comandoScript= "./CalcularLSI.py matrizPonderada.mm ";
 
 	//le agrego el path a la matriz
 	std::string comandoScript= "./CalcularLSI.py ";
-
-	std::string pathMatrizAux = "indices";
-	pathMatriz  =pathMatrizAux + pathMatriz;
 
 	comandoScript += pathMatriz;
 	comandoScript += " ";
@@ -39,6 +36,8 @@ void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz){
 	comandoScript += strTop;
 	comandoScript += " ";
 	comandoScript += strCol;
+	comandoScript += " ";
+	comandoScript += pathSVD;
 
 	std::cout << "INICIO CALCULO ISL" << std::endl;
 	system(comandoScript.c_str());
