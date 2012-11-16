@@ -9,7 +9,7 @@ Persister::Persister(std::string path){
 
 	this->path = path;
 
-    archivo.open(this->path.c_str(),std::fstream::out);
+    archivo.open(this->path.c_str(),std::fstream::out | std::fstream::in);
     contenedor = new std::list<TregistroArchivo*>;
     regAux=NULL;
 
@@ -120,8 +120,8 @@ void Persister::vaciar(){
 }
 
 
-void Persister::irAlComienzo(){
-    archivo.seekp(std::ios_base::beg);
+void Persister::irAlComienzoL(){
+    archivo.seekg(std::ios_base::beg);
 }
 
 std::vector<std::vector<double>*>* generadorContenedorMatriz(int cantCol){

@@ -1,4 +1,6 @@
 #include "Indexador.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include <iostream>
 
@@ -8,6 +10,7 @@ Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
 	this->cantTopicos = cantTopicos;
 
 	this->generarPaths();
+	this->crearCarpetaRepo();
 
 	listador = new ListadorDeArchivos();
 	parser = new Parser();
@@ -62,9 +65,6 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 			parser->obtenerContenedorOraciones()->vaciarContenedorParcial();
 		}
 	}
-
-	persistidor->cerrar();
-    persistidorOraciones->cerrar();
 
     std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
@@ -129,36 +129,46 @@ unsigned int Indexador::obtenerCanTopicos(){
 
 }
 
+void Indexador::crearCarpetaRepo(){
+
+
+	if(mkdir(this->pathCarpetaRepo.c_str(), S_IRWXG| S_IRWXO| S_IRWXU)!=0){ //devuelve cero si se pudo crear el dire
+		std::cout<<"no se pudo crear carpeta de repo"<<std::endl;
+	}
+}
+
 void Indexador::generarPaths(){
 
-		pathMatrizTermXDoc="matricesTermDoc/termXDoc__";
+		pathCarpetaRepo = nombreIndice;
+
+		pathMatrizTermXDoc= pathCarpetaRepo + "/termXDoc__";
 		pathMatrizTermXDoc += nombreIndice;
 
-		pathMatrizOracionesXDoc="matricesTermDoc/oracionesXDoc_";
+		pathMatrizOracionesXDoc=pathCarpetaRepo + "/oracionesXDoc_";
 		pathMatrizOracionesXDoc += nombreIndice;
 
-		pathMatrizTermXDocPrePonderada="matricesPrePonderadas/termXDoc_PrePonderada_";
+		pathMatrizTermXDocPrePonderada=pathCarpetaRepo + "/termXDoc_PrePonderada_";
 		pathMatrizTermXDocPrePonderada += nombreIndice;
 
-		pathMatrizOracionesXDocPrePonderada="matricesPrePonderadas/oracionesXDoc_PrePonderada_";
+		pathMatrizOracionesXDocPrePonderada=pathCarpetaRepo + "/oracionesXDoc_PrePonderada_";
 		pathMatrizOracionesXDocPrePonderada += nombreIndice;
 
-		pathMatrizTermXDocPonderada="matricesPonderadas/termXDoc_Ponderada_";
+		pathMatrizTermXDocPonderada=pathCarpetaRepo + "/termXDoc_Ponderada_";
 		pathMatrizTermXDocPonderada += nombreIndice;
 
-		pathMatrizOracionesXDocPonderada="matricesPonderadas/oracionesXDoc_Ponderada_";
+		pathMatrizOracionesXDocPonderada=pathCarpetaRepo + "/oracionesXDoc_Ponderada_";
 		pathMatrizOracionesXDocPonderada += nombreIndice;
 
-		pathSVDTerminos="indices/indiceSVDTerminos_";
+		pathSVDTerminos=pathCarpetaRepo + "/indiceSVDTerminos_";
 		pathSVDTerminos += nombreIndice;
 
-		pathSVDOraciones="indices/indiceSVDOraciones_";
+		pathSVDOraciones=pathCarpetaRepo + "/indiceSVDOraciones_";
 		pathSVDOraciones += nombreIndice;
 
-		pathDiccionarioTerminos="diccionarios/diccionarioTerminos";
+		pathDiccionarioTerminos=pathCarpetaRepo + "/diccionarioTerminos";
 		pathDiccionarioTerminos += nombreIndice;
 
-		pathDiccionarioOraciones="diccionarios/diccionarioOraciones";
+		pathDiccionarioOraciones=pathCarpetaRepo + "/diccionarioOraciones";
 		pathDiccionarioOraciones+= nombreIndice;
 
 		/*std::cout<<pathMatrizTermXDoc<<std::endl;

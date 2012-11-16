@@ -20,13 +20,13 @@ Ponderer::~Ponderer() {
 }
 
 
-std::string Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string nombreIndice){
+std::string Ponderer::ponderar(Trie* unTrie,Persister* unP, std::string pathMatrizPrePonderada,std::string pathMatrizPonderada){
 
 	trie = unTrie;
 	matrizFreqLoc = unP;
 
 	//parseo nombre indice
-	this->nombreMatrizFinal = nombreIndice.substr(nombreIndice.find_last_of(47));
+//	this->nombreMatrizFinal = nombreIndice.substr(nombreIndice.find_last_of(47));
 
 	matrizFreqLoc->abrir();
 
