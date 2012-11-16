@@ -23,6 +23,7 @@ public:
 	std::vector<unsigned int*>* parsearConsulta(std::string);
 
 private:
+    void cargarOffsetDiccionario();
 
 	void splitQuery();
 	void stemezarPalabras();
