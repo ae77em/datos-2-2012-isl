@@ -3,7 +3,7 @@
 
 Parser::Parser() {
 	contenedorLexico = new Trie();
-	contenedorOraciones = new Trie();
+	//contenedorOraciones = new Trie();
 	lector = new LectorArchivo();
 	stemmer = new Stemmer();
 	validador = new Validador();
@@ -13,8 +13,8 @@ Parser::~Parser() {
 	contenedorLexico->destruirArbol_INI();
 	delete contenedorLexico;
 
-	contenedorOraciones->destruirArbol_INI();
-	delete contenedorOraciones;
+	//contenedorOraciones->destruirArbol_INI();
+	//delete contenedorOraciones;
 
 	delete lector;
 	delete stemmer;
@@ -46,7 +46,7 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 					contenedorLexico->insertarPalabra(terminoStemado);
 				}
 
-				terminosOraciones.push_back(termino);
+				/*terminosOraciones.push_back(termino);
 				if (terminosOraciones.size() == PALABRAS_FRASE) {
 					std::string bufferOracion;
 					std::list<std::string>::iterator it;
@@ -54,11 +54,11 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 						bufferOracion += (*it) + " ";
 					}
 
-					//contenedorOraciones->insertarPalabra(bufferOracion); // TODO eliminar segundo parametro
+					contenedorOraciones->insertarPalabra(bufferOracion); // TODO eliminar segundo parametro
 
 					// TODO Mantener 3 terminos anteriores
 					terminosOraciones.pop_front();
-				}
+				}*/
 
 				termino = terminoSiguiente;
 			}
