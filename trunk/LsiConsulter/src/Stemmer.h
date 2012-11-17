@@ -8,7 +8,7 @@
 class Stemmer {
 private:
 	std::string palabraEnProcesamiento;       /* buffer para la palabra a procesar */
-	int tamanioFinal;
+	int tamanioPalabra;
 	int posPrimeraLetra;
 	int posUltimaLetra;     /* offset del string */
 	std::string s;  /* almacena la palabra a procesar al inicio, y almacena la
