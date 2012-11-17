@@ -58,7 +58,7 @@ class Trie {
 
 		void insertarPalabra(std::string);
 		void recorrer();
-		void recorrer(TnodoTrie*,std::string);
+		void recorrer(TnodoTrie*,std::string,std::ofstream*);
 
 
 		void aumentarCantidadDePalabrasEnLaColeccion(void);
