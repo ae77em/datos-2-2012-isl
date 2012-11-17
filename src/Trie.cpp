@@ -313,7 +313,7 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
                 char tamanio = sprintf(buffer,"%d",NODO->infoArchivo->id);
-                *salida<<palabra<<" "<<buffer<<std::endl;
+                *salida<<palabra<<" "<<buffer<<" ";
                 *offsetLexico<<*offset<<std::endl;
 
 				//actualizo offset
@@ -329,8 +329,13 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
 
 void Trie::insertarPalabra(std::string palabra){
 
-    //std::cout<<"entrando: "<<palabra<<std::endl;
-	insertarPalabra(palabra,this->RAIZ->padreSupremo);
+    char letra = 57;
+
+    if(palabra[0] <= letra){
+        std::cout<<palabra<<std::endl;
+    }
+
+    insertarPalabra(palabra,this->RAIZ->padreSupremo);
 
     this->aumentarCantidadDePalabrasEnLaColeccion();
 
@@ -459,23 +464,29 @@ void Trie::insertarPalabra(std::string palabra,TnodoTrie* padre){
 }
 
 void Trie::recorrer(){
+
+    std::ofstream salida;
+    salida.open("contenidoTrie.txt");
+
 	std::string palabra="";
 	std::cout<<std::endl;
-	recorrer(RAIZ->padreSupremo->hijo,palabra);
+	recorrer(RAIZ->padreSupremo->hijo,palabra,&salida);
+
+	salida.close();
 
 }
 
-void Trie::recorrer(TnodoTrie* NODO,std::string palabra){
+void Trie::recorrer(TnodoTrie* NODO,std::string palabra,std::ofstream* salida){
 
 	if(NODO){
 
             palabra= palabra+NODO->letra;
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
-            	std::cout<<palabra<<" ID: "<<NODO->infoArchivo->id<<" global: "<<NODO->infoArchivo->ocurrenciasEnElDocActual<<" FLAG: "<<(int)NODO->flagParser<<std::endl;
+            	*salida<<palabra<<" ID: "<<NODO->infoArchivo->id<<" global: "<<NODO->infoArchivo->ocurrenciasEnElDocActual<<" FLAG: "<<(int)NODO->flagParser<<std::endl;
             }
-            recorrer(NODO->hijo,palabra);
+            recorrer(NODO->hijo,palabra,salida);
             palabra.resize(palabra.size()-1);
-            recorrer(NODO->hermano,palabra);
+            recorrer(NODO->hermano,palabra,salida);
 	}
 
 }
