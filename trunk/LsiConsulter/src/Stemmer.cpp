@@ -33,10 +33,10 @@ Stemmer::Stemmer(){
 
 Stemmer::~Stemmer(){}
 
-/* esConsonante(i) es true <=> palabraEnProcesamiento[i] es una consonante. */
+/* esConsonante(i) es true <=> palabraEnProcesamiento.at(i) es una consonante. */
 int Stemmer::esConsonante(int i){
 
-	switch (palabraEnProcesamiento[i])
+	switch (palabraEnProcesamiento.at(i))
 	{
 		case 'a': case 'e': case 'i': case 'o': case 'u':
 			return false;
@@ -95,8 +95,7 @@ int Stemmer::m(){
 /* vocalEnStem() es true <=> posPrimeraLetra,...posUltimaLetra contiene una vocal */
 int Stemmer::vocalEnStem(){
 
-	int i;
-	for (i = posPrimeraLetra; i <= posUltimaLetra; i++)
+	for (int i = posPrimeraLetra; i <= posUltimaLetra; i++)
 		if (! esConsonante(i))
 			return true;
 
@@ -129,40 +128,40 @@ int Stemmer::cvc(int i){
 	if (i < posPrimeraLetra+2 || !esConsonante(i) || esConsonante(i-1) || !esConsonante(i-2))
 		return false;
 	{
-		int ch = palabraEnProcesamiento[i];
+		int ch = palabraEnProcesamiento.at(i);
 		if (ch == 'w' || ch == 'x' || ch == 'y')
 			return false;
 	}
 	return true;
 }
 
-/* terminaCon( s) es true si el substring del intervalo <=> posPrimeraLetra,...tamanioFinal en palabraEnProcesamiento es s. */
+/* terminaCon( s) es true si el substring del intervalo <=> posPrimeraLetra,...tamanioPalabra en palabraEnProcesamiento es s. */
 
 int Stemmer::terminaCon( int length, std::string str){
 
-	if (str[length-1] != palabraEnProcesamiento[tamanioFinal])
+	if (str[length-1] != palabraEnProcesamiento.at(tamanioPalabra))
 		return false;
 
-	if (length > tamanioFinal-posPrimeraLetra+1)
+	if (length > tamanioPalabra-posPrimeraLetra+1)
 		return false;
 
-	if (str.compare(0,length,palabraEnProcesamiento,tamanioFinal-length+1,length) != 0)
+	if (str.compare(0,length,palabraEnProcesamiento,tamanioPalabra-length+1,length) != 0)
 		return false;
 
-	posUltimaLetra = tamanioFinal-length;
+	posUltimaLetra = tamanioPalabra-length;
 
 	return true;
 }
 
-/* cambiarPor(s) cambia s en el rango (posUltimaLetra+1),...tamanioFinal por los pasados por parametro,
-   ajustando tamanioFinal.
+/* cambiarPor(s) cambia s en el rango (posUltimaLetra+1),...tamanioPalabra por los pasados por parametro,
+   ajustando tamanioPalabra.
  */
 void Stemmer::cambiarPor(int length,std::string str)
 {
 	/* reemplazo el string correspondiente */
 	palabraEnProcesamiento.replace(posUltimaLetra+1,length,str);
 
-	tamanioFinal = posUltimaLetra+length;
+	tamanioPalabra = posUltimaLetra+length;
 }
 
 /* este metodo es llamado en los pasos 2 y 3 */
@@ -195,20 +194,20 @@ void Stemmer::r(int length, std::string s) {
 */
 void Stemmer::paso1ab(){
 
-	if (palabraEnProcesamiento[tamanioFinal] == 's'){
+	if (palabraEnProcesamiento.at(tamanioPalabra) == 's'){
 		if ( terminaCon( 4, std::string("sses")))
-			tamanioFinal -= 2;
+			tamanioPalabra -= 2;
 		else
 		if ( terminaCon( 3, std::string("ies")))
 			cambiarPor(1, std::string("i"));
 		else
-		if (palabraEnProcesamiento[tamanioFinal-1] != 's')
-			tamanioFinal--;
+		if (palabraEnProcesamiento.at(tamanioPalabra-1) != 's')
+			tamanioPalabra--;
 	}
 
 	if ( terminaCon( 3, std::string("eed"))) {
 		if (m() > 0)
-			tamanioFinal--;
+			tamanioPalabra--;
 	}
 	else
 	if (vocalEnStem()){
@@ -224,7 +223,7 @@ void Stemmer::paso1ab(){
 		}
 
 		if ( not salir ){
-			tamanioFinal = posUltimaLetra;
+			tamanioPalabra = posUltimaLetra;
 			if ( terminaCon( 2, std::string("at")))
 				cambiarPor(3, std::string("ate"));
 			else
@@ -234,17 +233,17 @@ void Stemmer::paso1ab(){
 			if ( terminaCon( 2, std::string("iz")))
 				cambiarPor(3, std::string("ize"));
 			else
-			if (dobleConsonante(tamanioFinal))
+			if (dobleConsonante(tamanioPalabra))
 			{
-				tamanioFinal--;
+				tamanioPalabra--;
 				{
-					int ch = palabraEnProcesamiento[tamanioFinal];
+					int ch = palabraEnProcesamiento.at(tamanioPalabra);
 					if (ch == 'l' || ch == 's' || ch == 'z')
-						tamanioFinal++;
+						tamanioPalabra++;
 				}
 			}
 			else
-			if (m() == 1 && cvc(tamanioFinal))
+			if (m() == 1 && cvc(tamanioPalabra))
 				cambiarPor(1, std::string("e"));
 		}
 	}
@@ -257,7 +256,7 @@ void Stemmer::paso1ab(){
 void Stemmer::paso1c() {
 
 	if ( terminaCon( 1, std::string("y")) && vocalEnStem())
-		palabraEnProcesamiento[tamanioFinal] = 'i';
+		palabraEnProcesamiento.at(tamanioPalabra) = 'i';
 }
 
 
@@ -289,7 +288,7 @@ void Stemmer::paso1c() {
 */
 void Stemmer::paso2() {
 
-	switch (palabraEnProcesamiento[tamanioFinal-1])
+	switch (palabraEnProcesamiento.at(tamanioPalabra-1))
 	{
 		case 'a': if ( terminaCon( 7, std::string("ational"))) {
 					  r(3, std::string("ate"));
@@ -400,7 +399,7 @@ void Stemmer::paso2() {
 */
 void Stemmer::paso3() {
 
-	switch (palabraEnProcesamiento[tamanioFinal])
+	switch (palabraEnProcesamiento.at(tamanioPalabra))
 	{
 		case 'e': if ( terminaCon( 5, std::string("icate"))) {
 					  r(2, std::string("ic"));
@@ -464,7 +463,7 @@ void Stemmer::paso3() {
 
 void Stemmer::paso4(){
 
-	switch (palabraEnProcesamiento[tamanioFinal-1])
+	switch (palabraEnProcesamiento.at(tamanioPalabra-1))
     {
 		/* faltan procesar todos estos casos */
 		case 'a': if ( terminaCon( 2, std::string("al"))) break;
@@ -505,7 +504,7 @@ void Stemmer::paso4(){
     }
 	/* si hubo algun resultado positivo, elimino el sufijo correspondiente */
     if (m() > 1)
-    	tamanioFinal = posUltimaLetra;
+    	tamanioPalabra = posUltimaLetra;
 
 }
 
@@ -523,17 +522,17 @@ void Stemmer::paso4(){
  * */
 void Stemmer::paso5(){
 
-	posUltimaLetra = tamanioFinal;
+	posUltimaLetra = tamanioPalabra;
 	int a = m();
 
-	if (palabraEnProcesamiento[tamanioFinal] == 'e'){
+	if (palabraEnProcesamiento.at(tamanioPalabra) == 'e'){
 		/* remuevo la e final */
-		if (a > 1 || ( a == 1 && !cvc(tamanioFinal-1) ))
-			tamanioFinal--;
+		if (a > 1 || ( a == 1 && !cvc(tamanioPalabra-1) ))
+			tamanioPalabra--;
 
 	}
-	if (palabraEnProcesamiento[tamanioFinal] == 'l' && dobleConsonante(tamanioFinal) && a > 1)
-		tamanioFinal--;
+	if (palabraEnProcesamiento.at(tamanioPalabra) == 'l' && dobleConsonante(tamanioPalabra) && a > 1)
+		tamanioPalabra--;
 
 }
 
@@ -545,7 +544,7 @@ void Stemmer::paso5(){
  * 			  la palabra procesada.
  * @param posUltimaLetra : es el offset a la ultima letra de la palabra.
  *
-   The stemmer modifica los caracteres p[i] ... p[posUltimaLetra] y devuelve el nuevo punto
+   The stemmer modifica los caracteres p.at(i) ... p[posUltimaLetra] y devuelve el nuevo punto
    final de la palabra. El tamanio de la palabra procesada siempre sera menor o
    igual a p.
 
@@ -554,12 +553,12 @@ void Stemmer::paso5(){
 int Stemmer::stem(std::string p, int i, int posUltimaLetra)
 {
 	palabraEnProcesamiento = p;
-	tamanioFinal = posUltimaLetra;
+	tamanioPalabra = posUltimaLetra;
 	posPrimeraLetra = i;
 
 	/* si la palabra tiene menos de 3 letras salimos */
-	if (tamanioFinal <= posPrimeraLetra+1)
-		return tamanioFinal;
+	if (tamanioPalabra <= posPrimeraLetra+1)
+		return tamanioPalabra;
 
 	paso1ab();
 	paso1c();
@@ -569,7 +568,7 @@ int Stemmer::stem(std::string p, int i, int posUltimaLetra)
 	paso5();
 
 	s = palabraEnProcesamiento;
-	return tamanioFinal;
+	return tamanioPalabra;
 }
 
 
