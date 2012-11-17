@@ -1,10 +1,3 @@
-/*
- * Consulter.h
- *
- *  Created on: 16/11/2012
- *      Author: federico
- */
-
 #ifndef CONSULTER_H_
 #define CONSULTER_H_
 
