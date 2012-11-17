@@ -20,7 +20,7 @@ class Parser {
 		LectorArchivo* lector;
 		Stemmer* stemmer;
 		Trie* contenedorLexico;
-		Trie* contenedorOraciones;
+		//Trie* contenedorOraciones;
 		Validador* validador;
 	public:
 		Parser();
@@ -29,10 +29,10 @@ class Parser {
 		bool parsearArchivo(std::string nombreArchivo);
 
 		void persistirLexico(std::string nombreIndice);
-		void persistirOraciones(std::string nombreIndice);
+		//void persistirOraciones(std::string nombreIndice);
 
 		Trie* obtenerContenedorLexico();
-		Trie* obtenerContenedorOraciones();
+		//Trie* obtenerContenedorOraciones();
 };
 
 #endif

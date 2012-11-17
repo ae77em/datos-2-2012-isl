@@ -75,9 +75,9 @@ Trie* Parser::obtenerContenedorLexico() {
 	return contenedorLexico;
 }
 
-Trie* Parser::obtenerContenedorOraciones() {
-	return contenedorOraciones;
-}
+//Trie* Parser::obtenerContenedorOraciones() {
+//	return contenedorOraciones;
+//}
 
 void Parser::persistirLexico(std::string path) {
 
@@ -96,19 +96,19 @@ void Parser::persistirLexico(std::string path) {
     offsetLexico.close();
 }
 
-void Parser::persistirOraciones(std::string path) {
-
-    std::ofstream oraciones;
-    std::ofstream offsetOraciones;
-
-    std::string pathOffsetOracion = path;
-    pathOffsetOracion += "_offset";
-
-    oraciones.open(path.c_str());
-    offsetOraciones.open(pathOffsetOracion.c_str());
-
-    contenedorOraciones->persistirPalabras_INI(&oraciones, &offsetOraciones);
-
-    oraciones.close();
-    offsetOraciones.close();
-}
+//void Parser::persistirOraciones(std::string path) {
+//
+//    std::ofstream oraciones;
+//    std::ofstream offsetOraciones;
+//
+//    std::string pathOffsetOracion = path;
+//    pathOffsetOracion += "_offset";
+//
+//    oraciones.open(path.c_str());
+//    offsetOraciones.open(pathOffsetOracion.c_str());
+//
+//    contenedorOraciones->persistirPalabras_INI(&oraciones, &offsetOraciones);
+//
+//    oraciones.close();
+//    offsetOraciones.close();
+//}
