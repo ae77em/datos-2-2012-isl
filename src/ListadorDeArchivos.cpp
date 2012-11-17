@@ -30,7 +30,9 @@ void ListadorDeArchivos::listarArchivos(std::string ruta, std::list<std::string>
 	}
 
 	while  ((archivo = readdir(directorio)) != NULL) {
-		std::string nomArchivo = ruta + "/" + archivo->d_name;
+		std::string nomArchivo = ruta;
+		nomArchivo += "/";
+		nomArchivo += archivo->d_name;
 
 		if (archivo->d_type == DT_DIR) {
 			if (strcmp(archivo->d_name, ".") != 0 && strcmp(archivo->d_name, "..") != 0) {

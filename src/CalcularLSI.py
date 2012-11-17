@@ -18,7 +18,6 @@ try:
 		# Calculo y guardo la Matriz V
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
 		# lo imprimo con 4 decimales
-		
 		file = open(sys.argv[4]+"_V.bin", "wb")
 		file.write(pack('ii', V.shape[0], V.shape[1]))
 		file.write(V)
