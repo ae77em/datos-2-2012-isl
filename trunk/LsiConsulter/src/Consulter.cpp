@@ -60,7 +60,7 @@ std::vector<double*>* Consulter::multiplicarContraU(){
     //vector que ira acumulando la sumatoria resultante del producto intenrno;
     std::vector<double*>* productoInternoQcontraU = new std::vector<double*>;
 
-    productoInternoQcontraU->resize(this->K); //tendra el tamaño de la cantidad de topicos del indice
+    productoInternoQcontraU->resize(this->K); //tendra el tamaï¿½o de la cantidad de topicos del indice
 
     //inicializamos
     for(int i=0; i<productoInternoQcontraU->size(); i++){

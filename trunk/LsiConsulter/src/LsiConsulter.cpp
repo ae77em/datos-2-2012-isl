@@ -1,21 +1,37 @@
-//============================================================================
-// Name        : LsiConsulter.cpp
-// Author      : fede
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-
 #include <iostream>
 #include <string>
+
 #include "Consulter.h"
 
-int main() {
+std::string obtenerTerminosQuery(int argc, char* argv[]) {
+	std::string query;
 
-	std::string consulta= "";
+	for (int i = 4; i < argc; i++) {
+		query += argv[i] + " ";
+	}
 
-	Consulter* consulter = new Consulter();
-	consulter->analizarConsulta(consulta); //representa la serie de la palabras que conformen la consulta
+	return query;
+}
 
+int main(int argc, char* argv[]) {
+	Consulter* consultador;
+	std::string nombreRepositorio;
+	std::string query;
+
+	// Validacion de los argumentos
+	if (argc < 5) {
+		std::cerr << "Uso del programa: " << std::endl;
+		std::cerr << "TPGrupoXXq -r <nombre repositorio> -q <t1 t2 ...>" << std::endl;
+
+		return 1;
+	}
+
+	nombreRepositorio = argv[2];
+	query = obtenerTerminosQuery(argc, argv);
+
+	Consulter* consulter = new Consulter(0, nombreRepositorio);
+	consulter->analizarConsulta(query);
+
+	delete consulter;
 	return 0;
 }
