@@ -8,9 +8,9 @@ Consulter::Consulter(unsigned int unK,std::string pathMatrizU,std::string pathMa
 	this-> vectorS = new std::vector<double*>;
 	this-> vectorS->resize(K);
 
-    matrizU.open(pathMatrizU.c_str());
-    matrizS.open(pathMatrizS.c_str());
-    matrizV.open(pathMatrizV.c_str());
+    matrizU.open(pathMatrizU.c_str(),std::ifstream::binary);
+    matrizS.open(pathMatrizS.c_str(),std::ifstream::binary);
+    matrizV.open(pathMatrizV.c_str(),std::ifstream::binary);
 
     cargarS();
 
@@ -43,7 +43,6 @@ void Consulter::analizarConsulta(std::string consulta){
     //columnas de VT o la filas de V, depende de como se haya almacenado la matriz
     this->queryProyectada = this->proyectarQuery();
 
-
 }
 
 std::vector<double*>* Consulter::proyectarQuery(){
@@ -53,6 +52,10 @@ std::vector<double*>* Consulter::proyectarQuery(){
 }
 
 std::vector<double*>* Consulter::multiplicarContraU(){
+
+    std::cout<<"multiplicando contra U "<<std::endl;
+    std::cout.unsetf(std::ios::floatfield);            // floatfield not set
+    std::cout.precision(25);
 
     //como lo indices del vector query son 1, el producto interno entre el queyr y cada una de las columnas
     //sera la sumatoria de cada uno de los indices de esas columnas
@@ -71,17 +74,19 @@ std::vector<double*>* Consulter::multiplicarContraU(){
     double* filaMatrizU = new double[K];
 
     //comienza multiplicacion
-    for(unsigned int i=0; query->size(); i++){
+
+    for(unsigned int i=0; i<query->size(); i++){
         //me posiciono en la fila que indica el indice del vector querya analizado
-        matrizU.seekg(*query->at(i));
+        matrizU.seekg(*query->at(i)*sizeof(double)*K);
+
         //levanto fila
         matrizU.read((char*)filaMatrizU,sizeof(double)*K);
 
         //voy realizando las sumas parciales
         for(int i=0; i<productoInternoQcontraU->size(); i++){
             *productoInternoQcontraU->at(i) += filaMatrizU[i];
-        }
 
+        }
     }
 
     delete [] filaMatrizU;
