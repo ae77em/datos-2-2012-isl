@@ -9,7 +9,7 @@
 
 class Consulter {
 public:
-	Consulter(unsigned int unK,std::string,std::string,std::string);
+	Consulter(std::string repositorio);
 	virtual ~Consulter();
 
 	void rankearConsulta(std::string);
@@ -30,7 +30,7 @@ private:
     std::vector<double*>* multiplicarContraS(std::vector<double*>*);
 
     //atributos
-	unsigned int K;
+	unsigned int cantAutovalores;
     ParserQuery* parserQuery;
     CalculosAlgebraicos* calculer;
 
