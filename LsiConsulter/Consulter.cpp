@@ -1,48 +1,42 @@
 #include "Consulter.h"
 
-Consulter::Consulter(unsigned int unK,std::string pathMatrizU,std::string pathMatrizS,std::string pathMatrizV) {
+Consulter::Consulter(std::string repositorio) {
 
     this->calculer = new CalculosAlgebraicos();
 	this->parserQuery = new ParserQuery("diccionario.txt","offsetDiccionario.txt");
-	this-> K = unK;
 
-    this->documento = new std::vector<double*>;
+	matrizU.open((repositorio + "U.bin").c_str(), std::ios_base::binary);
+    matrizS.open((repositorio + "S.bin").c_str(), std::ios_base::binary);
+    matrizV.open((repositorio + "V.bin").c_str(), std::ios_base::binary);
+
+	cargarS();
+
+	this->documento = new std::vector<double*>;
     this->iniDoc();
-
-	this-> vectorS = new std::vector<double*>;
-	this-> vectorS->resize(K);
-
-    matrizU.open(pathMatrizU.c_str(),std::ifstream::binary);
-    matrizS.open(pathMatrizS.c_str(),std::ifstream::binary);
-    matrizV.open(pathMatrizV.c_str(),std::ifstream::binary);
-
-    cargarS();
-
 }
 
 void Consulter::iniDoc(){
 
-    this->documento->resize(K);
+    this->documento->resize(cantAutovalores);
 
-    for(unsigned int i=0; i<K;i++){
+    for(unsigned int i=0; i<cantAutovalores;i++){
         documento->at(i) = new double(0);
     }
 
 
 }
 
-void Consulter::cargarS(){
-    //la matriz S es una sola fila, compuesta por los valores singulares de la SVD
-    double* filaS = new double[K];
+void Consulter::cargarS() {
+	double valor;
 
-    matrizS.read((char*)filaS,sizeof(double)*K);
+	// Leo el tamaño de la matriz
+	matrizS.read(reinterpret_cast<char*>(&cantAutovalores), sizeof(int));
 
-    for(unsigned int i=0; i<K;i++){
-
-        vectorS->at(i) = new double(filaS[i]);
-
-    }
-
+	// Leo la matriz
+	for (int i = 0; i < cantAutovalores; i++) {
+		matrizS.read(reinterpret_cast<char*>(&valor), sizeof(double));
+		vectorS->at(i) = new double(valor);
+	}
 }
 
 Consulter::~Consulter() {
@@ -88,7 +82,7 @@ void Consulter::evaluar(){
 
 void Consulter::crearRegistro(){
 
-    registroV = new double[this->K];
+    registroV = new double[this->cantAutovalores];
 
 }
 
@@ -105,9 +99,9 @@ bool Consulter::hayDocumentos(){
 
 void Consulter::obtenerDocumento(){
 
-    matrizV.read((char*)registroV,sizeof(double)*this->K);
+    matrizV.read((char*)registroV,sizeof(double)*this->cantAutovalores);
 
-    for(unsigned int i=0; i< K ; i++){
+    for(unsigned int i=0; i< cantAutovalores ; i++){
         *documento->at(i) = registroV[i]; //solo es un camio de formato
         //std::cout<<documento->at(i)<<" ";
     }
@@ -128,7 +122,7 @@ std::vector<double*>* Consulter::multiplicarContraU(){
     //vector que ira acumulando la sumatoria resultante del producto intenrno;
     std::vector<double*>* productoInternoQcontraU = new std::vector<double*>;
 
-    productoInternoQcontraU->resize(this->K); //tendra el tama�o de la cantidad de topicos del indice
+    productoInternoQcontraU->resize(this->cantAutovalores); //tendra el tama�o de la cantidad de topicos del indice
 
     //inicializamos
     for(int i=0; i<productoInternoQcontraU->size(); i++){
@@ -136,16 +130,16 @@ std::vector<double*>* Consulter::multiplicarContraU(){
     }
 
     //registro donde se iran almacenando las filas de U
-    double* filaMatrizU = new double[K];
+    double* filaMatrizU = new double[cantAutovalores];
 
     //comienza multiplicacion
 
     for(unsigned int i=0; i<query->size(); i++){
         //me posiciono en la fila que indica el indice del vector querya analizado
-        matrizU.seekg(*query->at(i)*sizeof(double)*K);
+        matrizU.seekg(*query->at(i)*sizeof(double)*cantAutovalores);
 
         //levanto fila
-        matrizU.read((char*)filaMatrizU,sizeof(double)*K);
+        matrizU.read((char*)filaMatrizU,sizeof(double)*cantAutovalores);
 
         //voy realizando las sumas parciales
         for(int i=0; i<productoInternoQcontraU->size(); i++){

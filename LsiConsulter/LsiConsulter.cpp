@@ -7,7 +7,8 @@ std::string obtenerTerminosQuery(int argc, char* argv[]) {
 	std::string query;
 
 	for (int i = 4; i < argc; i++) {
-		query += argv[i] + " ";
+		query += argv[i];
+		query += " ";
 	}
 
 	return query;
@@ -29,9 +30,8 @@ int main(int argc, char* argv[]) {
 	nombreRepositorio = argv[2];
 	query = obtenerTerminosQuery(argc, argv);
 
-	Consulter* consulter = new Consulter(0, nombreRepositorio);
-	consulter->analizarConsulta(query);
+	consultador = new Consulter(nombreRepositorio);
 
-	delete consulter;
+	delete consultador;
 	return 0;
 }
