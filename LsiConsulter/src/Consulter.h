@@ -11,7 +11,7 @@ public:
 	Consulter(unsigned int unK,std::string,std::string,std::string);
 	virtual ~Consulter();
 
-	void analizarConsulta(std::string);
+	void rankearConsulta(std::string);
 	std::vector<double*>* proyectarQuery();
 
 private:

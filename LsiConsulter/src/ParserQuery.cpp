@@ -95,11 +95,8 @@ std::vector<unsigned int*>* ParserQuery::recuperarIds(){
 
 	while(b!=e){
 
-        std::cout<<"palabra buscando ID: "<<*(b)<<std::endl;
 
 		unsigned int* id = buscarIdTermino( *(b) );
-
-        std::cout<<"ID hallado: "<<*id<<std::endl;
 
 		ids->push_back( id );
 
@@ -111,8 +108,6 @@ std::vector<unsigned int*>* ParserQuery::recuperarIds(){
 
 unsigned int* ParserQuery::buscarIdTermino(std::string termino){
 
-    std::cout<<"comienzo busqueda ID de termino: "<<termino<<std::endl;
-
     int ini=0;
     int fin=contenedorOffsetDiccionario->size()-1;
     int medio = fin / 2;
@@ -123,7 +118,6 @@ unsigned int* ParserQuery::buscarIdTermino(std::string termino){
 
 unsigned int* ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fin,int medio){
 
-    std::cout<<"indice: "<<ini<<std::endl;
 
     std::string terminoEnArchivo="";
     unsigned int id=0;
@@ -147,10 +141,7 @@ unsigned int* ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fi
     diccionario>>terminoEnArchivo;
     diccionario>>id;
 
-    std::cout<<"termino leido: "<<terminoEnArchivo<<" termino buscado: "<<termino<<std::endl;
-
     if( terminoEnArchivo.compare(termino)==0){
-         std::cout<<"fin busqueda"<<std::endl;
     	return new unsigned int(id);
     }else{
 
