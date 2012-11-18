@@ -48,28 +48,31 @@ class Trie {
 		TnodoPrincipalTrie* RAIZ ;
 		char buffer [33];
 
+		void inicializarRaiz();
+		void inicializarNodo(TnodoTrie*);
+		void insertarPalabra(std::string,TnodoTrie*);
+		void recorrer(TnodoTrie*,std::string,std::ofstream*);
+		bool buscarPalabra(std::string,TnodoTrie*);
+		TnodoTrie* buscarLetra(char,TnodoTrie*);
+		void exportarPalabrasContenedor(TnodoTrie*, std::vector<TnodoTerminoId*>*, std::string);
+        void eliminarPalabra(std::string,TnodoTrie);
+        void exportarDatosParaEntropia(std::vector<TacumEntropia*>*,TnodoTrie*);
+        void destruirArbol(TnodoTrie*,int*);
+        void persistirPalabras(TnodoTrie*, std::ofstream*, std::ofstream*, int*, std::string);
+        void buscarPalabrasDelDocParseado(TnodoTrie*, std::vector<TnodoData*>*);
+
 	public:
 		Trie ();
 		~Trie ();
-		void inicializarRaiz();
-		void inicializarNodo(TnodoTrie*);
-
-		void insertarPalabra(std::string,TnodoTrie*);
 
 		void insertarPalabra(std::string);
 		void recorrer();
-		void recorrer(TnodoTrie*,std::string,std::ofstream*);
-
 
 		void aumentarCantidadDePalabrasEnLaColeccion(void);
 		void aumentarCantidadDeDocParseados(void);
 
 		bool buscarPalabra(std::string);
-		bool buscarPalabra(std::string,TnodoTrie*);
-		TnodoTrie* buscarLetra(char,TnodoTrie*);
-
 		std::vector<TnodoData*>* buscarPalabrasDelDocParseado_INI(void);
-		void buscarPalabrasDelDocParseado(TnodoTrie*, std::vector<TnodoData*>*);
 
 		int obtenerCantidadDePalabrasIngresadas();
 		int obtenerCantidadDeDocumentosParseados();
@@ -77,24 +80,19 @@ class Trie {
 		void incrementarContadorId();
 
 		std::vector<TnodoTerminoId*>* exportarPalabrasContenedor_INI();
-		void exportarPalabrasContenedor(TnodoTrie*, std::vector<TnodoTerminoId*>*, std::string);
 
 		void persistirPalabras_INI(std::ofstream*, std::ofstream*);
-		void persistirPalabras(TnodoTrie*, std::ofstream*, std::ofstream*, int*, std::string);
 		void persistirPalabrasContenedor(std::ofstream*);
 
-		void destruirArbol(TnodoTrie*,int*);
 		void destruirArbol_INI(void);
 		//////NUEVOS al 25/10
 		std::vector<TacumEntropia*>* exportarDatosParaEntropia_INI();
-		void exportarDatosParaEntropia(std::vector<TacumEntropia*>*,TnodoTrie*);
 		void vaciarContenedorParcial(); //no se hacen delete, solo se limpia el contenedor
 		void inicializarFrecuenciasLocales();
         void vaciarContenedores();
 
         //////NUEVOS al 14/11 eliminacion de palabras en el trie
         void eliminarPalabra_INI(std::string);
-        void eliminarPalabra(std::string,TnodoTrie);
 
         void actualizarIdsLuegoDeFiltradoDeTerminos();
 
