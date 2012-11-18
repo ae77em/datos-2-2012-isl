@@ -34,7 +34,7 @@ Consulter::~Consulter() {
 	// TODO Auto-generated destructor stub
 }
 
-void Consulter::analizarConsulta(std::string consulta){
+void Consulter::rankearConsulta(std::string consulta){
 
 	//toma un conjuento de palabras representado por el string y devuelve un vector que representa la consulta
 	this->query = parserQuery->parsearConsulta(consulta);
@@ -42,6 +42,8 @@ void Consulter::analizarConsulta(std::string consulta){
     //este vector hay que normalizarlo, luego aplicale el metodo del coseno junton con todas las
     //columnas de VT o la filas de V, depende de como se haya almacenado la matriz
     this->queryProyectada = this->proyectarQuery();
+
+
 
 }
 
@@ -102,3 +104,4 @@ std::vector<double*>* Consulter::multiplicarContraS(std::vector<double*>* produc
 
     return productoInternoQcontraU;
 }
+
