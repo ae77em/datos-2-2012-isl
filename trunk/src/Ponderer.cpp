@@ -74,7 +74,7 @@ void Ponderer::calcularEntropia(){
 void Ponderer::dividirTodoPorLog(){
 
     for(register unsigned int i=0; i<this->contenedorParcialEntropia->size(); i++){
-	   this->contenedorParcialEntropia->at(i)->acumEntropia = this->contenedorParcialEntropia->at(i)->acumEntropia / (log2(cantidadDocumentosEnLaColeccion));
+	   this->contenedorParcialEntropia->at(i)->acumEntropia = (this->contenedorParcialEntropia->at(i)->acumEntropia / (log2(cantidadDocumentosEnLaColeccion))) + 1;
 	}
 }
 
