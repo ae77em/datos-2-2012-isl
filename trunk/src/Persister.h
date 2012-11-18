@@ -41,8 +41,6 @@ class Persister {
         bool hayData();
         void vaciar(std::list<TregistroArchivo*>*);
         void vaciar();
-        void irAlComienzoL();
-        void parserLSI(int);
         std::string obtenerPath();
 
 

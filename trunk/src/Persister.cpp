@@ -60,6 +60,7 @@ std::list<TregistroArchivo*>* Persister::obtenerColumnaMatriz(){
 	    int columna=regAux->col;
 
 		while( ( regAux->col==columna ) && (!archivo.eof() )){
+			//va primero la carga del registro que habia quedado de la anterior leida
 	        this->contenedor->push_back(regAux);//
 
 			if(!archivo.eof() && columna==regAux->col){
