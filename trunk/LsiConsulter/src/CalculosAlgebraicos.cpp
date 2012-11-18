@@ -1,16 +1,16 @@
-#include "Consulter.h"
+#include "CalculosAlgebraicos.h"
 
-Consulter::Consulter()
+CalculosAlgebraicos::CalculosAlgebraicos()
 {
     //ctor
 }
 
-Consulter::~Consulter()
+CalculosAlgebraicos::~CalculosAlgebraicos()
 {
     //dtor
 }
 
-double Consulter::metodoCoseno(std::vector<double>* v1,std::vector<double>* v2){
+double CalculosAlgebraicos::metodoCoseno(std::vector<double>* v1,std::vector<double>* v2){
 
     double numerador = productoInterno(v1,v2);
     double norma1 = norma(v1);
@@ -21,7 +21,7 @@ double Consulter::metodoCoseno(std::vector<double>* v1,std::vector<double>* v2){
 
 
 
-double Consulter::productoInterno(std::vector<double>* v1,std::vector<double>* v2){
+double CalculosAlgebraicos::productoInterno(std::vector<double>* v1,std::vector<double>* v2){
 
     double producto=0;
 
@@ -33,7 +33,7 @@ double Consulter::productoInterno(std::vector<double>* v1,std::vector<double>* v
 
 }
 
-double Consulter::norma(std::vector<double>* v){
+double CalculosAlgebraicos::norma(std::vector<double>* v){
 
     double norma =0;
 
@@ -44,5 +44,3 @@ double Consulter::norma(std::vector<double>* v){
     return sqrt(norma);
 
 }
-
-
