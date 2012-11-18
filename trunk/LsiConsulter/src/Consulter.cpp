@@ -6,6 +6,9 @@ Consulter::Consulter(unsigned int unK,std::string pathMatrizU,std::string pathMa
 	this->parserQuery = new ParserQuery("diccionario.txt","offsetDiccionario.txt");
 	this-> K = unK;
 
+    this->documento = new std::vector<double*>;
+    this->iniDoc();
+
 	this-> vectorS = new std::vector<double*>;
 	this-> vectorS->resize(K);
 
@@ -14,6 +17,17 @@ Consulter::Consulter(unsigned int unK,std::string pathMatrizU,std::string pathMa
     matrizV.open(pathMatrizV.c_str(),std::ifstream::binary);
 
     cargarS();
+
+}
+
+void Consulter::iniDoc(){
+
+    this->documento->resize(K);
+
+    for(unsigned int i=0; i<K;i++){
+        documento->at(i) = new double(0);
+    }
+
 
 }
 
@@ -49,9 +63,54 @@ void Consulter::rankearConsulta(std::string consulta){
 
 void Consulter::evaluar(){
 
+    std::cout.unsetf(std::ios::floatfield);
+    std::cout.precision(15);
+
     //primero normalizo el vector query
     calculer->normalizarVector(this->queryProyectada);
 
+    crearRegistro(); //pide memoria para el registro que levatara los documentos
+
+    std::cout<<"MOSTRANDO RESULTADOS:"<<std::endl<<std::endl;
+
+    while(hayDocumentos()){
+
+        //deberia de estar normalizado
+        obtenerDocumento();
+
+        std::cout<<calculer->metodoCoseno(this->queryProyectada , this->documento)<<std::endl;
+
+    }
+
+    liberarRegistro();
+
+}
+
+void Consulter::crearRegistro(){
+
+    registroV = new double[this->K];
+
+}
+
+void Consulter::liberarRegistro(){
+
+    delete [] registroV;
+}
+
+bool Consulter::hayDocumentos(){
+
+    return !matrizV.eof();
+
+}
+
+void Consulter::obtenerDocumento(){
+
+    matrizV.read((char*)registroV,sizeof(double)*this->K);
+
+    for(unsigned int i=0; i< K ; i++){
+        *documento->at(i) = registroV[i]; //solo es un camio de formato
+        //std::cout<<documento->at(i)<<" ";
+    }
 
 }
 
@@ -62,10 +121,6 @@ std::vector<double*>* Consulter::proyectarQuery(){
 }
 
 std::vector<double*>* Consulter::multiplicarContraU(){
-
-    std::cout<<"multiplicando contra U "<<std::endl;
-    std::cout.unsetf(std::ios::floatfield);            // floatfield not set
-    std::cout.precision(25);
 
     //como lo indices del vector query son 1, el producto interno entre el queyr y cada una de las columnas
     //sera la sumatoria de cada uno de los indices de esas columnas
