@@ -70,6 +70,8 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 	//ponderador->ponderar(parser->obtenerContenedorOraciones(), persistidorOraciones,this->pathMatrizOracionesXDocPonderada);
 
+	parser->obtenerContenedorLexico()->recorrer();
+
 	std::cout<<"COMIENZA PERSISTENCIA DICCIONARIOS"<<std::endl;
 
     parser->persistirLexico(this->obtenerPathDiccionarioLexico());
@@ -79,7 +81,6 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
     std::cout<<"CALCULANDO SVD TERMINOS"<<std::endl;
     calculador->calcularLSI(this->obtenerCanTopicos(),this->pathMatrizTermXDocPonderada,this->pathSVDTerminos);
-    //persistidor->parserLSI(this->obtenerCantTopicos());
 
     // TODO para las oraciones, no se como se hace
     //std::cout<<"CALCULANDO SVD ORACIONES"<<std::endl;
