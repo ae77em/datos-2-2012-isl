@@ -43,3 +43,22 @@ double CalculosAlgebraicos::norma(std::vector<double*>* v){
 
     return sqrt(norma);
 }
+
+void CalculosAlgebraicos::normalizarVector(std::vector<double*>* v){
+
+    double normaDelVector = norma(v);
+
+    for(int i=0; i<v->size(); i++){
+        std::cout<<*v->at(i)<<" ";
+    }
+    std::cout<<std::endl;
+    for(int i=0; i<v->size(); i++){
+        *v->at(i) /= normaDelVector;
+    }
+
+    for(int i=0; i<v->size(); i++){
+        std::cout<<*v->at(i)<<" ";
+    }
+    std::cout<<std::endl;
+
+}
