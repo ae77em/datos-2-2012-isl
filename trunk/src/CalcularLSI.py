@@ -12,35 +12,24 @@ from math import *
 #sys.argv[4] -> contiene el path donde grabar la SVD
 
 try:
-	corpus = corpora.MmCorpus(argv[1]) 
+	corpus = corpora.MmCorpus(argv[1])
 	lsi = models.LsiModel(corpus, num_topics=int(argv[2]), chunksize=int(argv[3]))
 		
 	try:
 		# Calculo y guardo la Matriz V
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
-
-	# Normalizo las columnas de la matriz matriz V,
-	# guardando los resultados en un vector
-	try:
-		# creo el vector auxiliar
-		NColV = array([])
-		
-		# de cada columna por si misma
-		longitud = len(V[0])
-		NColV.resize(longitud)
-		for i in range(longitud):
-			a1 = V[:,i]
-			a = sqrt(dot(a1,a1))
-			NColV[i] = a
-		
-		# guardo el resultado en un archivo	
-		file = open(argv[4] + "/V.bin", "wb")
-		file.write(pack('i', NColV.shape[0] ))
-		file.write(NColV)
+		print 'V->'
+		print V
+		V = transpose(V)
+		print 'V trasp->'
+		print V
+		file = open(argv[4]+"_V.bin", "wb")
+		file.write(pack('ii', V.shape[0], V.shape[1]))
+		file.write(V)
 		file.close()
-		
+					
 	except Exception:
-		print "Error al calcular la norma de V"
+		print "Error al intentar guardar la matriz V."
 		raise
 
 	try:
@@ -48,7 +37,7 @@ try:
 		Saux =  lsi.projection.s
 		# Calculo la inversa de S, y los almaceno
 		S = linalg.pinv(diag(Saux))
-		
+				
 		file = open(argv[4] + "/S.bin", "wb")
 		file.write(pack('i', S.shape[0]))
 		file.write(S)
@@ -70,9 +59,11 @@ try:
 	except Exception:
 		print "Error al intentar guardar la matriz U."
 		raise
-
+	
+	 
 except Exception:
 	print "Los argumentos son inválidos o insuficientes."
 	raise	
 
  
+
