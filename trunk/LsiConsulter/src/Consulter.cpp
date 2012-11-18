@@ -2,6 +2,7 @@
 
 Consulter::Consulter(unsigned int unK,std::string pathMatrizU,std::string pathMatrizS,std::string pathMatrizV) {
 
+    this->calculer = new CalculosAlgebraicos();
 	this->parserQuery = new ParserQuery("diccionario.txt","offsetDiccionario.txt");
 	this-> K = unK;
 
@@ -43,6 +44,13 @@ void Consulter::rankearConsulta(std::string consulta){
     //columnas de VT o la filas de V, depende de como se haya almacenado la matriz
     this->queryProyectada = this->proyectarQuery();
 
+    evaluar();
+}
+
+void Consulter::evaluar(){
+
+    //primero normalizo el vector query
+    calculer->normalizarVector(this->queryProyectada);
 
 
 }
