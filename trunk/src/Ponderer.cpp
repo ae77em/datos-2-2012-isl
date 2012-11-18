@@ -54,9 +54,9 @@ void Ponderer::calcularEntropia(){
 
 			TacumEntropia* auxEntropia = this->contenedorParcialEntropia->at(auxReg->fil -1);
 
-			double localDivGlobal = ((double)auxReg->freq)/((double)auxEntropia->infoTerm->ocurrenciasEnLaColeccion);
+			double freqLocalDivFreqGlobal = ((double)auxReg->freq)/((double)auxEntropia->infoTerm->ocurrenciasEnLaColeccion);
 
-			auxEntropia->acumEntropia += (localDivGlobal*(log2(localDivGlobal)));
+			auxEntropia->acumEntropia += (freqLocalDivFreqGlobal*(log2(freqLocalDivFreqGlobal)));
 
 			b++;
 		}
@@ -72,10 +72,13 @@ void Ponderer::calcularEntropia(){
 }
 
 void Ponderer::dividirTodoPorLog(){
+    //ademas de dividir todo por log, tambien suma el 1
 
     for(register unsigned int i=0; i<this->contenedorParcialEntropia->size(); i++){
 	   this->contenedorParcialEntropia->at(i)->acumEntropia = (this->contenedorParcialEntropia->at(i)->acumEntropia / (log2(cantidadDocumentosEnLaColeccion))) + 1;
 	}
+
+
 }
 
 void Ponderer::ponderarLocarPorGlobal(){
