@@ -16,16 +16,12 @@ try:
 	lsi = models.LsiModel(corpus, num_topics=int(argv[2]), chunksize=int(argv[3]))
 		
 	try:
-		# Calculo y guardo la Matriz Vt
+		# Calculo y guardo la matriz V
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
-		
-		Vt = transpose(V)
-		
+				
 		file = open(argv[4] + "_Vt.bin", "wb")
-		file.write(pack('ii', Vt.shape[0], Vt.shape[1]))
-		file.write(Vt)
+		file.write(V)
 		file.close()
-					
 	except Exception:
 		print "Error al intentar guardar la matriz V."
 		raise
@@ -33,7 +29,8 @@ try:
 	try:
 		# Calculo los autovalores
 		Saux =  lsi.projection.s
-		# Calculo la inversa de S, y los almaceno
+
+		# Calculo la inversa de S, y la almaceno
 		S = linalg.pinv(diag(Saux))
 				
 		file = open(argv[4] + "/S.bin", "wb")
@@ -46,22 +43,16 @@ try:
 		raise
 		
 	try:
-		# Calculo y los autovalores
+		# Calculo y guardo la matriz U
 		U =  lsi.projection.u
 		
 		file = open(argv[4] + "/U.bin", "wb")
-		file.write(pack('ii', U.shape[0], U.shape[1]))
 		file.write(U)
-		file.close()
-		
+		file.close()		
 	except Exception:
 		print "Error al intentar guardar la matriz U."
-		raise
-	
+		raise	
 	 
 except Exception:
 	print "Los argumentos son inválidos o insuficientes."
-	raise	
-
- 
-
+	raise
