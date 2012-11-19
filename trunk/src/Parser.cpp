@@ -32,9 +32,21 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	}
 	
 
-	termino = lector->obtenerToken(archivo);
+	//termino = lector->obtenerToken(archivo);
 	while (!archivo.eof()) {
-		terminoSiguiente = lector->obtenerToken(archivo);
+
+		termino = lector->obtenerToken(archivo);
+		std::string terminoParseado = this->parsearPalabra(termino);
+
+		if(terminoParseado.size() > 0){
+
+			std::string terminoStemado = stemmer->stemPalabra(terminoParseado);
+			if (terminoStemado.size() > 0) {
+				contenedorLexico->insertarPalabra(terminoStemado);
+			}
+		}
+
+		/*terminoSiguiente = lector->obtenerToken(archivo);
 
 		if (termino.length() > 0 && validador->validarTermino(termino)) {
 			if (validador->esPalabraCompuesta(termino, terminoSiguiente) &&
@@ -65,11 +77,11 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 					terminosOraciones.pop_front();
 				}*/
 
-				termino = terminoSiguiente;
+			/*	termino = terminoSiguiente;
 			}
 		}else {
 			termino = terminoSiguiente;
-		}
+		}*/
 	}
 	archivo.close();
 	return true;
@@ -77,6 +89,23 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 
 Trie* Parser::obtenerContenedorLexico() {
 	return contenedorLexico;
+}
+
+std::string Parser::parsearPalabra(std::string palabra){
+
+	std::string palabraParseada="";
+
+	for(unsigned int i=0; i<palabra.size();i++){
+
+		if( (palabra.at(i)>=65 && palabra.at(i)<=90 ) || (palabra.at(i)>=97 && palabra.at(i)<=122) ){
+			palabraParseada += palabra.at(i);
+		}
+
+	}
+
+
+	return palabraParseada;
+
 }
 
 //Trie* Parser::obtenerContenedorOraciones() {

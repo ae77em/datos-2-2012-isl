@@ -34,6 +34,8 @@ class Parser {
 
 		Trie* obtenerContenedorLexico();
 		//Trie* obtenerContenedorOraciones();
+
+		std::string parsearPalabra(std::string);
 };
 
 #endif
