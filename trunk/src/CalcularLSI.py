@@ -16,16 +16,14 @@ try:
 	lsi = models.LsiModel(corpus, num_topics=int(argv[2]), chunksize=int(argv[3]))
 		
 	try:
-		# Calculo y guardo la Matriz V
+		# Calculo y guardo la Matriz Vt
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
-		print 'V->'
-		print V
-		V = transpose(V)
-		print 'V trasp->'
-		print V
-		file = open(argv[4]+"_V.bin", "wb")
-		file.write(pack('ii', V.shape[0], V.shape[1]))
-		file.write(V)
+		
+		Vt = transpose(V)
+		
+		file = open(argv[4] + "_Vt.bin", "wb")
+		file.write(pack('ii', Vt.shape[0], Vt.shape[1]))
+		file.write(Vt)
 		file.close()
 					
 	except Exception:
