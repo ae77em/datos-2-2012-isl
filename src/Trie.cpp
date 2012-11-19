@@ -294,7 +294,7 @@ void Trie::persistirPalabrasContenedor(std::ofstream* salida){
     }
 }
 
-void Trie::persistirPalabras_INI(std::ofstream* salida, std::ofstream* offsetLexico){
+void Trie::persistirPalabras_INI(std::ofstream* diccionario, std::ofstream* offsetLexico){
 
 	std::string cadenaParcialDePalabras;
 
@@ -302,7 +302,9 @@ void Trie::persistirPalabras_INI(std::ofstream* salida, std::ofstream* offsetLex
 
     int offsetL=0;
 
-    persistirPalabras(RAIZ->padreSupremo->hijo,salida,offsetLexico,&offsetL,cadenaParcialDePalabras);
+    persistirPalabras(RAIZ->padreSupremo->hijo,diccionario,offsetLexico,&offsetL,cadenaParcialDePalabras);
+
+    *diccionario<<this->obtenerContadorId()<<std::endl;
 }
 
 void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstream* offsetLexico,int* offset,std::string palabra){

@@ -53,6 +53,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 		}else {
 			std::cout << "El archivo " << nombreArchivo << " fue parseado (" << i << ")" << std::endl;
 
+			//extrayendo y persistiendo nombre archivo
 			nombreArchivos<<nombreArchivo.substr((nombreArchivo.find_last_of("/\\")+1))<<" "<<parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados()<<std::endl;
 			parser->obtenerContenedorLexico()->aumentarCantidadDeDocParseados();
 
