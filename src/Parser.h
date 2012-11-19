@@ -11,7 +11,8 @@
 #include "Trie.h"
 #include "Validador.h"
 
-#define PALABRAS_FRASE 4
+// Maximo de palabras para las palabras compuestas
+#define MAX_PALABRAS 4
 
 class Parser {
 	private:

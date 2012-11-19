@@ -1,6 +1,8 @@
 #include "Parser.h"
 #include "Stemmer.h"
 
+#include <algorithm>
+
 Parser::Parser() {
 	contenedorLexico = new Trie();
 	//contenedorOraciones = new Trie();
@@ -35,7 +37,8 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 		terminoSiguiente = lector->obtenerToken(archivo);
 
 		if (termino.length() > 0 && validador->validarTermino(termino)) {
-			if (validador->esPalabraCompuesta(termino, terminoSiguiente)) {
+			if (validador->esPalabraCompuesta(termino, terminoSiguiente) &&
+				std::count(termino.begin(), termino.end(), ' ') < MAX_PALABRAS) {
 				if (terminoSiguiente.length() > 0) {
 					termino += " " + terminoSiguiente;
 				}
