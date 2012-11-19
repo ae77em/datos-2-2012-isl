@@ -39,12 +39,15 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 	std::list<std::string>* archivos = listador->listarArchivos(directorio);
 
 	std::list<std::string>::iterator iterador;
-	for (iterador = archivos->begin(); iterador != archivos->end(); iterador++) {
+	int i = 0;
+	for (iterador = archivos->begin(); iterador != archivos->end(); iterador++, i++) {
 		std::string nombreArchivo = (*iterador);
 
 		if (!parser->parsearArchivo(nombreArchivo)) {
 			std::cerr << "El archivo " << nombreArchivo << " no pudo ser parseado" << std::endl;
-		}else{
+		}else {
+			std::cout << "El archivo " << nombreArchivo << " fue parseado (" << i << ")" << std::endl;
+
 			parser->obtenerContenedorLexico()->aumentarCantidadDeDocParseados();
 			//parser->obtenerContenedorOraciones()->aumentarCantidadDeDocParseados();
 
