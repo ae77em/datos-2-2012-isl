@@ -19,6 +19,8 @@ Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
 
 	ponderador = new Ponderer();
 	calculador = new CalculadorLSI();
+
+
 }
 
 Indexador::~Indexador() {
@@ -34,6 +36,9 @@ Indexador::~Indexador() {
  */
 bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std::string directorio) {
 
+	std::ofstream nombreArchivos;
+	nombreArchivos.open(this->pathNombreArchivosTerminos.c_str());
+
 	std::cout<<"COMIENZA INDEXACION"<<std::endl;
 
 	std::list<std::string>* archivos = listador->listarArchivos(directorio);
@@ -48,7 +53,9 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 		}else {
 			std::cout << "El archivo " << nombreArchivo << " fue parseado (" << i << ")" << std::endl;
 
+			nombreArchivos<<nombreArchivo.substr((nombreArchivo.find_last_of("/\\")+1))<<" "<<parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados()<<std::endl;
 			parser->obtenerContenedorLexico()->aumentarCantidadDeDocParseados();
+
 			//parser->obtenerContenedorOraciones()->aumentarCantidadDeDocParseados();
 
 			// vuelco los datos obtenidos del documento parseado a disco
@@ -58,12 +65,13 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 			//preparo el trie para una nueva parseada
 			parser->obtenerContenedorLexico()->inicializarFrecuenciasLocales();
 			parser->obtenerContenedorLexico()->vaciarContenedorParcial();
-
+			std::cout<<"libro: "<<parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados()<<std::endl;
 			//parser->obtenerContenedorOraciones()->inicializarFrecuenciasLocales();
 			//parser->obtenerContenedorOraciones()->vaciarContenedorParcial();
 		}
 	}
 
+	nombreArchivos.close();
 	persistidor->cerrar();
 	//persistidorOraciones->cerrar();
 
@@ -147,4 +155,7 @@ void Indexador::generarPaths(){
 
 		pathDiccionarioOraciones=pathCarpetaRepo + "/diccionarioOraciones";
 		pathDiccionarioOraciones+= nombreIndice;
+
+		pathNombreArchivosTerminos=pathCarpetaRepo + "/nombreArchivos";
+		pathNombreArchivosTerminos += pathCarpetaRepo;
 }

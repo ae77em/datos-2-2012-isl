@@ -313,7 +313,7 @@ void Trie::persistirPalabras(TnodoTrie* NODO, std::ofstream* salida,std::ofstrea
             if(NODO->infoArchivo){ //si este nodo no esta vacio quiere decir que corresponde al final de una palabra
 
                 char tamanio = sprintf(buffer,"%d",NODO->infoArchivo->id);
-                *salida<<palabra<<" "<<buffer<<" ";
+                *salida<<palabra<<" "<<buffer<<std::endl;
                 *offsetLexico<<*offset<<std::endl;
 
 				//actualizo offset

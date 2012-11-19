@@ -52,6 +52,7 @@ class Indexador {
 		std::string pathDiccionarioTerminos;
 		std::string pathDiccionarioOraciones;
 
+		std::string pathNombreArchivosTerminos;
 };
 
 #endif
