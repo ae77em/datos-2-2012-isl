@@ -7,7 +7,7 @@ Consulter::Consulter(std::string repositorio) {
 
 	matrizU.open((repositorio + "U.bin").c_str(), std::ios_base::binary);
     matrizS.open((repositorio + "S.bin").c_str(), std::ios_base::binary);
-    matrizV.open((repositorio + "V.bin").c_str(), std::ios_base::binary);
+    matrizV.open((repositorio + "Vt.bin").c_str(), std::ios_base::binary);
 
 	cargarS();
 
@@ -33,7 +33,7 @@ void Consulter::cargarS() {
 	matrizS.read(reinterpret_cast<char*>(&cantAutovalores), sizeof(int));
 
 	// Leo la matriz
-	for (int i = 0; i < cantAutovalores; i++) {
+	for (unsigned int i = 0; i < cantAutovalores; i++) {
 		matrizS.read(reinterpret_cast<char*>(&valor), sizeof(double));
 		vectorS->at(i) = new double(valor);
 	}
