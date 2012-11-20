@@ -22,6 +22,7 @@ try:
 		file = open(argv[4] + "_V.bin", "wb")
 		file.write(V)
 		file.close()
+
 	except Exception:
 		print "Error al intentar guardar la matriz V."
 		raise
@@ -32,6 +33,7 @@ try:
 
 		# Calculo la inversa de S, y la almaceno
 		S = diag(linalg.pinv(diag(Saux)))
+		
 				
 		file = open(argv[4] + "/S.bin", "wb")
 		file.write(pack('i', S.shape[0]))
@@ -49,6 +51,7 @@ try:
 		file = open(argv[4] + "/U.bin", "wb")
 		file.write(U)
 		file.close()		
+
 	except Exception:
 		print "Error al intentar guardar la matriz U."
 		raise	
