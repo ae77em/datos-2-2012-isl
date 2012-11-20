@@ -19,10 +19,9 @@ try:
 		# Calculo y guardo la matriz V
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
 				
-		file = open(argv[4] + "/V.bin", "wb")
+		file = open(argv[4] + "_V.bin", "wb")
 		file.write(V)
 		file.close()
-
 	except Exception:
 		print "Error al intentar guardar la matriz V."
 		raise
@@ -32,7 +31,7 @@ try:
 		Saux =  lsi.projection.s
 
 		# Calculo la inversa de S, y la almaceno
-		S = linalg.pinv(diag(Saux))
+		S = diag(linalg.pinv(diag(Saux)))
 				
 		file = open(argv[4] + "/S.bin", "wb")
 		file.write(pack('i', S.shape[0]))
