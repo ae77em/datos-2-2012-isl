@@ -16,12 +16,10 @@ class Indexador {
 		Parser* parser;
 		Ponderer* ponderador;
 		Persister* persistidor;
-		Persister* persistidorOraciones;
 		CalculadorLSI* calculador;
 
 		std::string nombreIndice;
 		unsigned int cantTopicos;
-
 	public:
 		Indexador(std::string nombreIndice, unsigned int cantTopicos);
 		~Indexador();
@@ -29,7 +27,6 @@ class Indexador {
 		bool crearIndice(std::string nombreRepositorio, int cantTopicos, std::string directorio);
 
 		std::string obtenerPathDiccionarioLexico();
-		std::string obtenerPathDiccionarioOraciones();
 
 		unsigned int obtenerCanTopicos();
 
@@ -39,19 +36,10 @@ class Indexador {
 		void crearCarpetaRepo();
 
 		std::string pathCarpetaRepo;
-
 		std::string pathMatrizTermXDoc;
-		std::string pathMatrizOracionesXDoc;
-
 		std::string pathMatrizTermXDocPonderada;
-		std::string pathMatrizOracionesXDocPonderada;
-
 		std::string pathSVDTerminos;
-		std::string pathSVDOraciones;
-
 		std::string pathDiccionarioTerminos;
-		std::string pathDiccionarioOraciones;
-
 		std::string pathNombreArchivosTerminos;
 };
 
