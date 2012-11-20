@@ -40,6 +40,8 @@ class Indexador {
 		std::string pathMatrizTermXDocPonderada;
 		std::string pathSVDTerminos;
 		std::string pathDiccionarioTerminos;
+		std::string pathOffsetDiccionarioTerminos;
+
 		std::string pathNombreArchivosTerminos;
 };
 
