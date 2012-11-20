@@ -6,6 +6,8 @@
 #include <fstream>
 #include "ParserQuery.h"
 #include "CalculosAlgebraicos.h"
+#include "Heap.h"
+
 
 class Consulter {
 public:
@@ -22,8 +24,8 @@ private:
     void cargarS();
     void cargarV();
     void cargarNombreArchivos(std::string);
-
     void evaluar();
+    void cantidadDeResultados(unsigned int);
 
 
     std::vector<double>* multiplicarContraU();
@@ -53,9 +55,7 @@ private:
     void mostrarV();
     void mostrarS();
 
-
-
-	//HEAP heap;
+	Heap* heap;
 };
 
 #endif /* CONSULTER_H_ */
