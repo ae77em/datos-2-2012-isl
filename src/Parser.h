@@ -11,9 +11,6 @@
 #include "Trie.h"
 #include "Validador.h"
 
-// Maximo de palabras para las palabras compuestas
-#define MAX_PALABRAS 4
-
 class Parser {
 	private:
 		std::list<std::string> terminosOraciones;
@@ -21,21 +18,14 @@ class Parser {
 		LectorArchivo* lector;
 		Stemmer* stemmer;
 		Trie* contenedorLexico;
-		//Trie* contenedorOraciones;
 		Validador* validador;
 	public:
 		Parser();
 		~Parser();
 		
 		bool parsearArchivo(std::string nombreArchivo);
-
 		void persistirLexico(std::string nombreIndice);
-		//void persistirOraciones(std::string nombreIndice);
-
 		Trie* obtenerContenedorLexico();
-		//Trie* obtenerContenedorOraciones();
-
-		std::string parsearPalabra(std::string);
 };
 
 #endif

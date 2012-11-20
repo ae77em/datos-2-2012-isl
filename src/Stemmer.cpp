@@ -90,6 +90,8 @@ int Stemmer::m(){
 		}
 		i++;
 	}
+
+	return n;
 }
 
 /* vocalEnStem() es true <=> posPrimeraLetra,...posUltimaLetra contiene una vocal */

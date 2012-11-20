@@ -25,17 +25,3 @@ bool Validador::validarTermino(std::string termino) {
 
 	return true;
 }
-
-bool Validador::esPalabraCompuesta(std::string termino, std::string terminoSiguiente) {
-	if (islower(termino[0])) {
-		return false;
-	}
-
-	if (isdigit(terminoSiguiente[0])) {
-		return validarNumero(terminoSiguiente);
-	}else if (islower(terminoSiguiente[0])) {
-		return false;
-	}
-
-	return true;
-}

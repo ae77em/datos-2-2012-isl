@@ -5,7 +5,6 @@
 
 Parser::Parser() {
 	contenedorLexico = new Trie();
-	//contenedorOraciones = new Trie();
 	lector = new LectorArchivo();
 	stemmer = new Stemmer();
 	validador = new Validador();
@@ -14,10 +13,6 @@ Parser::Parser() {
 Parser::~Parser() {
 	contenedorLexico->destruirArbol_INI();
 	delete contenedorLexico;
-
-	//contenedorOraciones->destruirArbol_INI();
-	//delete contenedorOraciones;
-
 	delete lector;
 	delete stemmer;
 	delete validador;
@@ -32,57 +27,20 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	}
 	
 
-	//termino = lector->obtenerToken(archivo);
+	termino = lector->obtenerToken(archivo);
 	while (!archivo.eof()) {
+		if (termino.length() > 0 && validador->validarTermino(termino)) {
+			std::string terminoStemado = stemmer->stemPalabra(termino);
 
-		termino = lector->obtenerToken(archivo);
-		std::string terminoParseado = this->parsearPalabra(termino);
-
-		if(terminoParseado.size() > 0){
-
-			std::string terminoStemado = stemmer->stemPalabra(terminoParseado);
+			// Por si justo la palabra que entra es un stemm y luego de procesar queda vacia
 			if (terminoStemado.size() > 0) {
 				contenedorLexico->insertarPalabra(terminoStemado);
 			}
 		}
 
-		/*terminoSiguiente = lector->obtenerToken(archivo);
-
-		if (termino.length() > 0 && validador->validarTermino(termino)) {
-			if (validador->esPalabraCompuesta(termino, terminoSiguiente) &&
-				std::count(termino.begin(), termino.end(), ' ') < MAX_PALABRAS) {
-				if (terminoSiguiente.length() > 0) {
-					termino += " " + terminoSiguiente;
-				}
-			}else {
-				std::string terminoStemado = stemmer->stemPalabra(termino);
-
-				// Por si justo la palabra que entra es un stemm y luego de procesar queda vacia
-				if (terminoStemado.size() > 0) {
-					contenedorLexico->insertarPalabra(terminoStemado);
-
-				}
-
-				/*terminosOraciones.push_back(termino);
-				if (terminosOraciones.size() == PALABRAS_FRASE) {
-					std::string bufferOracion;
-					std::list<std::string>::iterator it;
-					for (it = terminosOraciones.begin(); it != terminosOraciones.end(); ++it) {
-						bufferOracion += (*it) + " ";
-					}
-
-					contenedorOraciones->insertarPalabra(bufferOracion); // TODO eliminar segundo parametro
-
-					// TODO Mantener 3 terminos anteriores
-					terminosOraciones.pop_front();
-				}*/
-
-			/*	termino = terminoSiguiente;
-			}
-		}else {
-			termino = terminoSiguiente;
-		}*/
+		termino = lector->obtenerToken(archivo);
 	}
+
 	archivo.close();
 	return true;
 }
@@ -90,27 +48,6 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 Trie* Parser::obtenerContenedorLexico() {
 	return contenedorLexico;
 }
-
-std::string Parser::parsearPalabra(std::string palabra){
-
-	std::string palabraParseada="";
-
-	for(unsigned int i=0; i<palabra.size();i++){
-
-		if( (palabra.at(i)>=65 && palabra.at(i)<=90 ) || (palabra.at(i)>=97 && palabra.at(i)<=122) ){
-			palabraParseada += palabra.at(i);
-		}
-
-	}
-
-
-	return palabraParseada;
-
-}
-
-//Trie* Parser::obtenerContenedorOraciones() {
-//	return contenedorOraciones;
-//}
 
 void Parser::persistirLexico(std::string path) {
 
@@ -128,20 +65,3 @@ void Parser::persistirLexico(std::string path) {
     lexico.close();
     offsetLexico.close();
 }
-
-//void Parser::persistirOraciones(std::string path) {
-//
-//    std::ofstream oraciones;
-//    std::ofstream offsetOraciones;
-//
-//    std::string pathOffsetOracion = path;
-//    pathOffsetOracion += "_offset";
-//
-//    oraciones.open(path.c_str());
-//    offsetOraciones.open(pathOffsetOracion.c_str());
-//
-//    contenedorOraciones->persistirPalabras_INI(&oraciones, &offsetOraciones);
-//
-//    oraciones.close();
-//    offsetOraciones.close();
-//}
