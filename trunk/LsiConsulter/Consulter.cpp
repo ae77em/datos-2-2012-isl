@@ -6,6 +6,7 @@ Consulter::Consulter(std::string repositorio) {
    std::cout.unsetf(std::ios::floatfield);
    std::cout.precision(15);
 
+   heap = new Heap();
 
     calculer = new CalculosAlgebraicos();
 
@@ -191,10 +192,21 @@ void Consulter::evaluar(){
     calculer->normalizarVector(this->queryProyectada);
 
     std::cout<<"EVALUANDO"<<std::endl<<std::endl;
+
+    TnodoHeapDocPuntaje nodoHeap;
+
     //metodo coseno
     for(unsigned int i=0; i< cantAutovalores; i++){
     	std::cout<<calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) )<<std::endl;
+
+    	nodoHeap.puntaje = calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) );
+    	nodoHeap.doc = 0;
+    	heap->cargarElemento(nodoHeap);
+
     }
+
+    unsigned int cantidadDeDoc = 0;
+    cantidadDeResultados(cantidadDeDoc);
 
 }
 
@@ -304,5 +316,11 @@ void Consulter::mostrarMatrices(){
 	mostrarS();
 	mostrarU();
 	mostrarV();
+
+}
+
+void Consulter::cantidadDeResultados(unsigned int cantDoc){
+
+
 
 }
