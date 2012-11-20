@@ -15,7 +15,6 @@ Indexador::Indexador(std::string nombreIndice, unsigned int cantTopicos) {
 	parser = new Parser();
 
 	persistidor = new Persister(pathMatrizTermXDoc);
-	persistidorOraciones = new Persister(pathMatrizOracionesXDoc);
 
 	ponderador = new Ponderer();
 	calculador = new CalculadorLSI();
@@ -116,9 +115,6 @@ std::string Indexador::obtenerPathDiccionarioLexico() {
 	return pathDiccionarioTerminos;
 }
 
-std::string Indexador::obtenerPathDiccionarioOraciones() {
-	return pathDiccionarioOraciones;
-}
 
 unsigned int Indexador::obtenerCanTopicos() {
 	return cantTopicos;
@@ -137,26 +133,18 @@ void Indexador::generarPaths(){
 		pathMatrizTermXDoc= pathCarpetaRepo + "/MatriztermXDoc__";
 		pathMatrizTermXDoc += nombreIndice;
 
-		pathMatrizOracionesXDoc=pathCarpetaRepo + "/MatrizoracionesXDoc_";
-		pathMatrizOracionesXDoc += nombreIndice;
 
 		pathMatrizTermXDocPonderada=pathCarpetaRepo + "/MatriztermXDoc_Ponderada_";
 		pathMatrizTermXDocPonderada += nombreIndice;
 
-		pathMatrizOracionesXDocPonderada=pathCarpetaRepo + "/MatrizoracionesXDoc_Ponderada_";
-		pathMatrizOracionesXDocPonderada += nombreIndice;
 
 		pathSVDTerminos=pathCarpetaRepo + "/SVDTerminos_";
 		pathSVDTerminos += nombreIndice;
 
-		pathSVDOraciones=pathCarpetaRepo + "/SVDOraciones_";
-		pathSVDOraciones += nombreIndice;
 
 		pathDiccionarioTerminos=pathCarpetaRepo + "/diccionarioTerminos";
 		pathDiccionarioTerminos += nombreIndice;
 
-		pathDiccionarioOraciones=pathCarpetaRepo + "/diccionarioOraciones";
-		pathDiccionarioOraciones+= nombreIndice;
 
 		pathOffsetDiccionarioTerminos = pathCarpetaRepo + "/offsetDiccionarioTermino";
 		pathOffsetDiccionarioTerminos += nombreIndice;
