@@ -19,7 +19,7 @@ try:
 		# Calculo y guardo la matriz V
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
 				
-		file = open(argv[4] + "_V.bin", "wb")
+		file = open(argv[4] + "/V.bin", "wb")
 		file.write(V)
 		file.close()
 
