@@ -19,9 +19,10 @@ try:
 		# Calculo y guardo la matriz V
 		V = matutils.corpus2dense(lsi[corpus], len(lsi.projection.s)).T / lsi.projection.s
 				
-		file = open(argv[4] + "_Vt.bin", "wb")
+		file = open(argv[4] + "/V.bin", "wb")
 		file.write(V)
 		file.close()
+
 	except Exception:
 		print "Error al intentar guardar la matriz V."
 		raise
