@@ -13,8 +13,6 @@
 
 class Parser {
 	private:
-		std::list<std::string> terminosOraciones;
-
 		LectorArchivo* lector;
 		Stemmer* stemmer;
 		Trie* contenedorLexico;
@@ -26,7 +24,6 @@ class Parser {
 		bool parsearArchivo(std::string nombreArchivo);
 		void persistirLexico(std::string,std::string);
 		Trie* obtenerContenedorLexico();
-		std::string parsearPalabra(std::string);
 };
 
 #endif
