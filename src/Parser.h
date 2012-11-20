@@ -26,6 +26,7 @@ class Parser {
 		bool parsearArchivo(std::string nombreArchivo);
 		void persistirLexico(std::string,std::string);
 		Trie* obtenerContenedorLexico();
+		std::string parsearPalabra(std::string);
 };
 
 #endif
