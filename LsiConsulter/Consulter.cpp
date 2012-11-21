@@ -128,6 +128,50 @@ void Consulter::rankearConsulta(std::string consulta){
     evaluar();
 }
 
+void Consulter::evaluar(){
+
+    //primero normalizo el vector query
+    calculer->normalizarVector(this->queryProyectada);
+
+    TnodoHeapDocPuntaje nodoHeap;
+
+    //metodo coseno
+    for(unsigned int i=0; i< cantAutovalores; i++){
+    //	std::cout<<calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) )<<std::endl;
+
+    	nodoHeap.puntaje = calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) );
+    	nodoHeap.doc = i;
+    	heap->cargarElemento(nodoHeap);
+
+    }
+
+    unsigned int cantidadDeDoc = 3;
+
+    mostrarCantidadDeResultados(cantidadDeDoc);
+
+}
+void Consulter::mostrarCantidadDeResultados(unsigned int cantDocSolicitados){
+
+	std::cout<<"MOSTRANDO RESULTADOS"<<std::endl;
+
+	for(unsigned int i=0; i<cantDocSolicitados; i++ ){
+
+		TnodoHeapDocPuntaje nodoHeap = heap->obtenerMaximo();
+
+		std::string nombreArchivo = obtenerNombreArchivo(nodoHeap.doc);
+
+		std::cout<<"RANK: "<<i+1<<" NombreArchivo: "<<nombreArchivo<<" Puntaje: "<<nodoHeap.puntaje<<std::endl;
+
+	}
+
+
+}
+
+std::string Consulter::obtenerNombreArchivo(unsigned int pos){
+
+	return contenedorNombreArchivos->at(pos);
+
+}
 
 
 
@@ -185,6 +229,9 @@ std::vector<double>* Consulter::multiplicarContraS(std::vector<double>* producto
 
     return productoInternoQcontraU;
 }
+
+
+
 
 
 
@@ -296,47 +343,3 @@ void Consulter::mostrarMatrices(){
 
 }
 
-void Consulter::evaluar(){
-
-    //primero normalizo el vector query
-    calculer->normalizarVector(this->queryProyectada);
-
-    TnodoHeapDocPuntaje nodoHeap;
-
-    //metodo coseno
-    for(unsigned int i=0; i< cantAutovalores; i++){
-    //	std::cout<<calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) )<<std::endl;
-
-    	nodoHeap.puntaje = calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) );
-    	nodoHeap.doc = i;
-    	heap->cargarElemento(nodoHeap);
-
-    }
-
-    unsigned int cantidadDeDoc = 3;
-
-    mostrarCantidadDeResultados(cantidadDeDoc);
-
-}
-void Consulter::mostrarCantidadDeResultados(unsigned int cantDocSolicitados){
-
-	std::cout<<"MOSTRANDO RESULTADOS"<<std::endl;
-
-	for(unsigned int i=0; i<cantDocSolicitados; i++ ){
-
-		TnodoHeapDocPuntaje nodoHeap = heap->obtenerMaximo();
-
-		std::string nombreArchivo = obtenerNombreArchivo(nodoHeap.doc);
-
-		std::cout<<"RANK: "<<i+1<<" NombreArchivo: "<<nombreArchivo<<" Puntaje: "<<nodoHeap.puntaje<<std::endl;
-
-	}
-
-
-}
-
-std::string Consulter::obtenerNombreArchivo(unsigned int pos){
-
-	return contenedorNombreArchivos->at(pos);
-
-}

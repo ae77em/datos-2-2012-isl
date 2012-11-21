@@ -23,14 +23,11 @@ void ParserQuery::cargarOffsetDiccionario(){
 
     unsigned int offset;
 
-    while(!offsetDiccionario.eof()){
-        offsetDiccionario>>offset;
-        //std::cout<<offset<<" ";
+    while(!offsetDiccionario.eof() && (offsetDiccionario>>offset) ){
         contenedorOffsetDiccionario->push_back(offset);
     }
 
-    contenedorOffsetDiccionario->pop_back();
-}
+ }
 
 ParserQuery::~ParserQuery() {
 	// TODO Auto-generated destructor stub
