@@ -25,7 +25,7 @@ private:
     void cargarV();
     void cargarNombreArchivos(std::string);
     void evaluar();
-    void mostrarCantidadDeResultados(unsigned int);
+    void mostrarRankings();
     void generarContenedorMatrizV();
     void cargarMatrizV();
 

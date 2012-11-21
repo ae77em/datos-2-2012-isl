@@ -33,8 +33,7 @@ void Consulter::cargarNombreArchivos(std::string repositorio){
 
 	std::string nombreArchivo="";
 
-	while(archivos.good()){
-		archivos >> nombreArchivo;
+	while(archivos.good() && std::getline(archivos,nombreArchivo)){
 		contenedorNombreArchivos->push_back(nombreArchivo);
 	}
 
@@ -145,12 +144,15 @@ void Consulter::evaluar(){
 
     }
 
-    unsigned int cantidadDeDoc = 3;
-
-    mostrarCantidadDeResultados(cantidadDeDoc);
+    mostrarRankings();
 
 }
-void Consulter::mostrarCantidadDeResultados(unsigned int cantDocSolicitados){
+void Consulter::mostrarRankings(){
+
+	unsigned int cantDocSolicitados;
+
+	std::cout<<"INGRESE CANTIDAD DE DOCUMENTOS A LISTAR"<<std::endl;
+	std::cin>>cantDocSolicitados;
 
 	std::cout<<"MOSTRANDO RESULTADOS"<<std::endl;
 
@@ -160,7 +162,7 @@ void Consulter::mostrarCantidadDeResultados(unsigned int cantDocSolicitados){
 
 		std::string nombreArchivo = obtenerNombreArchivo(nodoHeap.doc);
 
-		std::cout<<"RANK: "<<i+1<<" NombreArchivo: "<<nombreArchivo<<" Puntaje: "<<nodoHeap.puntaje<<std::endl;
+		std::cout<<"RANK: "<<i+1<<" NombreArchivo: "<<nombreArchivo<<"       Puntaje: "<<nodoHeap.puntaje<<std::endl;
 
 	}
 
@@ -229,9 +231,6 @@ std::vector<double>* Consulter::multiplicarContraS(std::vector<double>* producto
 
     return productoInternoQcontraU;
 }
-
-
-
 
 
 
