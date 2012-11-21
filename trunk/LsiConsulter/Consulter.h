@@ -25,13 +25,14 @@ private:
     void cargarV();
     void cargarNombreArchivos(std::string);
     void evaluar();
-    void cantidadDeResultados(unsigned int);
-
+    void mostrarCantidadDeResultados(unsigned int);
+    void generarContenedorMatrizV();
+    void cargarMatrizV();
 
     std::vector<double>* multiplicarContraU();
     std::vector<double>* multiplicarContraS(std::vector<double>*);
-    void generarContenedorMatrizV();
-    void cargarMatrizV();
+
+    std::string obtenerNombreArchivo(unsigned int);
 
     //atributos
 	unsigned int cantAutovalores;
