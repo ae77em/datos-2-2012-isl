@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Consulter.h"
+#include "Heap.h"
 
 std::string obtenerTerminosQuery(int argc, char* argv[]) {
 	std::string query;
@@ -13,6 +14,7 @@ std::string obtenerTerminosQuery(int argc, char* argv[]) {
 
 	return query;
 }
+
 
 int main(int argc, char* argv[]) {
 	Consulter* consultador;
