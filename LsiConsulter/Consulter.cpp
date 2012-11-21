@@ -98,12 +98,13 @@ void Consulter::generarContenedorMatrizV(){
 void Consulter::cargarMatrizV(){
 
 		registroV = new double[this->cantAutovalores];
+		int j=0;
 
 		while( matrizV.good() &&  matrizV.read((char*)registroV,sizeof(double)*this->cantAutovalores) ){
-
 			for(unsigned int i=0; i< cantAutovalores ; i++){
-				contenedorMatrizV->at(i)->push_back( registroV[i] ); //solo es un camio de formato
+				contenedorMatrizV->at(j)->push_back( registroV[i] ); //solo es un camio de formato
 			}
+			j++;
 		}
 
 	    delete [] registroV;
@@ -136,7 +137,6 @@ void Consulter::evaluar(){
 
     //metodo coseno
     for(unsigned int i=0; i< cantAutovalores; i++){
-    //	std::cout<<calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) )<<std::endl;
 
     	nodoHeap.puntaje = calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) );
     	nodoHeap.doc = i;
