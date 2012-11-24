@@ -1,13 +1,14 @@
 #ifndef CONSULTER_H_
 #define CONSULTER_H_
 
+#include <cstdlib>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
-#include "ParserQuery.h"
+
 #include "CalculosAlgebraicos.h"
 #include "Heap.h"
-
+#include "ParserQuery.h"
 
 class Consulter {
 public:

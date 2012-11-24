@@ -1,22 +1,24 @@
 #include "Consulter.h"
 
 Consulter::Consulter(std::string repositorio) {
+	std::string home = getenv("HOME");
+	std::string rutaRepositorio = home + "/" + repositorio;
 
 	//solo es para que imprima decimales
-   std::cout.unsetf(std::ios::floatfield);
-   std::cout.precision(15);
+	std::cout.unsetf(std::ios::floatfield);
+	std::cout.precision(15);
 
-   heap = new Heap();
+	heap = new Heap();
 
-    calculer = new CalculosAlgebraicos();
+	calculer = new CalculosAlgebraicos();
 
-    parserQuery = new ParserQuery(repositorio + "/diccionarioTerminos" + repositorio , repositorio + "/offsetDiccionarioTermino" + repositorio);
+    parserQuery = new ParserQuery(rutaRepositorio + "/diccionarioTerminos", rutaRepositorio + "/offsetDiccionarioTermino");
 
-    cargarNombreArchivos(repositorio);
+    cargarNombreArchivos(rutaRepositorio);
 
-	matrizU.open((repositorio + "/U.bin").c_str(), std::ios_base::binary);
-    matrizS.open((repositorio + "/S.bin").c_str(), std::ios_base::binary);
-    matrizV.open((repositorio + "/V.bin").c_str(), std::ios_base::binary);
+	matrizU.open((rutaRepositorio + "/U.bin").c_str(), std::ios_base::binary);
+    matrizS.open((rutaRepositorio + "/S.bin").c_str(), std::ios_base::binary);
+    matrizV.open((rutaRepositorio + "/V.bin").c_str(), std::ios_base::binary);
 
 	cargarS();
 	cargarV(); //se levanta normal, no esta traspuesta
@@ -24,12 +26,11 @@ Consulter::Consulter(std::string repositorio) {
 }
 
 
-void Consulter::cargarNombreArchivos(std::string repositorio){
-
+void Consulter::cargarNombreArchivos(std::string rutaRepositorio) {
 	contenedorNombreArchivos = new std::vector<std::string>;
 
 	std::ifstream archivos;
-	archivos.open( (repositorio + "/nombreArchivos" + repositorio).c_str());
+	archivos.open( (rutaRepositorio + "/nombreArchivos").c_str());
 
 	std::string nombreArchivo="";
 
@@ -68,56 +69,39 @@ void Consulter::cargarS() {
 	delete [] regS;
 }
 
-void Consulter::cargarV(){
-
+void Consulter::cargarV() {
 	generarContenedorMatrizV();
-
 	cargarMatrizV();
-
-	/*std::cout<<"V"<<std::endl; //mostrnado V
-	for(unsigned int i=0; i<contenedorMatrizV->size() ; i++){
-		for(unsigned int j=0; j<contenedorMatrizV->at(i)->size() ; j++){
-			std::cout<<contenedorMatrizV->at(i)->at(j)<<" ";
-		}
-		std::cout<<std::endl;
-	}
-	std::cout<<std::endl;*/
 }
 
-void Consulter::generarContenedorMatrizV(){
-
+void Consulter::generarContenedorMatrizV() {
 	contenedorMatrizV = new std::vector< std::vector<double>* >;
 
-	for(unsigned int i = 0 ; i<cantAutovalores ; i++){
-		contenedorMatrizV->push_back( new std::vector <double>);
+	for(unsigned int i = 0 ; i < cantAutovalores ; i++){
+		contenedorMatrizV->push_back(new std::vector<double>);
 	}
-
 }
 
+void Consulter::cargarMatrizV() {
+	registroV = new double[this->cantAutovalores];
+	int j = 0;
 
-void Consulter::cargarMatrizV(){
-
-		registroV = new double[this->cantAutovalores];
-		int j=0;
-
-		while( matrizV.good() &&  matrizV.read((char*)registroV,sizeof(double)*this->cantAutovalores) ){
-			for(unsigned int i=0; i< cantAutovalores ; i++){
-				contenedorMatrizV->at(j)->push_back( registroV[i] ); //solo es un camio de formato
-			}
-			j++;
+	while( matrizV.good() &&  matrizV.read((char*)registroV,sizeof(double)*this->cantAutovalores) ){
+		for(unsigned int i=0; i< cantAutovalores ; i++){
+			contenedorMatrizV->at(j)->push_back( registroV[i] ); //solo es un camio de formato
 		}
+		j++;
+	}
 
-	    delete [] registroV;
-
+	delete [] registroV;
 }
 
 
 Consulter::~Consulter() {
-	// TODO Auto-generated destructor stub
+
 }
 
-void Consulter::rankearConsulta(std::string consulta){
-
+void Consulter::rankearConsulta(std::string consulta) {
 	//toma un conjuento de palabras representado por el string y devuelve un vector que representa la consulta
 	this->query = parserQuery->parsearConsulta(consulta);
 
