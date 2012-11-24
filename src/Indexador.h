@@ -1,8 +1,9 @@
 #ifndef __INDEXADOR_H_
 #define __INDEXADOR_H_
 
-#include <string>
+#include <cstdlib>
 #include <list>
+#include <string>
 
 #include "ListadorDeArchivos.h"
 #include "Parser.h"

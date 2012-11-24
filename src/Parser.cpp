@@ -19,24 +19,21 @@ Parser::~Parser() {
 }
 
 bool Parser::parsearArchivo(std::string nombreArchivo) {
-	std::string termino, terminoSiguiente;
-	std::ifstream archivo(nombreArchivo.c_str());
+	std::string termino;
 
+	std::ifstream archivo(nombreArchivo.c_str());
 	if (!archivo.good()) {
 		return false;
 	}
 
-	std::string terminoValidado;
-	std::string terminoStemado;
-
 	termino = lector->obtenerToken(archivo);
 	while (!archivo.eof()) {
 		if (termino.length() > 0 && validador->validarTermino(termino)) {
-			std::string terminoStemado = stemmer->stemPalabra(termino);
+			termino = stemmer->stemPalabra(termino);
 
 			// Por si justo la palabra que entra es un stemm y luego de procesar queda vacia
-			if (terminoStemado.size() > 0) {
-				contenedorLexico->insertarPalabra(terminoStemado);
+			if (termino.size() > 0) {
+				contenedorLexico->insertarPalabra(termino);
 			}
 		}
 

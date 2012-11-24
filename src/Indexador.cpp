@@ -80,7 +80,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
     //aca  deberian de ir los destructoures de los trie,
 
     std::cout<<"CALCULANDO SVD TERMINOS"<<std::endl;
-    calculador->calcularLSI(this->obtenerCanTopicos(),this->pathMatrizTermXDocPonderada,this->nombreIndice);
+    calculador->calcularLSI(this->obtenerCanTopicos(),this->pathMatrizTermXDocPonderada,this->pathCarpetaRepo);
 
     persistidor->cerrar();
 
@@ -96,35 +96,25 @@ std::string Indexador::obtenerPathDiccionarioLexico() {
 	return pathDiccionarioTerminos;
 }
 
-
 unsigned int Indexador::obtenerCanTopicos() {
 	return cantTopicos;
 }
 
 void Indexador::crearCarpetaRepo() {
-	if(mkdir(this->pathCarpetaRepo.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH )!=0){ //devuelve cero si se pudo crear el dire
-		std::cerr << "no se pudo crear carpeta de repo: " << pathCarpetaRepo << std::endl;
+	// Devuelve cero si se pudo crear el dire
+	if(mkdir(this->pathCarpetaRepo.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0) {
+		std::cerr << "No se pudo crear la carpeta del repositorio: " << pathCarpetaRepo << std::endl;
 	}
 }
 
 void Indexador::generarPaths(){
-	pathCarpetaRepo =  nombreIndice;
+	std::string home = getenv("HOME");
+	pathCarpetaRepo = home + "/" + nombreIndice;
 
-	pathMatrizTermXDoc= pathCarpetaRepo + "/MatriztermXDoc__";
-	pathMatrizTermXDoc += nombreIndice;
-
-	pathMatrizTermXDocPonderada=pathCarpetaRepo + "/MatriztermXDoc_Ponderada_";
-	pathMatrizTermXDocPonderada += nombreIndice;
-
-	pathSVDTerminos=pathCarpetaRepo + "/SVDTerminos_";
-	pathSVDTerminos += nombreIndice;
-
-	pathDiccionarioTerminos=pathCarpetaRepo + "/diccionarioTerminos";
-	pathDiccionarioTerminos += nombreIndice;
-
+	pathMatrizTermXDoc = pathCarpetaRepo + "/MatriztermXDoc";
+	pathMatrizTermXDocPonderada = pathCarpetaRepo + "/MatriztermXDoc_Ponderada";
+	pathSVDTerminos = pathCarpetaRepo + "/SVDTerminos";
+	pathDiccionarioTerminos = pathCarpetaRepo + "/diccionarioTerminos";
 	pathOffsetDiccionarioTerminos = pathCarpetaRepo + "/offsetDiccionarioTermino";
-	pathOffsetDiccionarioTerminos += nombreIndice;
-
-	pathNombreArchivosTerminos=pathCarpetaRepo + "/nombreArchivos";
-	pathNombreArchivosTerminos += pathCarpetaRepo;
+	pathNombreArchivosTerminos = pathCarpetaRepo + "/nombreArchivos";
 }
