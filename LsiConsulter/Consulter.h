@@ -49,7 +49,7 @@ private:
 	std::vector<double>* vectorS;
 	std::vector<std::vector<double>*>* contenedorMatrizV;
 
-	std::vector<std::string>* contenedorNombreArchivos;
+	std::vector<std::string> contenedorNombreArchivos;
 
     double* registroV;
 

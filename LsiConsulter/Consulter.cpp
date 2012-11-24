@@ -9,9 +9,7 @@ Consulter::Consulter(std::string repositorio) {
 	std::cout.precision(15);
 
 	heap = new Heap();
-
 	calculer = new CalculosAlgebraicos();
-
     parserQuery = new ParserQuery(rutaRepositorio + "/diccionarioTerminos", rutaRepositorio + "/offsetDiccionarioTermino");
 
     cargarNombreArchivos(rutaRepositorio);
@@ -22,20 +20,17 @@ Consulter::Consulter(std::string repositorio) {
 
 	cargarS();
 	cargarV(); //se levanta normal, no esta traspuesta
-
 }
 
 
 void Consulter::cargarNombreArchivos(std::string rutaRepositorio) {
-	contenedorNombreArchivos = new std::vector<std::string>;
-
 	std::ifstream archivos;
 	archivos.open( (rutaRepositorio + "/nombreArchivos").c_str());
 
 	std::string nombreArchivo="";
 
 	while(archivos.good() && std::getline(archivos,nombreArchivo)){
-		contenedorNombreArchivos->push_back(nombreArchivo);
+		contenedorNombreArchivos.push_back(nombreArchivo);
 	}
 
 	archivos.close();
@@ -43,30 +38,22 @@ void Consulter::cargarNombreArchivos(std::string rutaRepositorio) {
 }
 
 void Consulter::cargarS() {
-
 	// Leo el tamaño de la matriz
 	matrizS.read((char*)(&cantAutovalores), sizeof(int));
 
-//	std::cout<<"cantAutovalores: "<<cantAutovalores<<std::endl;
-
-	//inicializo vector S
+	// Inicializo vector S
 	this->vectorS = new std::vector<double>;
 	this->vectorS->resize(cantAutovalores);
 
 	double* regS = new double[cantAutovalores];
 
-	//std::cout<<"vector S"<<std::endl;
+	matrizS.read((char*) regS, sizeof(double) * cantAutovalores);
 
-	matrizS.read((char*)regS, sizeof(double)*cantAutovalores);
-
-	for(unsigned int i=0; i < cantAutovalores ; i++){
+	for(unsigned int i = 0; i < cantAutovalores ; i++){
 		this->vectorS->at(i) = regS[i];
-		//std::cout<<vectorS->at(i)<<" ";
 	}
 
-	//std::cout<<std::endl<<std::endl;
-
-	delete [] regS;
+	delete[] regS;
 }
 
 void Consulter::cargarV() {
@@ -122,7 +109,7 @@ void Consulter::evaluar(){
     //metodo coseno
     for(unsigned int i=0; i< cantAutovalores; i++){
 
-    	nodoHeap.puntaje = calculer->metodoCoseno(this->queryProyectada , this->contenedorMatrizV->at(i) );
+    	nodoHeap.puntaje = calculer->productoInterno(this->queryProyectada , this->contenedorMatrizV->at(i) );
     	nodoHeap.doc = i;
     	heap->cargarElemento(nodoHeap);
 
@@ -153,23 +140,16 @@ void Consulter::mostrarRankings(){
 
 }
 
-std::string Consulter::obtenerNombreArchivo(unsigned int pos){
-
-	return contenedorNombreArchivos->at(pos);
-
+std::string Consulter::obtenerNombreArchivo(unsigned int pos) {
+	return contenedorNombreArchivos.at(pos);
 }
 
-
-
-std::vector<double>* Consulter::proyectarQuery(){
-
-    return this->multiplicarContraS( this->multiplicarContraU());
-
+std::vector<double>* Consulter::proyectarQuery() {
+    return this->multiplicarContraS(this->multiplicarContraU());
 }
 
-std::vector<double>* Consulter::multiplicarContraU(){
-
-    //como lo indices del vector query son 1, el producto interno entre el queyr y cada una de las columnas
+std::vector<double>* Consulter::multiplicarContraU() {
+    //como lo indices del vector query son 1, el producto interno entre el query y cada una de las columnas
     //sera la sumatoria de cada uno de los indices de esas columnas
 
     //vector que ira acumulando la sumatoria resultante del producto intenrno;
@@ -184,11 +164,9 @@ std::vector<double>* Consulter::multiplicarContraU(){
 
     //registro donde se iran almacenando las filas de U
     double* filaMatrizU = new double[cantAutovalores];
-    //std::cout<<std::endl;
-    //std::cout<<"U"<<std::endl;
+
     //comienza multiplicacion
     for(unsigned int i=0; i<query->size(); i++){
-
     	//me posiciono en la fila que indica el indice del vector query
         matrizU.seekg(query->at(i)*sizeof(double)*cantAutovalores);
 
@@ -199,25 +177,19 @@ std::vector<double>* Consulter::multiplicarContraU(){
         for(unsigned int i=0; i<productoInternoQcontraU->size(); i++){
             productoInternoQcontraU->at(i) += filaMatrizU[i];
         }
-
     }
 
-    delete [] filaMatrizU;
-
+    delete[] filaMatrizU;
     return productoInternoQcontraU;
 }
 
-std::vector<double>* Consulter::multiplicarContraS(std::vector<double>* productoInternoQcontraU){
-
+std::vector<double>* Consulter::multiplicarContraS(std::vector<double>* productoInternoQcontraU) {
     for(unsigned int i=0;i<productoInternoQcontraU->size();i++){
         productoInternoQcontraU->at(i) *= vectorS->at(i);
     }
 
     return productoInternoQcontraU;
 }
-
-
-
 
 /***************************************************************************/
 //metodos que muestran los contenidos de las amtrices
@@ -251,8 +223,7 @@ void Consulter::mostrarS(){
 
 }
 
-void Consulter::mostrarV(){
-
+void Consulter::mostrarV() {
 	matrizV.seekg(0);
 
 	std::vector< std::vector<double>* > * contenedorMatrizV2 = new std::vector< std::vector<double>* >;
@@ -284,11 +255,9 @@ void Consulter::mostrarV(){
 	std::cout<<std::endl;
 
 	delete [] registroV;
-
 }
 
-void Consulter::mostrarU(){
-
+void Consulter::mostrarU() {
 	matrizU.seekg(0);
 
 	std::vector< std::vector<double>* > * contenedorMatrizU = new std::vector< std::vector<double>* >;
@@ -315,14 +284,11 @@ void Consulter::mostrarU(){
 	std::cout<<std::endl;
 
 	delete [] registroU;
-
 }
 
-void Consulter::mostrarMatrices(){
-
+void Consulter::mostrarMatrices() {
 	mostrarS();
 	mostrarU();
 	mostrarV();
-
 }
 
