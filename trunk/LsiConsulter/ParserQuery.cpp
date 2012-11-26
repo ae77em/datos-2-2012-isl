@@ -88,16 +88,15 @@ unsigned int ParserQuery::buscarIdTerminoRec(std::string termino, int ini, int f
 	unsigned int id = 0;
 	
 	int medio = (ini + fin) / 2;
-    
-	
+
 	// Condicion de corte
-    if(ini > fin){
-       	return -1;
+    if(ini > fin) {
+		return -1;
     }
 
     diccionario.seekg(contenedorOffsetDiccionario->at(medio));
-    diccionario>>terminoEnArchivo;
-    diccionario>>id;
+    diccionario >> terminoEnArchivo;
+    diccionario >> id;
 
 	comparacion = terminoEnArchivo.compare(termino);
     if(comparacion == 0) {
@@ -109,15 +108,15 @@ unsigned int ParserQuery::buscarIdTerminoRec(std::string termino, int ini, int f
             ini = medio + 1;
         }
         
-        medio = (medio + fin) / 2;
         return buscarIdTerminoRec(termino, ini, fin);
     }
 }
 
 void ParserQuery::obtenerOffsetDiccionario() {
-	unsigned int nro=0;
-    while(!offsetDiccionario.eof()){
-    	offsetDiccionario>>nro;
+	unsigned int nro = 0;
+	
+    while (!offsetDiccionario.eof()) {
+    	offsetDiccionario >> nro;
         this->contenedorOffsetDiccionario->push_back(nro);
     }
 }
