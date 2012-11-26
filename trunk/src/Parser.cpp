@@ -2,6 +2,7 @@
 #include "Stemmer.h"
 
 #include <algorithm>
+#include <cctype>
 
 Parser::Parser() {
 	contenedorLexico = new Trie();
@@ -29,6 +30,7 @@ bool Parser::parsearArchivo(std::string nombreArchivo) {
 	termino = lector->obtenerToken(archivo);
 	while (!archivo.eof()) {
 		if (termino.length() > 0 && validador->validarTermino(termino)) {
+			//std::transform(termino.begin(), termino.end(), termino.begin(), ::tolower);
 			termino = stemmer->stemPalabra(termino);
 
 			// Por si justo la palabra que entra es un stemm y luego de procesar queda vacia
