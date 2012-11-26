@@ -29,9 +29,12 @@ void Ponderer::ponderar(Trie* unTrie,Persister* unP,std::string pathMatrizPonder
 	this->pathMatrizPonderada = pathMatrizPonderada;
 
     this->calcularEntropia();
-    return this->ponderarLocarPorGlobal(); //tambien persiste, despues hay que cambiarlo
+    this->ponderarLocarPorGlobal(); //tambien persiste, despues hay que cambiarlo
+    //this->normalizar();
 
 }
+
+
 
 
 void Ponderer::calcularEntropia(){
@@ -131,7 +134,7 @@ void Ponderer::ponderarLocarPorGlobal(){
 	matrizPonderada->cerrar();
 
 	//lo dejo listo para calcular la data de la matriz por oraciones
-	inicializarPonderer();
+//	inicializarPonderer();
 
 }
 
@@ -147,4 +150,58 @@ void Ponderer::inicializarPonderer(){
 	delete this->matrizPonderada;
 	this->matrizPonderada=NULL;
 	this->pathMatrizPonderada="";
+}
+
+void Ponderer::normalizar(){
+
+	matrizPonderadaNormalizada = new Persister(pathMatrizPonderada + "normalizada");
+	matrizPonderada->abrir();
+
+	matrizPonderadaNormalizada->escribirEncabezado(trie->obtenerCantidadDeDocumentosParseados(),trie->obtenerContadorId(),trie->obtenerCantidadDePalabrasIngresadas());
+
+	//recorro toda la matriz
+	while(!matrizPonderada->hayData()){
+		std::list<TregistroArchivoF*>* dataCol = matrizPonderada->obtenerColumnaMatrizPonderada();
+
+		std::list<TregistroArchivoF*>::iterator b = dataCol->begin();
+		std::list<TregistroArchivoF*>::iterator e = dataCol->end();
+		std::cout<<"tamanio: "<<dataCol->size()<<std::endl;
+
+		//hallo norma columna
+		double acumNorma=0;
+		while(b!=e){
+
+			TregistroArchivoF* aux = *b;
+			std::cout<<acumNorma<<" ";
+			acumNorma += (aux->peso * aux->peso);
+			b++;
+
+		}
+		acumNorma = sqrt(acumNorma); //calculo inal de la norma
+
+		std::cout<<"NORMA: "<<acumNorma<<std::endl;
+
+		b = dataCol->begin();
+
+		while(b!=e){
+			TregistroArchivoF* aux = *b;
+
+			aux->peso /= acumNorma; //normalizo cada indice
+
+			std::cout<<aux->peso<<" "<<std::endl;
+
+			b++;
+		}
+
+		std::cout<<std::endl;
+
+		matrizPonderadaNormalizada->persistirDatos(dataCol);
+		matrizPonderada->vaciarPesos(); //vacio los registros de la columna leida
+
+		//preparo la lista para poder ponderar una nueva columna
+	}
+
+	matrizPonderada->cerrar();
+	matrizPonderadaNormalizada->cerrar();
+
 }

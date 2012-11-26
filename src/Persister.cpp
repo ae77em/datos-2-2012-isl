@@ -11,7 +11,11 @@ Persister::Persister(std::string path){
 
     archivo.open(this->path.c_str(),std::fstream::out);
     contenedor = new std::list<TregistroArchivo*>;
+    contenedorPesoColumna = new std::list<TregistroArchivoF*>;
+
     regAux=NULL;
+    regAuxPeso=NULL;
+
 
 }
 
@@ -124,4 +128,44 @@ std::string Persister::obtenerPath(){
 
 	return path;
 
+}
+std::list<TregistroArchivoF*>* Persister::obtenerColumnaMatrizPonderada(){
+
+		if(regAuxPeso==NULL){//solo en la primer lectura pasa esto
+				regAuxPeso = new TregistroArchivoF;
+				archivo >> regAuxPeso->col;
+				archivo >> regAuxPeso->fil;
+				archivo >> regAuxPeso->peso;
+				std::cout<<std::endl<<"ENTRE con col: "<<regAuxPeso->col<<" fil "<<regAuxPeso->fil<<"freq "<<std::endl;//regAuxPeso->pèso;//<<std::endl;
+
+			}else{
+		       // cout<<endl<<"ENTRE con col: "<<regAuxPeso->col<<" fil "<<regAuxPeso->fil<<"freq "<<regAuxPeso->freq<<endl;
+			}
+
+		    unsigned int columna=regAuxPeso->col;
+
+			while( ( regAuxPeso->col==columna ) && (!archivo.eof() )){
+				//va primero la carga del registro que habia quedado de la anterior leida
+		        this->contenedorPesoColumna->push_back(regAuxPeso);//
+		        std::cout<<regAuxPeso->col<<std::endl;
+				if(!archivo.eof() && columna==regAuxPeso->col){
+
+		            regAuxPeso = new TregistroArchivoF;
+					archivo >> regAuxPeso->col;
+					archivo >> regAuxPeso->fil;
+					archivo >> regAuxPeso->peso;
+		        }
+			}
+			return this->contenedorPesoColumna;
+
+}
+
+void Persister::vaciarPesos(){
+
+    while(!contenedorPesoColumna->empty()){
+        TregistroArchivoF* aux = contenedorPesoColumna->back();
+        delete aux;
+        contenedorPesoColumna->pop_back();
+    }
+    contenedorPesoColumna->clear();
 }
