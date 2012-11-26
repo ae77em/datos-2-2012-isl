@@ -33,42 +33,11 @@ ParserQuery::~ParserQuery() {
 	// TODO Auto-generated destructor stub
 }
 
-std::vector<unsigned int>* ParserQuery::parsearConsulta(std::string consulta){
-
-	this->consulta = consulta;
-
-	splitQuery();
-
+std::vector<unsigned int>* ParserQuery::parsearConsulta(std::list<std::string>* terminosConsulta) {
+	palabras = terminosConsulta;
 	stemezarPalabras();
 
 	return recuperarIds();
-
-}
-
-void ParserQuery::splitQuery(){
-
-
-	std::string palabraParseada = "";
-
-	char letra = 32;//espacio en blanco
-
-	for(unsigned int i=0; i<consulta.size(); i++){
-
-		if(consulta.at(i) != letra){
-   			palabraParseada += consulta.at(i);
-		}else{
-			std::string palabraParseadaParaLista = palabraParseada;
-			palabras->push_back(palabraParseadaParaLista);
-
-			palabraParseada = "";
-		}
-	}
-
-    //la ultima palabra queda siempre colgada poque al final de la misma no hay un espacio
-	if (palabraParseada != ""){
-	    palabras->push_back(palabraParseada);
-	}
-
 }
 
 void ParserQuery::stemezarPalabras(){

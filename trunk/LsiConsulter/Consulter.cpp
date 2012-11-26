@@ -88,13 +88,10 @@ Consulter::~Consulter() {
 
 }
 
-void Consulter::rankearConsulta(std::string consulta) {
+void Consulter::rankearConsulta(std::list<std::string>* terminosConsulta) {
 	//toma un conjuento de palabras representado por el string y devuelve un vector que representa la consulta
-	this->query = parserQuery->parsearConsulta(consulta);
-
-
-	this->queryProyectada = this->proyectarQuery();
-
+	query = parserQuery->parsearConsulta(terminosConsulta);
+	queryProyectada = proyectarQuery();
 
     evaluar();
 }
