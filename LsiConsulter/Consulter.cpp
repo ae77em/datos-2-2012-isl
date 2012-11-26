@@ -71,13 +71,13 @@ void Consulter::generarContenedorMatrizV() {
 
 void Consulter::cargarMatrizV() {
 	registroV = new double[this->cantAutovalores];
-	int j = 0;
 
-	while( matrizV.good() &&  matrizV.read((char*)registroV,sizeof(double)*this->cantAutovalores) ){
-		for(unsigned int i=0; i< cantAutovalores ; i++){
+	for (unsigned int j = 0; j < cantAutovalores; j++) {
+		matrizV.read((char*) registroV, sizeof(double) * this->cantAutovalores);
+
+		for(unsigned int i = 0; i < cantAutovalores ; i++){
 			contenedorMatrizV->at(j)->push_back( registroV[i] ); //solo es un camio de formato
 		}
-		j++;
 	}
 
 	delete [] registroV;
