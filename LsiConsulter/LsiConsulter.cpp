@@ -4,22 +4,11 @@
 #include "Consulter.h"
 #include "Heap.h"
 
-std::string obtenerTerminosQuery(int argc, char* argv[]) {
-	std::string query;
-
-	for (int i = 4; i < argc; i++) {
-		query += argv[i];
-		query += " ";
-	}
-
-	return query;
-}
-
-
 int main(int argc, char* argv[]) {
 	Consulter* consultador;
 	std::string nombreRepositorio;
-	std::string query;
+
+	std::list<std::string>* terminosConsulta = new std::list<std::string>();
 
 	// Validacion de los argumentos
 	if (argc < 5) {
@@ -30,12 +19,14 @@ int main(int argc, char* argv[]) {
 	}
 
 	nombreRepositorio = argv[2];
-	query = obtenerTerminosQuery(argc, argv);
+
+	// Almaceno los terminos del query en una lista
+	for (int i = 4; i < argc; i++) {
+		terminosConsulta->push_back(argv[i]);
+	}
 
 	consultador = new Consulter(nombreRepositorio);
-
-	//consultador->mostrarMatrices();
-	consultador->rankearConsulta(query);
+	consultador->rankearConsulta(terminosConsulta);
 
 	delete consultador;
 	return 0;

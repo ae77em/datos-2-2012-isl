@@ -20,7 +20,7 @@ public:
 	ParserQuery(std::string,std::string);
 	virtual ~ParserQuery();
 
-	std::vector<unsigned int>* parsearConsulta(std::string);
+	std::vector<unsigned int>* parsearConsulta(std::list<std::string>* terminosConsulta);
 
 private:
     void cargarOffsetDiccionario();
