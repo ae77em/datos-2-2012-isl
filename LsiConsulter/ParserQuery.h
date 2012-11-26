@@ -1,10 +1,3 @@
-/*
- * ParserQuery.h
- *
- *  Created on: 16/11/2012
- *      Author: federico
- */
-
 #ifndef PARSERQUERY_H_
 #define PARSERQUERY_H_
 
@@ -16,12 +9,10 @@
 
 class ParserQuery {
 public:
-
 	ParserQuery(std::string,std::string);
 	virtual ~ParserQuery();
 
 	std::vector<unsigned int>* parsearConsulta(std::list<std::string>* terminosConsulta);
-
 private:
     void cargarOffsetDiccionario();
 
@@ -31,7 +22,7 @@ private:
 
 	std::vector<unsigned int>* recuperarIds();
 	unsigned int buscarIdTermino(std::string);
-	unsigned int buscarIdTerminoRec(std::string,int ,int ,int);
+	unsigned int buscarIdTerminoRec(std::string, int, int);
 
 	Stemmer* stemmer;
 
@@ -46,9 +37,7 @@ private:
 	std::list<std::string>* palabrasStemezadas;
 
 	std::vector<unsigned int>* contenedorOffsetDiccionario;
-
-
 };
 
 
-#endif /* PARSERQUERY_H_ */
+#endif

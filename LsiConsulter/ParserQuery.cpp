@@ -74,66 +74,50 @@ std::vector<unsigned int>* ParserQuery::recuperarIds(){
 	return ids;
 }
 
-unsigned int ParserQuery::buscarIdTermino(std::string termino){
+unsigned int ParserQuery::buscarIdTermino(std::string termino) {
+    int ini = 0;
+    int fin = contenedorOffsetDiccionario->size() - 1;
 
-    int ini=0;
-    int fin=contenedorOffsetDiccionario->size()-1;
-    int medio = fin / 2;
-
-    return buscarIdTerminoRec(termino,ini,fin,medio);
-
+    return buscarIdTerminoRec(termino, ini, fin);
 }
 
-unsigned int ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fin,int medio){
-
-
-    std::string terminoEnArchivo="";
-    unsigned int id=0;
-
-    //condicion de corte
-    if(ini==fin){
-        diccionario.seekg(contenedorOffsetDiccionario->at(ini));
-        diccionario>>terminoEnArchivo;
-        diccionario>>id;
-
-        if (terminoEnArchivo.compare(termino)==0){
-        	return id;
-        }else{
-        	return -1;
-        }
-
+unsigned int ParserQuery::buscarIdTerminoRec(std::string termino, int ini, int fin) {
+	std::string terminoEnArchivo;
+    
+	int comparacion;
+	unsigned int id = 0;
+	
+	int medio = (ini + fin) / 2;
+    
+	
+	// Condicion de corte
+    if(ini > fin){
+       	return -1;
     }
 
     diccionario.seekg(contenedorOffsetDiccionario->at(medio));
-
     diccionario>>terminoEnArchivo;
     diccionario>>id;
 
-    if( terminoEnArchivo.compare(termino)==0){
+	comparacion = terminoEnArchivo.compare(termino);
+    if(comparacion == 0) {
     	return id;
-    }else{
-
-        if(termino.compare(terminoEnArchivo)==-1){
-            fin= medio -1;
-            medio= fin/2;
-            return buscarIdTerminoRec(termino,ini,fin,medio);
-
-            }else{
-            ini= medio + 1;
-            medio= (medio + fin)/2;
-            return buscarIdTerminoRec(termino,ini,fin,medio);
-
+    }else {
+        if(comparacion < 0){
+            fin = medio - 1;
+		}else {
+            ini = medio + 1;
         }
+        
+        medio = (medio + fin) / 2;
+        return buscarIdTerminoRec(termino, ini, fin);
     }
 }
 
-
-void ParserQuery::obtenerOffsetDiccionario(){
-
+void ParserQuery::obtenerOffsetDiccionario() {
 	unsigned int nro=0;
     while(!offsetDiccionario.eof()){
     	offsetDiccionario>>nro;
         this->contenedorOffsetDiccionario->push_back(nro);
     }
-
 }
