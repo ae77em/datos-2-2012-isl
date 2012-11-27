@@ -22,7 +22,7 @@ private:
 
 	std::vector<unsigned int>* recuperarIds();
 	unsigned int buscarIdTermino(std::string);
-	unsigned int buscarIdTerminoRec(std::string, int, int);
+	unsigned int buscarIdTerminoRec(std::string, int, int ,int);
 
 	Stemmer* stemmer;
 
