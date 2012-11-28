@@ -6,7 +6,7 @@ ParserQuery::ParserQuery(std::string pathDiccionario, std::string pathOffsetDicc
 	offsetDiccionario.open(pathOffsetDiccionario.c_str(),std::fstream::in);
 
 	if(!diccionario.good() || !offsetDiccionario.good()){
-        std::cout<<"no se pudiento abrir diccioarnios"<<std::endl;
+        std::cout<<"no se pudiento abrir diccionarios"<<std::endl;
 	}
 
 	stemmer = new Stemmer();
@@ -91,8 +91,6 @@ int ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fin,int medi
         diccionario>>terminoEnArchivo;
         diccionario>>id;
 
-        std::cout<<"termnin: "<<termino<<" ternArchivo; "<<terminoEnArchivo<<std::endl;
-
         if (terminoEnArchivo.compare(termino)==0){
         	return id;
         }else{
@@ -105,7 +103,7 @@ int ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fin,int medi
 
     diccionario>>terminoEnArchivo;
     diccionario>>id;
-    std::cout<<"termnin: "<<termino<<" ternArchivo; "<<terminoEnArchivo<<std::endl;
+
     if( terminoEnArchivo.compare(termino)==0){
     	return id;
     }else{

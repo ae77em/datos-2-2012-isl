@@ -1,5 +1,7 @@
 #include "Consulter.h"
 
+#include <ctime>
+
 Consulter::Consulter(std::string repositorio) {
 	std::string home = getenv("HOME");
 	std::string rutaRepositorio = home + "/" + repositorio;
@@ -89,11 +91,21 @@ Consulter::~Consulter() {
 }
 
 void Consulter::rankearConsulta(std::list<std::string>* terminosConsulta) {
+	time_t tiempoInicioConsulta, tiempoFinConsulta;
+	double tiempoTotal;
+
+	tiempoInicioConsulta = time(NULL);
+
 	//toma un conjuento de palabras representado por el string y devuelve un vector que representa la consulta
 	query = parserQuery->parsearConsulta(terminosConsulta);
 	queryProyectada = proyectarQuery();
 
     evaluar();
+
+    tiempoFinConsulta = time(NULL);
+    tiempoTotal = tiempoFinConsulta - tiempoInicioConsulta;
+
+    std::cout << "Tiempo tardado en realizar la consulta: " << (tiempoTotal / 1000) << " segundos" << std::endl;
 }
 
 void Consulter::evaluar(){
