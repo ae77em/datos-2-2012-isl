@@ -3,6 +3,8 @@
 
 #include <string>
 
+#define LONG_MAX_NUMERO 6
+
 class Validador {
 	private:
 		/**
