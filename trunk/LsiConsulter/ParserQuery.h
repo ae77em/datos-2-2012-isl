@@ -12,7 +12,7 @@ public:
 	ParserQuery(std::string,std::string);
 	virtual ~ParserQuery();
 
-	std::vector<unsigned int>* parsearConsulta(std::list<std::string>* terminosConsulta);
+	std::vector<int>* parsearConsulta(std::list<std::string>* terminosConsulta);
 private:
     void cargarOffsetDiccionario();
 
@@ -20,9 +20,9 @@ private:
 	void stemezarPalabras();
 	void obtenerOffsetDiccionario();
 
-	std::vector<unsigned int>* recuperarIds();
-	unsigned int buscarIdTermino(std::string);
-	unsigned int buscarIdTerminoRec(std::string, int, int ,int);
+	std::vector<int>* recuperarIds();
+	int buscarIdTermino(std::string);
+	int buscarIdTerminoRec(std::string, int, int ,int);
 
 	Stemmer* stemmer;
 

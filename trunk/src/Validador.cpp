@@ -19,7 +19,7 @@ bool Validador::validarNumero(std::string numero) {
 }
 
 bool Validador::validarTermino(std::string termino) {
-	if (validarNumero(termino) && termino.length() > 4) {
+	if (validarNumero(termino) && termino.length() > LONG_MAX_NUMERO) {
 		return false;
 	}
 

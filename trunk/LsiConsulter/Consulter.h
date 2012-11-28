@@ -44,7 +44,7 @@ private:
     std::ifstream matrizS;
     std::ifstream matrizV;
 
-	std::vector<unsigned int>* query;
+	std::vector<int>* query;
 	std::vector<double>* queryProyectada;
 	std::vector<double>* vectorS;
 	std::vector<std::vector<double>*>* contenedorMatrizV;

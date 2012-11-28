@@ -33,7 +33,7 @@ ParserQuery::~ParserQuery() {
 	// TODO Auto-generated destructor stub
 }
 
-std::vector<unsigned int>* ParserQuery::parsearConsulta(std::list<std::string>* terminosConsulta) {
+std::vector<int>* ParserQuery::parsearConsulta(std::list<std::string>* terminosConsulta) {
 	palabras = terminosConsulta;
 	stemezarPalabras();
 
@@ -52,21 +52,20 @@ void ParserQuery::stemezarPalabras(){
 
 }
 
-std::vector<unsigned int>* ParserQuery::recuperarIds(){
-
-	std::vector<unsigned int>* ids = new std::vector<unsigned int>;
+std::vector<int>* ParserQuery::recuperarIds() {
+	std::vector<int>* ids = new std::vector<int>;
 
 	std::list<std::string>::iterator b = palabrasStemezadas->begin();
 	std::list<std::string>::iterator e = palabrasStemezadas->end();
 
-	while(b!=e){
+	while (b != e) {
+		int id = buscarIdTermino(*b);
 
-
-		unsigned int id = buscarIdTermino( *(b) );
-
-		//if(id != -1){
-			ids->push_back( id );
-	//	}
+		if (id == -1) {
+			ids->push_back(0);
+		}else {
+			ids->push_back(id);
+		}
 
 		b++;
 	}
@@ -74,21 +73,17 @@ std::vector<unsigned int>* ParserQuery::recuperarIds(){
 	return ids;
 }
 
-unsigned int ParserQuery::buscarIdTermino(std::string termino){
-
+int ParserQuery::buscarIdTermino(std::string termino) {
     int ini=0;
     int fin=contenedorOffsetDiccionario->size()-1;
     int medio = fin / 2;
 
     return buscarIdTerminoRec(termino,ini,fin,medio);
-
 }
 
-unsigned int ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fin,int medio){
-
-
-    std::string terminoEnArchivo="";
-    unsigned int id=0;
+int ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fin,int medio) {
+    std::string terminoEnArchivo;
+    int id=0;
 
     //condicion de corte
     if(ini==fin){
@@ -115,23 +110,19 @@ unsigned int ParserQuery::buscarIdTerminoRec(std::string termino,int ini,int fin
     	return id;
     }else{
 
-        if(termino.compare(terminoEnArchivo)<0){
-            fin= medio -1;
-            medio= (ini + fin)/2;
-            return buscarIdTerminoRec(termino,ini,fin,medio);
-
-            }else{
-            ini= medio + 1;
-            medio= (ini + fin)/2;
-            return buscarIdTerminoRec(termino,ini,fin,medio);
-
+        if (termino.compare(terminoEnArchivo) < 0) {
+            fin = medio - 1;
+        }else {
+            ini = medio + 1;
         }
+
+        medio = (ini + fin) / 2;
+        return buscarIdTerminoRec(termino,ini,fin,medio);
     }
 }
 
 
-void ParserQuery::obtenerOffsetDiccionario(){
-
+void ParserQuery::obtenerOffsetDiccionario() {
 	unsigned int nro=0;
     while(!offsetDiccionario.eof()){
     	offsetDiccionario>>nro;
