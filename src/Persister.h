@@ -34,7 +34,6 @@ class Persister {
 //se usa en la matriz final
         void persistirDatos(std::list<TregistroArchivoF*>*);
 
-        std::list<TregistroArchivoF*>* obtenerColumnaMatrizPonderada();
         std::list<TregistroArchivo*>* obtenerColumnaMatriz();
 
         void abrir();
@@ -42,7 +41,6 @@ class Persister {
         bool hayData();
         void vaciar(std::list<TregistroArchivo*>*);
         void vaciar();
-        void vaciarPesos();
 
         std::string obtenerPath();
 
@@ -52,10 +50,8 @@ class Persister {
         std::vector<std::vector<double>*>* generadorContenedorMatriz(int);
 
         TregistroArchivo* regAux; //almacenara el registro que se lee del archivo
-        TregistroArchivoF* regAuxPeso; //almacenara el registro que se lee del archivo
         std::fstream archivo;
         std::list<TregistroArchivo*>* contenedor;
-        std::list<TregistroArchivoF*>* contenedorPesoColumna;
         std::string path;
 
 };
