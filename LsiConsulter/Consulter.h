@@ -17,9 +17,6 @@ public:
 
 	int rankearConsulta(std::list<std::string>* terminosConsulta);
 	std::vector<double>* proyectarQuery();
-	 void mostrarMatrices(); //solo para imprimir las matrices
-
-
 private:
 
     void cargarS();
@@ -52,10 +49,6 @@ private:
 	std::vector<std::string> contenedorNombreArchivos;
 
     double* registroV;
-
-    void mostrarU();
-    void mostrarV();
-    void mostrarS();
 
 	Heap* heap;
 };
