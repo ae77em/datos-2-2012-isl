@@ -90,7 +90,7 @@ Consulter::~Consulter() {
 
 }
 
-void Consulter::rankearConsulta(std::list<std::string>* terminosConsulta) {
+int Consulter::rankearConsulta(std::list<std::string>* terminosConsulta) {
 	time_t tiempoInicioConsulta, tiempoFinConsulta;
 	double tiempoTotal;
 
@@ -98,14 +98,20 @@ void Consulter::rankearConsulta(std::list<std::string>* terminosConsulta) {
 
 	//toma un conjuento de palabras representado por el string y devuelve un vector que representa la consulta
 	query = parserQuery->parsearConsulta(terminosConsulta);
-	queryProyectada = proyectarQuery();
 
-    evaluar();
+	if(query != NULL){
+		queryProyectada = proyectarQuery();
 
-    tiempoFinConsulta = time(NULL);
-    tiempoTotal = tiempoFinConsulta - tiempoInicioConsulta;
+		evaluar();
 
-    std::cout << "Tiempo tardado en realizar la consulta: " << (tiempoTotal / 1000) << " segundos" << std::endl;
+		tiempoFinConsulta = time(NULL);
+		tiempoTotal = tiempoFinConsulta - tiempoInicioConsulta;
+
+		std::cout << "Tiempo tardado en realizar la consulta: " << (tiempoTotal / 1000) << " segundos" << std::endl;
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 void Consulter::evaluar(){

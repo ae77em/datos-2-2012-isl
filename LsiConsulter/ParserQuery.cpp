@@ -34,6 +34,7 @@ ParserQuery::~ParserQuery() {
 }
 
 std::vector<int>* ParserQuery::parsearConsulta(std::list<std::string>* terminosConsulta) {
+
 	palabras = terminosConsulta;
 	stemezarPalabras();
 
@@ -61,16 +62,18 @@ std::vector<int>* ParserQuery::recuperarIds() {
 	while (b != e) {
 		int id = buscarIdTermino(*b);
 
-		if (id == -1) {
-			ids->push_back(0);
-		}else {
+		if (id != -1) {
 			ids->push_back(id);
 		}
 
 		b++;
 	}
 
-	return ids;
+	if(ids->size() > 0){
+		return ids;
+	}else{
+		return NULL;
+	}
 }
 
 int ParserQuery::buscarIdTermino(std::string termino) {
