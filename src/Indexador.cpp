@@ -32,7 +32,6 @@ Indexador::~Indexador() {
  * Realiza los procesos necesarios para la creacion del indice
  */
 bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std::string directorio) {
-
 	std::ofstream nombreArchivos;
 	nombreArchivos.open(this->pathNombreArchivosTerminos.c_str());
 
@@ -40,14 +39,15 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 
 	std::list<std::string>* archivos = listador->listarArchivos(directorio);
 
-	std::list<std::string>::iterator iterador;
 	int i = 0;
+	std::list<std::string>::iterator iterador;
 	for (iterador = archivos->begin(); iterador != archivos->end(); iterador++, i++) {
 		std::string nombreArchivo = (*iterador);
 
-		if (!parser->parsearArchivo(nombreArchivo)) {
+		if (!parser->parsearArchivo(directorio + "/" + nombreArchivo)) {
 			std::cerr << "El archivo " << nombreArchivo << " no pudo ser parseado" << std::endl;
 		}else {
+			std::cout << "("<< i << ") El archivo " << nombreArchivo << " fue parseado" << std::endl;
 
 			//extrayendo y persistiendo nombre archivo
 			nombreArchivos<<nombreArchivo.substr((nombreArchivo.find_last_of("/\\")+1))<<std::endl;

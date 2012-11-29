@@ -1,6 +1,8 @@
 #ifndef CALCULADORLSI_H_
 #define CALCULADORLSI_H_
 
+#include <string>
+
 class CalculadorLSI {
 public:
 	CalculadorLSI();

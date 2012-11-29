@@ -1,17 +1,20 @@
-#define CANT_COLUMNAS_A_LEVANTAR 5000
+#include "CalculadorLSI.h"
 
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
 
-#include "CalculadorLSI.h"
+#define CANT_COLUMNAS_A_LEVANTAR 5000
 
 CalculadorLSI::CalculadorLSI() {
 
 }
 
-void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz, std::string pathSVD){
+CalculadorLSI::~CalculadorLSI() {
 
+}
+
+void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz, std::string pathSVD) {
 	char strTop[4];
 	char strCol[5];
 
@@ -35,8 +38,3 @@ void CalculadorLSI::calcularLSI(int cantTopicos, std::string pathMatriz, std::st
 	res++;
 	std::cout << "FIN CALCULO ISL" << std::endl;
 }
-
-CalculadorLSI::~CalculadorLSI() {
-	
-}
-
