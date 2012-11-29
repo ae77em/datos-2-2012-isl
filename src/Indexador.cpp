@@ -48,7 +48,6 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 		if (!parser->parsearArchivo(nombreArchivo)) {
 			std::cerr << "El archivo " << nombreArchivo << " no pudo ser parseado" << std::endl;
 		}else {
-			std::cout << "El archivo " << nombreArchivo << " fue parseado (" << i << ")" << std::endl;
 
 			//extrayendo y persistiendo nombre archivo
 			nombreArchivos<<nombreArchivo.substr((nombreArchivo.find_last_of("/\\")+1))<<std::endl;
@@ -60,14 +59,13 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
 			//preparo el trie para una nueva parseada
 			parser->obtenerContenedorLexico()->inicializarFrecuenciasLocales();
 			parser->obtenerContenedorLexico()->vaciarContenedorParcial();
-			std::cout<<"libro: "<<parser->obtenerContenedorLexico()->obtenerCantidadDeDocumentosParseados()<<std::endl;
 		}
 	}
 
 	nombreArchivos.close();
 	persistidor->cerrar();
 
-	std::cout<<"COMIENZA PONDERACION MATRIZ POR TERMINOS"<<std::endl;
+	std::cout<<"COMIENZA PONDERACION MATRIZ"<<std::endl;
 
 	ponderador->ponderar(parser->obtenerContenedorLexico(), persistidor, this->pathMatrizTermXDocPonderada);
 
@@ -80,6 +78,7 @@ bool Indexador::crearIndice(std::string nombreRepositorio, int cantTopicos, std:
     //aca  deberian de ir los destructoures de los trie,
 
     std::cout<<"CALCULANDO SVD TERMINOS"<<std::endl;
+
     calculador->calcularLSI(this->obtenerCanTopicos(),this->pathMatrizTermXDocPonderada,this->pathCarpetaRepo);
 
     persistidor->cerrar();
