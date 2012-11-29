@@ -1,14 +1,11 @@
 #include "Consulter.h"
 
 #include <ctime>
+#include <iomanip>
 
 Consulter::Consulter(std::string repositorio) {
 	std::string home = getenv("HOME");
 	std::string rutaRepositorio = home + "/" + repositorio;
-
-	//solo es para que imprima decimales
-	std::cout.unsetf(std::ios::floatfield);
-	std::cout.precision(15);
 
 	heap = new Heap();
 	calculer = new CalculosAlgebraicos();
@@ -133,26 +130,30 @@ void Consulter::evaluar(){
     mostrarRankings();
 
 }
-void Consulter::mostrarRankings(){
+void Consulter::mostrarRankings() {
+	int cantDocSolicitados;
 
-	unsigned int cantDocSolicitados;
+	std::cout << "INGRESE CANTIDAD DE DOCUMENTOS A LISTAR" << std::endl;
+	std::cin >> cantDocSolicitados;
 
-	std::cout<<"INGRESE CANTIDAD DE DOCUMENTOS A LISTAR"<<std::endl;
-	std::cin>>cantDocSolicitados;
+	std::cout << "MOSTRANDO RESULTADOS" << std::endl;
 
-	std::cout<<"MOSTRANDO RESULTADOS"<<std::endl;
+	std::cout << "Ranking Puntaje Archivo" << std::endl;
+	std::cout << "------- ------- -------" << std::endl;
 
-	for(unsigned int i=0; i<cantDocSolicitados; i++ ){
-
+	std::cout.setf(std::ios::fixed, std::ios::floatfield);
+	std::cout.precision(5);
+	
+	for (int i = 1; i <= cantDocSolicitados; i++) {
 		TnodoHeapDocPuntaje nodoHeap = heap->obtenerMaximo();
 
 		std::string nombreArchivo = obtenerNombreArchivo(nodoHeap.doc);
 
-		std::cout<<"RANK: "<<i+1<<" NombreArchivo: "<<nombreArchivo<<"       Puntaje: "<<nodoHeap.puntaje<<std::endl;
+		std::cout << std::setw(7) << std::right << i << " "
+				  << std::setw(7) << std::right << nodoHeap.puntaje << " "
+				  << std::left << nombreArchivo << std::endl;
 
 	}
-
-
 }
 
 std::string Consulter::obtenerNombreArchivo(unsigned int pos) {
