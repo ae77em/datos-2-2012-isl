@@ -15,7 +15,7 @@ public:
 	Consulter(std::string repositorio);
 	virtual ~Consulter();
 
-	void rankearConsulta(std::list<std::string>* terminosConsulta);
+	int rankearConsulta(std::list<std::string>* terminosConsulta);
 	std::vector<double>* proyectarQuery();
 	 void mostrarMatrices(); //solo para imprimir las matrices
 

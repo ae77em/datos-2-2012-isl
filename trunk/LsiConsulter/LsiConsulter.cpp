@@ -26,7 +26,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	consultador = new Consulter(nombreRepositorio);
-	consultador->rankearConsulta(terminosConsulta);
+	if( consultador->rankearConsulta(terminosConsulta) == 0 ){
+		std::cout<<"No se han encontrado resultados para la consulta realizada"<<std::endl;
+	}
 
 	delete consultador;
 	return 0;
