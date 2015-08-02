@@ -1,0 +1,1 @@
+http://en.wikipedia.org/wiki/Singular_value_decomposition
